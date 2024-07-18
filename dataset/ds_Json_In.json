@@ -1,0 +1,21 @@
+{
+	"name": "ds_Json_In",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADFDev001_blobadfdev01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "._customers.json",
+				"folderPath": "Input",
+				"container": "customerorders"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

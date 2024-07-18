@@ -1,0 +1,9 @@
+{
+	"name": "DataFactory-ADFDev001",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "096420d2-e2c8-4a16-8597-093cfc30edb1",
+		"tenantId": "dd82188f-36c9-46c8-98ba-e0a867221563"
+	}
+}
