@@ -25,6 +25,8 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": "Input",
+							"wildcardFileName": "*.json",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
