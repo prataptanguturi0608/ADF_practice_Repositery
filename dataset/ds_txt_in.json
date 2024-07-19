@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "._order_items.txt",
 				"folderPath": "Input",
 				"container": "customerorders"
 			}
