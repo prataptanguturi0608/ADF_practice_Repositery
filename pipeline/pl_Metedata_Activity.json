@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Metadata1",
+				"name": "Get Metadata 001",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -13,7 +13,44 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_txt_stddb_CourseInstructor_in",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"itemName",
+						"itemType",
+						"lastModified"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata 001",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(\n    formatDateTime(utcNow(),'yyyy-MM-dd'), \n    formatDateTime(activity('Get Metadata 001').output.lastModified,'yyyy-MM-dd')\n    )",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"annotations": []
