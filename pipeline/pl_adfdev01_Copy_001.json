@@ -76,7 +76,6 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "Input",
 							"wildcardFileName": "*.txt",
 							"deleteFilesAfterCompletion": false
 						},
