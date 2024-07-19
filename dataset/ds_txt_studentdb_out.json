@@ -1,0 +1,23 @@
+{
+	"name": "ds_txt_studentdb_out",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_dlake_stddb_dev001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Outbound",
+				"fileSystem": "schooldb"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
