@@ -240,7 +240,14 @@
 					"sink": {
 						"type": "BinarySink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "PreserveHierarchy",
+							"metadata": [
+								{
+									"name": "Modified_data",
+									"value": "$$LASTMODIFIED"
+								}
+							]
 						}
 					},
 					"enableStaging": false
