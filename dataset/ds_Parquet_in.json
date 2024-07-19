@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "._orders.parquet",
 				"folderPath": "Input",
 				"container": "customerorders"
 			},
