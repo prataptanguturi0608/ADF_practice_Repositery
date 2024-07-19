@@ -1,0 +1,18 @@
+{
+	"name": "ds_txt_metadata_out",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADEDev001_dlakeadfdev01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Input",
+				"fileSystem": "customerorders"
+			}
+		}
+	}
+}

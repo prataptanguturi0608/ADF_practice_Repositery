@@ -173,7 +173,14 @@
 			{
 				"name": "GetMd_txtFile_Blob",
 				"type": "GetMetadata",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Copy_Txt_Blob_to_DataLake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -184,14 +191,15 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_txt_in",
+						"referenceName": "ds_txt_out",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
+						"itemType",
 						"lastModified"
 					],
 					"storeSettings": {
-						"type": "AzureBlobStorageReadSettings",
+						"type": "AzureBlobFSReadSettings",
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -222,10 +230,8 @@
 					"source": {
 						"type": "BinarySource",
 						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"wildcardFileName": "*.txt",
-							"deleteFilesAfterCompletion": false
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
 						},
 						"formatSettings": {
 							"type": "BinaryReadSettings"
@@ -234,27 +240,20 @@
 					"sink": {
 						"type": "BinarySink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings",
-							"copyBehavior": "PreserveHierarchy",
-							"metadata": [
-								{
-									"name": "Modified_date",
-									"value": "$$LASTMODIFIED"
-								}
-							]
+							"type": "AzureBlobFSWriteSettings"
 						}
 					},
 					"enableStaging": false
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_txt_in",
+						"referenceName": "ds_txt_out",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_txt_out",
+						"referenceName": "ds_txt_metadata_out",
 						"type": "DatasetReference"
 					}
 				]
