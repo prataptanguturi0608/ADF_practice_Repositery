@@ -1,5 +1,5 @@
 {
-	"name": "ds_txt_studentdb_out",
+	"name": "ds_txt_studentdb_Arcout",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_dlake_stddb_dev001",
@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "*.csv",
-				"folderPath": "Outbound",
+				"folderPath": "Outbound_Archive",
 				"fileSystem": "schooldb"
 			},
 			"columnDelimiter": ",",
