@@ -75,23 +75,11 @@
 										"type": "DelimitedTextReadSettings"
 									}
 								},
-								"sink": {
-									"type": "BinarySink",
-									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
-									}
-								},
 								"enableStaging": false
 							},
 							"inputs": [
 								{
 									"referenceName": "ds_txt_stddb_in",
-									"type": "DatasetReference"
-								}
-							],
-							"outputs": [
-								{
-									"referenceName": "ds_txt_studentdb_out",
 									"type": "DatasetReference"
 								}
 							]
@@ -123,23 +111,11 @@
 										"type": "DelimitedTextReadSettings"
 									}
 								},
-								"sink": {
-									"type": "BinarySink",
-									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
-									}
-								},
 								"enableStaging": false
 							},
 							"inputs": [
 								{
 									"referenceName": "ds_txt_stddb_in",
-									"type": "DatasetReference"
-								}
-							],
-							"outputs": [
-								{
-									"referenceName": "ds_txt_studentdb_out",
 									"type": "DatasetReference"
 								}
 							]
