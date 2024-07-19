@@ -52,7 +52,7 @@
 					},
 					"ifFalseActivities": [
 						{
-							"name": "Copy data2",
+							"name": "activity_copy_ArchiveFiles",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -114,7 +114,7 @@
 					],
 					"ifTrueActivities": [
 						{
-							"name": "Copy data1",
+							"name": "activity_copy_CurrentFiles",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
