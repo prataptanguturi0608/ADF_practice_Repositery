@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "CourseInstructor.txt",
+				"fileName": "*.txt",
 				"container": "schooldb"
 			},
 			"columnDelimiter": ",",
