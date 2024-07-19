@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_txt_stddb_CourseInstructor_in",
+						"referenceName": "ds_txt_stddb_in",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
