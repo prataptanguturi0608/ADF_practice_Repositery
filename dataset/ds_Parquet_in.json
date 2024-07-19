@@ -1,0 +1,21 @@
+{
+	"name": "ds_Parquet_in",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADFDev001_blobadfdev01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "._orders.parquet",
+				"folderPath": "Input",
+				"container": "customerorders"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
