@@ -107,7 +107,14 @@
 			{
 				"name": "Copy_Parquet_Blob_to_DataLake",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Copy_Txt_Blob_to_DataLake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
