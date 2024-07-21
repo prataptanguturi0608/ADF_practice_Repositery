@@ -1,0 +1,17 @@
+{
+	"name": "ds_dlake_Input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADFDev001_blobadfdev01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "input"
+			}
+		}
+	}
+}
