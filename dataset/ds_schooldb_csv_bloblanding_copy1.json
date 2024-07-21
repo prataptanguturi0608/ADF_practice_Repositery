@@ -5,6 +5,11 @@
 			"referenceName": "LS_SchoolDb_bloblanding",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"FileName": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
