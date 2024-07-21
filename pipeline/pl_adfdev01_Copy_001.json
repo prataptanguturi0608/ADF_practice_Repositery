@@ -192,7 +192,10 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "ds_Dlake_Stg",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": "*.txt"
+						}
 					},
 					"fieldList": [
 						"childItems"
@@ -272,7 +275,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@greaterOrEquals(activity('Get_Out_File_Metadata').output.lastModified,adddays(utcnow(),-7))",
+									"value": "@greaterOrEquals(activity('Get_Out_File_Metadata_activity').output.lastModified,adddays(utcnow(),-7))",
 									"type": "Expression"
 								},
 								"ifTrueActivities": [
@@ -314,7 +317,7 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"FileName": {
-														"value": "@activity('Get_Out_File_Metadata').output.itemName",
+														"value": "@activity('Get_Out_File_Metadata_activity').output.itemName",
 														"type": "Expression"
 													}
 												}
