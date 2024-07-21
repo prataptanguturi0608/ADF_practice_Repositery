@@ -1,0 +1,22 @@
+{
+	"name": "ds_schooldb_csv_blob01_copy2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SchoolDb_blob",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "schooldb-landing"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
