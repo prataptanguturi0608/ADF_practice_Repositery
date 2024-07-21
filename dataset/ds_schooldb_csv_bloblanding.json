@@ -1,0 +1,36 @@
+{
+	"name": "ds_schooldb_csv_bloblanding",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SchoolDb_bloblanding",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "OfficeAssignment.csv",
+				"container": "schooldb-landing"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "InstructorID",
+				"type": "String"
+			},
+			{
+				"name": "Location",
+				"type": "String"
+			},
+			{
+				"name": "Timestamp",
+				"type": "String"
+			}
+		]
+	}
+}
