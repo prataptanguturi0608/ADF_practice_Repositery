@@ -226,7 +226,7 @@
 					},
 					"activities": [
 						{
-							"name": "Get_Out_File_Metadata",
+							"name": "Get_Out_File_Metadata_activity",
 							"type": "GetMetadata",
 							"dependsOn": [],
 							"policy": {
@@ -263,7 +263,7 @@
 							"type": "IfCondition",
 							"dependsOn": [
 								{
-									"activity": "Get_Out_File_Metadata",
+									"activity": "Get_Out_File_Metadata_activity",
 									"dependencyConditions": [
 										"Succeeded"
 									]
