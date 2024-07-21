@@ -235,10 +235,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"fieldList": [
-									"lastModified",
-									"itemName"
-								],
+								"fieldList": [],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
 									"recursive": true,
@@ -290,15 +287,14 @@
 													"type": "BinaryReadSettings"
 												}
 											},
-											"sink": {
-												"type": "BinarySink",
-												"storeSettings": {
-													"type": "AzureBlobFSWriteSettings",
-													"copyBehavior": "PreserveHierarchy"
-												}
-											},
 											"enableStaging": false
-										}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_txt_out",
+												"type": "DatasetReference"
+											}
+										]
 									}
 								]
 							}
