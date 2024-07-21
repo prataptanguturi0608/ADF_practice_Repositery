@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Course.csv",
 				"container": "schooldb-landing"
 			},
 			"columnDelimiter": ",",
