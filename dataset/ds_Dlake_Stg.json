@@ -1,0 +1,22 @@
+{
+	"name": "ds_Dlake_Stg",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADEDev001_dlakeadfdev01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset.FileName",
+					"type": "Expression"
+				},
+				"folderPath": "Output",
+				"fileSystem": "customerorders"
+			}
+		}
+	}
+}
