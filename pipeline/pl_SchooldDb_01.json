@@ -20,10 +20,7 @@
 						"type": "DatasetReference"
 					},
 					"fieldList": [
-						"childItems",
-						"itemName",
-						"itemType",
-						"lastModified"
+						"childItems"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
@@ -33,6 +30,12 @@
 						"type": "DelimitedTextReadSettings"
 					}
 				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": []
 			}
 		],
 		"annotations": []
