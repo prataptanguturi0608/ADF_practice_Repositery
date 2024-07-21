@@ -190,18 +190,12 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataset": {
-						"referenceName": "ds_Dlake_Stg",
-						"type": "DatasetReference",
-						"parameters": {
-							"FileName": "*.txt"
-						}
-					},
 					"fieldList": [
 						"childItems"
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -241,19 +235,13 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"dataset": {
-									"referenceName": "ds_Dlake_Stg",
-									"type": "DatasetReference",
-									"parameters": {
-										"FileName": "@item().name"
-									}
-								},
 								"fieldList": [
 									"lastModified",
 									"itemName"
 								],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -310,25 +298,7 @@
 												}
 											},
 											"enableStaging": false
-										},
-										"inputs": [
-											{
-												"referenceName": "ds_Dlake_Stg",
-												"type": "DatasetReference",
-												"parameters": {
-													"FileName": {
-														"value": "@activity('Get_Out_File_Metadata_activity').output.itemName",
-														"type": "Expression"
-													}
-												}
-											}
-										],
-										"outputs": [
-											{
-												"referenceName": "ds_dlake_Input",
-												"type": "DatasetReference"
-											}
-										]
+										}
 									}
 								]
 							}
