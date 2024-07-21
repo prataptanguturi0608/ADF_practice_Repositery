@@ -16,14 +16,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_schooldb_csv_blob01",
+						"referenceName": "ds_schooldb_csv_bloblanding",
 						"type": "DatasetReference"
 					},
-					"fieldList": [
-						"itemName",
-						"itemType",
-						"lastModified"
-					],
+					"fieldList": [],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
 						"enablePartitionDiscovery": false
