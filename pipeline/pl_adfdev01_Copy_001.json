@@ -305,7 +305,7 @@
 											"sink": {
 												"type": "BinarySink",
 												"storeSettings": {
-													"type": "AzureBlobStorageWriteSettings",
+													"type": "AzureBlobFSWriteSettings",
 													"copyBehavior": "PreserveHierarchy"
 												}
 											},

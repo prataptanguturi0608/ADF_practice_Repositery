@@ -10,7 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "input"
+				"folderPath": "Input",
+				"fileSystem": "customerorders"
 			}
 		}
 	}
