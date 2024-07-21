@@ -240,9 +240,15 @@
 							"typeProperties": {
 								"dataset": {
 									"referenceName": "ds_Dlake_Stg",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": "@item().name"
+									}
 								},
-								"fieldList": [],
+								"fieldList": [
+									"lastModified",
+									"itemName"
+								],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
 									"enablePartitionDiscovery": false
