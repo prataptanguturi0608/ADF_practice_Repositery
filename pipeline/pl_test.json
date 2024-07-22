@@ -57,7 +57,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_test_outpur",
+						"referenceName": "ds_test_output",
 						"type": "DatasetReference"
 					}
 				]
