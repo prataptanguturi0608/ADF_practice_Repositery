@@ -10,12 +10,18 @@
 				"type": "string"
 			}
 		},
+		"folder": {
+			"name": "dsf_Schooldb"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "@dataset.FileName",
+				"fileName": {
+					"value": "@dataset.FileName",
+					"type": "Expression"
+				},
 				"container": "schooldb-landing"
 			},
 			"columnDelimiter": ",",

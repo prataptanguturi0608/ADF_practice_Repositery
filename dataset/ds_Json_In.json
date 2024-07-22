@@ -5,6 +5,9 @@
 			"referenceName": "LS_ADFDev001_blobadfdev01",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "dsf_adfdev01"
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {

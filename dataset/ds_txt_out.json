@@ -5,6 +5,9 @@
 			"referenceName": "LS_ADEDev001_dlakeadfdev01",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "dsf_adfdev01"
+		},
 		"annotations": [],
 		"type": "Binary",
 		"typeProperties": {

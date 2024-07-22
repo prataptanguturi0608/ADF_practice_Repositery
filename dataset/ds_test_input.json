@@ -1,19 +1,19 @@
 {
-	"name": "ds_schooldb_csv_blob01",
+	"name": "ds_test_input",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_SchoolDb_blob",
+			"referenceName": "ls_test_BlobStorage",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "dsf_Schooldb"
+			"name": "dsf_test"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "schooldb-landing"
+				"container": "test-input"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
