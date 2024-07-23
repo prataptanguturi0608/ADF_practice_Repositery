@@ -151,6 +151,30 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEachLoop",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_listFileNames_out",
+					"value": {
+						"value": "@variables('v_listFileNames')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
@@ -158,6 +182,9 @@
 				"type": "String"
 			},
 			"v_listFileNames": {
+				"type": "Array"
+			},
+			"v_listFileNames_out": {
 				"type": "Array"
 			}
 		},
