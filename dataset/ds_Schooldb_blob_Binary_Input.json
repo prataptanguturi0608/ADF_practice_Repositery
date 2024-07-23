@@ -1,6 +1,7 @@
 {
 	"name": "ds_Schooldb_blob_Binary_Input",
 	"properties": {
+		"description": "Will used to get the metadata of the files in the folder",
 		"linkedServiceName": {
 			"referenceName": "ls_SchoolDb_Binary",
 			"type": "LinkedServiceReference"
