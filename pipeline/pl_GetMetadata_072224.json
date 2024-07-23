@@ -29,6 +29,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -186,6 +187,12 @@
 			},
 			"v_listFileNames_out": {
 				"type": "Array"
+			},
+			"v_listOfFiles": {
+				"type": "Array"
+			},
+			"v_FileSize": {
+				"type": "Integer"
 			}
 		},
 		"folder": {
