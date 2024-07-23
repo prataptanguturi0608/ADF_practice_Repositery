@@ -5,6 +5,11 @@
 			"referenceName": "ls_test_BlobStorage",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_filenameInput": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "TestDB"
 		},
@@ -13,6 +18,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().p_filenameInput",
+					"type": "Expression"
+				},
 				"container": "test-input"
 			}
 		}
