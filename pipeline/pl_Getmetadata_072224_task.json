@@ -162,40 +162,6 @@
 						}
 					]
 				}
-			},
-			{
-				"name": "Get_Metadata_of_File",
-				"type": "GetMetadata",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataset": {
-						"referenceName": "ds_Schooldb_blob_Binary_InputFile",
-						"type": "DatasetReference",
-						"parameters": {
-							"p_FileName": "Course.csv"
-						}
-					},
-					"fieldList": [
-						"itemType",
-						"itemName",
-						"size"
-					],
-					"storeSettings": {
-						"type": "AzureBlobStorageReadSettings",
-						"enablePartitionDiscovery": false
-					},
-					"formatSettings": {
-						"type": "BinaryReadSettings"
-					}
-				}
 			}
 		],
 		"variables": {
