@@ -140,7 +140,14 @@
 									]
 								}
 							],
-							"userProperties": []
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_listFileNames",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
@@ -149,6 +156,9 @@
 		"variables": {
 			"v_filename": {
 				"type": "String"
+			},
+			"v_listFileNames": {
+				"type": "Array"
 			}
 		},
 		"annotations": []
