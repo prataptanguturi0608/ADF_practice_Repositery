@@ -18,11 +18,18 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "ds_Schooldb_blob_Binary_Input",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"p_FileName": {
+								"value": "@variables('v_FileName')",
+								"type": "Expression"
+							}
+						}
 					},
 					"fieldList": [
 						"childItems",
-						"itemName"
+						"itemName",
+						"size"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
@@ -52,7 +59,7 @@
 					},
 					"activities": [
 						{
-							"name": "Setvariable",
+							"name": "Set Variable-FileName",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
@@ -64,6 +71,23 @@
 								"variableName": "v_FileName",
 								"value": {
 									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set variable-fileSize",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_FileSize",
+								"value": {
+									"value": "@item().size",
 									"type": "Expression"
 								}
 							}
