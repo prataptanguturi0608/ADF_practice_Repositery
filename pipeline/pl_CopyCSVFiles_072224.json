@@ -147,7 +147,7 @@
 				"type": "String"
 			},
 			"v_FileSize": {
-				"type": "String"
+				"type": "Integer"
 			}
 		},
 		"folder": {
