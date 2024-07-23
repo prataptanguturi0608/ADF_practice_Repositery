@@ -86,11 +86,36 @@
 									"type": "BinaryReadSettings"
 								}
 							}
+						},
+						{
+							"name": "Append variable1",
+							"type": "AppendVariable",
+							"dependsOn": [
+								{
+									"activity": "GetFileMetadata",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_listOfFiles",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
 			}
 		],
+		"variables": {
+			"v_listOfFiles": {
+				"type": "Array"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes"
 		},
