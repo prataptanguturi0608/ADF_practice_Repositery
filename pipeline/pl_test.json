@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "GetFileMetadataAct",
+				"name": "GetFolderMetadataAct",
 				"description": "to get the metadata info of file",
 				"type": "GetMetadata",
 				"dependsOn": [],
