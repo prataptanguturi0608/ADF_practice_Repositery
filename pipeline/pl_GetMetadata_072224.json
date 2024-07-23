@@ -1,5 +1,5 @@
 {
-	"name": "pl_test",
+	"name": "pl_GetMetadata_072224",
 	"properties": {
 		"activities": [
 			{
@@ -187,6 +187,9 @@
 			"v_listFileNames_out": {
 				"type": "Array"
 			}
+		},
+		"folder": {
+			"name": "ADE Classes"
 		},
 		"annotations": []
 	}
