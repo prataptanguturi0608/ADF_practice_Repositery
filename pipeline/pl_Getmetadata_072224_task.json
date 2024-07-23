@@ -86,6 +86,20 @@
 									"type": "BinaryReadSettings"
 								}
 							}
+						},
+						{
+							"name": "If Condition1",
+							"description": "If condition to copy files >300Bytes in size",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "GetFilesMetadata",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": []
 						}
 					]
 				}
