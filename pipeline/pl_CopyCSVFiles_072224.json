@@ -88,8 +88,8 @@
 							}
 						},
 						{
-							"name": "Append variable1",
-							"type": "AppendVariable",
+							"name": "Set variable_fileName",
+							"type": "SetVariable",
 							"dependsOn": [
 								{
 									"activity": "GetFileMetadata",
@@ -98,11 +98,39 @@
 									]
 								}
 							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "v_listOfFiles",
+								"variableName": "v_FileName",
 								"value": {
 									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set variable_FileSize",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "GetFileMetadata",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_FileSize",
+								"value": {
+									"value": "@item().size",
 									"type": "Expression"
 								}
 							}
@@ -114,6 +142,12 @@
 		"variables": {
 			"v_listOfFiles": {
 				"type": "Array"
+			},
+			"v_FileName": {
+				"type": "String"
+			},
+			"v_FileSize": {
+				"type": "String"
 			}
 		},
 		"folder": {
