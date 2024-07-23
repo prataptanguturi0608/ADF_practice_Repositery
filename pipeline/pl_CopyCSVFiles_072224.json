@@ -130,7 +130,7 @@
 							"typeProperties": {
 								"variableName": "v_FileSize",
 								"value": {
-									"value": "@item().size",
+									"value": "activity('GetFileMetadata').output.size",
 									"type": "Expression"
 								}
 							}
