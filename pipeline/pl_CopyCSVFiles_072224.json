@@ -88,30 +88,6 @@
 							}
 						},
 						{
-							"name": "Set variable_fileName",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "GetFileMetadata",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "v_FileName",
-								"value": {
-									"value": "@activity('GetFileMetadata').output.itemName",
-									"type": "Expression"
-								}
-							}
-						},
-						{
 							"name": "Set variable_FileSize",
 							"type": "SetVariable",
 							"dependsOn": [
@@ -139,12 +115,6 @@
 							"name": "If Condition1",
 							"type": "IfCondition",
 							"dependsOn": [
-								{
-									"activity": "Set variable_fileName",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								},
 								{
 									"activity": "Set variable_FileSize",
 									"dependencyConditions": [
@@ -198,7 +168,7 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"p_FileName": {
-														"value": "@variables('v_FileName')",
+														"value": "@activity('GetFileMetadata').output.itemName",
 														"type": "Expression"
 													}
 												}
