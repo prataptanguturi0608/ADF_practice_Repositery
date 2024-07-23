@@ -28,8 +28,7 @@
 					},
 					"fieldList": [
 						"childItems",
-						"itemName",
-						"size"
+						"itemName"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
@@ -89,6 +88,36 @@
 								"value": {
 									"value": "@item().size",
 									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Get Metadata1",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
+									"type": "DatasetReference"
+								},
+								"fieldList": [
+									"itemName",
+									"size"
+								],
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
 								}
 							}
 						}
