@@ -5,6 +5,9 @@
 			"referenceName": "ls_test_BlobStorage",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "TestDB"
+		},
 		"annotations": [],
 		"type": "Binary",
 		"typeProperties": {
