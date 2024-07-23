@@ -46,6 +46,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('GetSchoolDBMetadata').output.childItems",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "Setvariable",
