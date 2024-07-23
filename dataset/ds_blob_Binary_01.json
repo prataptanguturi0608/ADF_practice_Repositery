@@ -1,0 +1,17 @@
+{
+	"name": "ds_blob_Binary_01",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_test_BlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "test-input"
+			}
+		}
+	}
+}
