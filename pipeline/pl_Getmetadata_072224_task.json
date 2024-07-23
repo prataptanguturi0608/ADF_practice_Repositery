@@ -4,7 +4,7 @@
 		"description": "Copy the files from source to target\n\nTask1: Copy the files which are >500B in size.\n\nTask2: Copy only files of previous day.\n\nTask3: Copy only .csv formatted files.",
 		"activities": [
 			{
-				"name": "Get Metadata1",
+				"name": "GetSchoolDBMetadata",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -14,7 +14,21 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_Schooldb_blob_Binary_Input",
+						"type": "DatasetReference"
+					},
+					"fieldList": [],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "BinaryReadSettings"
+					}
+				}
 			}
 		],
 		"folder": {
