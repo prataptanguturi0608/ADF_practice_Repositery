@@ -32,8 +32,8 @@
 				}
 			},
 			{
-				"name": "ForEach1",
-				"type": "ForEach",
+				"name": "CSVFileFilter",
+				"type": "Filter",
 				"dependsOn": [
 					{
 						"activity": "GetSourceMetadata",
@@ -48,10 +48,33 @@
 						"value": "@activity('GetSourceMetadata').output.childItems",
 						"type": "Expression"
 					},
+					"condition": {
+						"value": "@contains(item().name, '.csv')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "CSVFileFilter",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('CSVFileFilter').output.value",
+						"type": "Expression"
+					},
 					"activities": [
 						{
-							"name": "GetFileMetadata",
-							"type": "GetMetadata",
+							"name": "csv_file_Copy_act",
+							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
@@ -62,7 +85,27 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"dataset": {
+								"source": {
+									"type": "BinarySource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true
+									},
+									"formatSettings": {
+										"type": "BinaryReadSettings"
+									}
+								},
+								"sink": {
+									"type": "BinarySink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings",
+										"copyBehavior": "PreserveHierarchy"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
 									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
 									"type": "DatasetReference",
 									"parameters": {
@@ -71,118 +114,14 @@
 											"type": "Expression"
 										}
 									}
-								},
-								"fieldList": [
-									"itemName",
-									"itemType",
-									"lastModified",
-									"size"
-								],
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "BinaryReadSettings"
-								}
-							}
-						},
-						{
-							"name": "Set variable_FileName",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "GetFileMetadata",
-									"dependencyConditions": [
-										"Succeeded"
-									]
 								}
 							],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "v_FileName",
-								"value": {
-									"value": "@activity('GetFileMetadata').output.itemName",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "If Condition1",
-							"type": "IfCondition",
-							"dependsOn": [
+							"outputs": [
 								{
-									"activity": "Set variable_FileName",
-									"dependencyConditions": [
-										"Succeeded"
-									]
+									"referenceName": "ds_Schooldb_blob_Binary_Output",
+									"type": "DatasetReference"
 								}
-							],
-							"userProperties": [],
-							"typeProperties": {
-								"expression": {
-									"value": "@bool(endswith(variables('v_FileName'),'.csv'))",
-									"type": "Expression"
-								},
-								"ifTrueActivities": [
-									{
-										"name": "CopyFiles_act",
-										"description": "Copy .csv files",
-										"type": "Copy",
-										"dependsOn": [],
-										"policy": {
-											"timeout": "0.12:00:00",
-											"retry": 0,
-											"retryIntervalInSeconds": 30,
-											"secureOutput": false,
-											"secureInput": false
-										},
-										"userProperties": [],
-										"typeProperties": {
-											"source": {
-												"type": "BinarySource",
-												"storeSettings": {
-													"type": "AzureBlobStorageReadSettings",
-													"recursive": true
-												},
-												"formatSettings": {
-													"type": "BinaryReadSettings"
-												}
-											},
-											"sink": {
-												"type": "BinarySink",
-												"storeSettings": {
-													"type": "AzureBlobStorageWriteSettings",
-													"copyBehavior": "PreserveHierarchy"
-												}
-											},
-											"enableStaging": false
-										},
-										"inputs": [
-											{
-												"referenceName": "ds_Schooldb_blob_Binary_InputFile",
-												"type": "DatasetReference",
-												"parameters": {
-													"p_FileName": {
-														"value": "@variables('v_FileName')",
-														"type": "Expression"
-													}
-												}
-											}
-										],
-										"outputs": [
-											{
-												"referenceName": "ds_Schooldb_blob_Binary_Output",
-												"type": "DatasetReference"
-											}
-										]
-									}
-								]
-							}
+							]
 						}
 					]
 				}
