@@ -18,17 +18,10 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "ds_Schooldb_blob_Binary_Input",
-						"type": "DatasetReference",
-						"parameters": {
-							"p_FileName": {
-								"value": "@variables('v_FileName')",
-								"type": "Expression"
-							}
-						}
+						"type": "DatasetReference"
 					},
 					"fieldList": [
-						"childItems",
-						"itemName"
+						"childItems"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
@@ -38,107 +31,8 @@
 						"type": "BinaryReadSettings"
 					}
 				}
-			},
-			{
-				"name": "ForEachActivity",
-				"type": "ForEach",
-				"dependsOn": [
-					{
-						"activity": "GetSchoolDBMetadata",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"items": {
-						"value": "@activity('GetSchoolDBMetadata').output.childItems",
-						"type": "Expression"
-					},
-					"activities": [
-						{
-							"name": "Set Variable-FileName",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "v_FileName",
-								"value": {
-									"value": "@item().name",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "Set variable-fileSize",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "v_FileSize",
-								"value": {
-									"value": "@item().size",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "Get Metadata1",
-							"type": "GetMetadata",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"dataset": {
-									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
-									"type": "DatasetReference",
-									"parameters": {
-										"p_FileName": {
-											"value": "@item().name",
-											"type": "Expression"
-										}
-									}
-								},
-								"fieldList": [
-									"itemName",
-									"size"
-								],
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "BinaryReadSettings"
-								}
-							}
-						}
-					]
-				}
 			}
 		],
-		"variables": {
-			"v_FileName": {
-				"type": "String"
-			},
-			"v_FileSize": {
-				"type": "String"
-			}
-		},
 		"folder": {
 			"name": "ADE Classes"
 		},
