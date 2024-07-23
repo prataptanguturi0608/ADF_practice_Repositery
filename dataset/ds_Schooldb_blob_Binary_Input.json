@@ -1,0 +1,20 @@
+{
+	"name": "ds_Schooldb_blob_Binary_Input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_SchoolDb_Binary",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/072224_getMetadata_Task"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "schooldb-landing"
+			}
+		}
+	}
+}
