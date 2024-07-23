@@ -105,6 +105,17 @@
 				}
 			}
 		],
+		"variables": {
+			"v_FileName": {
+				"type": "String"
+			},
+			"v_FileSize": {
+				"type": "String"
+			},
+			"v_FileLastModifiedDate": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes"
 		},
