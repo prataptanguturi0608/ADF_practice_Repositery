@@ -65,7 +65,13 @@
 							"typeProperties": {
 								"dataset": {
 									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"p_FileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
 								},
 								"fieldList": [
 									"itemName",
