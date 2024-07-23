@@ -1,5 +1,5 @@
 {
-	"name": "pl_Getmetadata_072224_task",
+	"name": "pl_Copy_PrevioudBdayFiles_072224",
 	"properties": {
 		"description": "Copy the files from source to target\n\nTask1: Copy the files which are >500B in size.\n\nTask2: Copy only files of previous day.\n\nTask3: Copy only .csv formatted files.",
 		"activities": [
