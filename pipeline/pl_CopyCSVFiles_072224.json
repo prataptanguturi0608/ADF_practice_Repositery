@@ -134,15 +134,91 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Set variable_fileName",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Set variable_FileSize",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greaterOrEquals(variables('v_FileSize'),300)",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "CopyFiles_act",
+										"description": "Copy files which are >=300bytes in size",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "BinarySource",
+												"storeSettings": {
+													"type": "AzureBlobStorageReadSettings",
+													"recursive": true
+												},
+												"formatSettings": {
+													"type": "BinaryReadSettings"
+												}
+											},
+											"sink": {
+												"type": "BinarySink",
+												"storeSettings": {
+													"type": "AzureBlobStorageWriteSettings",
+													"copyBehavior": "PreserveHierarchy"
+												}
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_Schooldb_blob_Binary_InputFile",
+												"type": "DatasetReference",
+												"parameters": {
+													"p_FileName": {
+														"value": "@variables('v_FileName')",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_Schooldb_blob_Binary_Output",
+												"type": "DatasetReference"
+											}
+										]
+									}
+								]
+							}
 						}
 					]
 				}
 			}
 		],
 		"variables": {
-			"v_listOfFiles": {
-				"type": "Array"
-			},
 			"v_FileName": {
 				"type": "String"
 			},
