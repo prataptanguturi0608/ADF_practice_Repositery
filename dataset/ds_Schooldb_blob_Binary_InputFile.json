@@ -6,6 +6,14 @@
 			"referenceName": "ls_SchoolDb_Binary",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_FileName": {
+				"type": "string"
+			},
+			"p_FileSize": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes/072224_getMetadata_Task"
 		},
@@ -14,6 +22,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().p_FileName",
+					"type": "Expression"
+				},
 				"container": "schooldb-landing"
 			}
 		}
