@@ -17,7 +17,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_blob_Binary_01",
+						"referenceName": "ds_blob_Binary_In_01",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
@@ -35,8 +35,47 @@
 						"type": "BinaryReadSettings"
 					}
 				}
+			},
+			{
+				"name": "ForEachLoop",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "GetFolderMetadataAct",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"activities": [
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_filename",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
 			}
 		],
+		"variables": {
+			"v_filename": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
