@@ -5,6 +5,11 @@
 			"referenceName": "ls_blob_binary_out",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_OutFileName": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes/072224_getMetadata_Task"
 		},
@@ -13,6 +18,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().p_OutFileName",
+					"type": "Expression"
+				},
 				"container": "schooldb"
 			}
 		}
