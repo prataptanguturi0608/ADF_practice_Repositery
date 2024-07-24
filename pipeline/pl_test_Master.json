@@ -38,7 +38,10 @@
 				"inputs": [
 					{
 						"referenceName": "ds_Test_blob_input",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"p_FileName": "course.txt"
+						}
 					}
 				],
 				"outputs": [
