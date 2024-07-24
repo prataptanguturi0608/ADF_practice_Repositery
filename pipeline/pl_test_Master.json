@@ -19,7 +19,8 @@
 						"type": "BinarySource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
+							"recursive": true,
+							"deleteFilesAfterCompletion": false
 						},
 						"formatSettings": {
 							"type": "BinaryReadSettings"
@@ -48,15 +49,15 @@
 				]
 			}
 		],
-		"variables": {
-			"v_Container": {
-				"type": "String"
+		"parameters": {
+			"p_Container": {
+				"type": "string"
 			},
-			"v_Folder": {
-				"type": "String"
+			"p_Folder": {
+				"type": "string"
 			},
-			"v_file": {
-				"type": "String"
+			"p_File": {
+				"type": "string"
 			}
 		},
 		"folder": {
