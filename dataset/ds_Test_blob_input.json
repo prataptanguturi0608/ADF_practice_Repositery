@@ -6,12 +6,6 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"p_ContainerName": {
-				"type": "String"
-			},
-			"p_FolderName": {
-				"type": "String"
-			},
 			"p_FileName": {
 				"type": "String"
 			}
@@ -28,14 +22,7 @@
 					"value": "@dataset().p_FileName",
 					"type": "Expression"
 				},
-				"folderPath": {
-					"value": "@dataset().p_FolderName",
-					"type": "Expression"
-				},
-				"container": {
-					"value": "@dataset().p_ContainerName",
-					"type": "Expression"
-				}
+				"container": "schooldb-landing"
 			}
 		}
 	}
