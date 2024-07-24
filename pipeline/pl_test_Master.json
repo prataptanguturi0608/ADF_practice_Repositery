@@ -1,0 +1,9 @@
+{
+	"name": "pl_test_Master",
+	"properties": {
+		"folder": {
+			"name": "Test"
+		},
+		"annotations": []
+	}
+}
