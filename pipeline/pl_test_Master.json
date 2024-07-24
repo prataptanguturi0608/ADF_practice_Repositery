@@ -95,7 +95,13 @@
 							"outputs": [
 								{
 									"referenceName": "ds_Schooldb_blob_Binary_Output",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"p_OutFileName": {
+											"value": "@concat(replace(item().name,'.csv',''),'_',formatDateTime(utcnow(),'yyyyMMdd'),'.csv')",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
