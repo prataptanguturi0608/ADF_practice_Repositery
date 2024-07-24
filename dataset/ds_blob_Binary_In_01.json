@@ -13,7 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "test-input"
+				"fileName": "Course.csv",
+				"container": "schooldb-landing"
 			}
 		}
 	}
