@@ -1,19 +1,38 @@
 {
-	"name": "Conv_RobTbl_to_ColumnarTbl_dataflow",
+	"name": "Conv_RowTbl_to_ColumnarTbl_dataflow",
 	"properties": {
 		"description": "Dataflow task to convert row table to columnar table, grouping by customer id",
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
-					"name": "source1"
+					"dataset": {
+						"referenceName": "ds_Customer_Product_salesData",
+						"type": "DatasetReference"
+					},
+					"name": "CustomerProductSalesDataSource"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "pivot1"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> source1"
+				"source(output(",
+				"          customer_id as string,",
+				"          product_name as string,",
+				"          sales as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CustomerProductSalesDataSource",
+				"CustomerProductSalesDataSource pivot(groupBy(customer_id),",
+				"     pivotBy(product_name),",
+				"     Sales = sum(toInteger(sales)),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1"
 			]
 		}
 	}
