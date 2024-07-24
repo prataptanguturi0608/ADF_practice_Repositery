@@ -1,0 +1,19 @@
+{
+	"name": "ds_Test_blob_input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SchoolDb_bloblanding",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Test"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation"
+			}
+		}
+	}
+}
