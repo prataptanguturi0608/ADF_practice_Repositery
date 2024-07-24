@@ -1,0 +1,36 @@
+{
+	"name": "ds_Customer_Product_salesData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_CustomerProductSalesData",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Customer_Product_SalesData.txt",
+				"container": "test-input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "customer_id",
+				"type": "String"
+			},
+			{
+				"name": "product_name",
+				"type": "String"
+			},
+			{
+				"name": "sales",
+				"type": "String"
+			}
+		]
+	}
+}
