@@ -191,13 +191,13 @@
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "GetFileMetadata",
+									"activity": "If Condition1",
 									"dependencyConditions": [
 										"Succeeded"
 									]
 								},
 								{
-									"activity": "If Condition1",
+									"activity": "GetFileMetadata",
 									"dependencyConditions": [
 										"Succeeded"
 									]
