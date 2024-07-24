@@ -49,17 +49,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"p_Container": {
-				"type": "string"
-			},
-			"p_Folder": {
-				"type": "string"
-			},
-			"p_File": {
-				"type": "string"
-			}
-		},
 		"folder": {
 			"name": "Test"
 		},
