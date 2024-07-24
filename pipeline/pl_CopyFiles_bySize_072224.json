@@ -237,7 +237,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"p_FileName": {
-											"value": "@item().item",
+											"value": "@item().name",
 											"type": "Expression"
 										}
 									}
