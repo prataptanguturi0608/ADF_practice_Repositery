@@ -5,6 +5,17 @@
 			"referenceName": "LS_SchoolDb_bloblanding",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_ContainerName": {
+				"type": "String"
+			},
+			"p_FolderName": {
+				"type": "String"
+			},
+			"p_FileName": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "Test"
 		},
@@ -12,7 +23,19 @@
 		"type": "Binary",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation"
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().p_FileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().p_FolderName",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().p_ContainerName",
+					"type": "Expression"
+				}
 			}
 		}
 	}
