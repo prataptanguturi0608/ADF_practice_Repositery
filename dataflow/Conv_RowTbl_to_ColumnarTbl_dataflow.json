@@ -16,7 +16,7 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "pivot1"
+					"name": "ProductNamePivot"
 				}
 			],
 			"scriptLines": [
@@ -32,7 +32,7 @@
 				"     pivotBy(product_name),",
 				"     Sales = sum(toInteger(sales)),",
 				"     columnNaming: '$N$V',",
-				"     lateral: true) ~> pivot1"
+				"     lateral: true) ~> ProductNamePivot"
 			]
 		}
 	}
