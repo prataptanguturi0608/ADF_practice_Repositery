@@ -48,6 +48,17 @@
 				]
 			}
 		],
+		"variables": {
+			"v_Container": {
+				"type": "String"
+			},
+			"v_Folder": {
+				"type": "String"
+			},
+			"v_file": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "Test"
 		},
