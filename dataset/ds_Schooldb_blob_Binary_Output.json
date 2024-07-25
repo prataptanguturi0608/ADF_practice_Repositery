@@ -5,11 +5,6 @@
 			"referenceName": "ls_blob_binary_out",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"p_OutFileName": {
-				"type": "String"
-			}
-		},
 		"folder": {
 			"name": "ADE Classes/072224_getMetadata_Task"
 		},
