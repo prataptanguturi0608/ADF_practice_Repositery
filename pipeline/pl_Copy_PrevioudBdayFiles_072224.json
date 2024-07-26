@@ -34,7 +34,7 @@
 				}
 			},
 			{
-				"name": "ForEach-to-Copy-Previous Bday files",
+				"name": "ForEachLoop-to-Copy-Previous Bday files",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -90,31 +90,8 @@
 							}
 						},
 						{
-							"name": "Set variable1",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "GetFilesMetadata",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "v_FileLastModifiedDate",
-								"value": {
-									"value": "@formatDateTime(activity('GetFilesMetadata').output.lastModified,'yyyy-MM-dd')",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "If Condition1",
+							"name": "IfCondition_ToCheckDataLogic",
+							"description": "If statement to check if the file last modified date is Current date-1 or not",
 							"type": "IfCondition",
 							"dependsOn": [
 								{
@@ -127,7 +104,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@greaterOrEquals(activity('GetFilesMetadata').output.lastModified,adddays(utcnow(),-4))",
+									"value": "@lessOrEquals(activity('GetFilesMetadata').output.lastModified,adddays(utcnow(),-1))\n\n",
 									"type": "Expression"
 								},
 								"ifTrueActivities": [
