@@ -50,6 +50,7 @@
 						"value": "@activity('GetSchoolDBMetadata').output.childItems",
 						"type": "Expression"
 					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "GetFilesMetadata",
@@ -89,74 +90,6 @@
 							}
 						},
 						{
-							"name": "If Condition1",
-							"description": "Copy Previoud Bday file only",
-							"type": "IfCondition",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"expression": {
-									"value": "@lessOrEquals(formatDateTime(activity('GetFilesMetadata').output.lastModified,'yyyyMMdd'),formatDateTime(utcNow(),'yyyyMMdd'))",
-									"type": "Expression"
-								},
-								"ifTrueActivities": [
-									{
-										"name": "Copy Previous BDay Files",
-										"type": "Copy",
-										"dependsOn": [],
-										"policy": {
-											"timeout": "0.12:00:00",
-											"retry": 0,
-											"retryIntervalInSeconds": 30,
-											"secureOutput": false,
-											"secureInput": false
-										},
-										"userProperties": [],
-										"typeProperties": {
-											"source": {
-												"type": "BinarySource",
-												"storeSettings": {
-													"type": "AzureBlobStorageReadSettings",
-													"recursive": true
-												},
-												"formatSettings": {
-													"type": "BinaryReadSettings"
-												}
-											},
-											"sink": {
-												"type": "BinarySink",
-												"storeSettings": {
-													"type": "AzureBlobStorageWriteSettings",
-													"copyBehavior": "PreserveHierarchy"
-												}
-											},
-											"enableStaging": false
-										},
-										"inputs": [
-											{
-												"referenceName": "ds_Schooldb_blob_Binary_InputFile",
-												"type": "DatasetReference",
-												"parameters": {
-													"p_FileName": {
-														"value": "@activity('GetFilesMetadata').output.itemName",
-														"type": "Expression"
-													}
-												}
-											}
-										],
-										"outputs": [
-											{
-												"referenceName": "ds_Schooldb_blob_Binary_Output",
-												"type": "DatasetReference"
-											}
-										]
-									}
-								]
-							}
-						},
-						{
 							"name": "Set variable1",
 							"type": "SetVariable",
 							"dependsOn": [
@@ -175,7 +108,7 @@
 							"typeProperties": {
 								"variableName": "v_FileLastModifiedDate",
 								"value": {
-									"value": "@item().lastModified",
+									"value": "@activity('GetFilesMetadata').output.lastModified",
 									"type": "Expression"
 								}
 							}
@@ -186,9 +119,6 @@
 		],
 		"variables": {
 			"v_FileName": {
-				"type": "String"
-			},
-			"v_FileSize": {
 				"type": "String"
 			},
 			"v_FileLastModifiedDate": {
