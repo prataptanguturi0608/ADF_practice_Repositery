@@ -30,8 +30,73 @@
 						"type": "BinaryReadSettings"
 					}
 				}
+			},
+			{
+				"name": "ForEachFileLoop",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "GetFolderMetadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('GetFolderMetadata').output.childItems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Get Metadata1",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_FileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"itemName",
+									"size"
+								],
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							}
+						}
+					]
+				}
 			}
 		],
+		"parameters": {
+			"p_FileName": {
+				"type": "string"
+			},
+			"p_FileSize": {
+				"type": "int"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes"
 		},
