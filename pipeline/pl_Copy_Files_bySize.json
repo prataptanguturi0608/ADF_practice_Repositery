@@ -50,7 +50,7 @@
 					},
 					"activities": [
 						{
-							"name": "Get Metadata1",
+							"name": "GetFilesMetadata",
 							"type": "GetMetadata",
 							"dependsOn": [],
 							"policy": {
