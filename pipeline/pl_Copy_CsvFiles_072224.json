@@ -93,7 +93,16 @@
 									"type": "BinarySource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"recursive": true
+										"recursive": true,
+										"modifiedDatetimeStart": {
+											"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+											"type": "Expression"
+										},
+										"modifiedDatetimeEnd": {
+											"value": "formatDateTime(utcNow(),'yyyy/MM/dd')",
+											"type": "Expression"
+										},
+										"deleteFilesAfterCompletion": false
 									},
 									"formatSettings": {
 										"type": "BinaryReadSettings"
@@ -116,8 +125,7 @@
 										"p_FileName": {
 											"value": "@item().name",
 											"type": "Expression"
-										},
-										"p_FileSize": "123"
+										}
 									}
 								}
 							],
@@ -138,6 +146,18 @@
 			},
 			"v_FileSize": {
 				"type": "Integer"
+			},
+			"filenametxt": {
+				"type": "String"
+			},
+			"inputfilename": {
+				"type": "String"
+			},
+			"filenamejson": {
+				"type": "String"
+			},
+			"filenameparquet": {
+				"type": "String"
 			}
 		},
 		"folder": {
