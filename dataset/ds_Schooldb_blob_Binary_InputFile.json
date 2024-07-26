@@ -6,6 +6,14 @@
 			"referenceName": "ls_SchoolDb_Binary",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_FileName": {
+				"type": "string"
+			},
+			"p_FileSize": {
+				"type": "int"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes/072224_getMetadata_Task"
 		},
