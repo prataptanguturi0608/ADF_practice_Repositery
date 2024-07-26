@@ -92,8 +92,6 @@
 						{
 							"name": "Set variable_Filename",
 							"type": "SetVariable",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "FilterFilesbySize",
