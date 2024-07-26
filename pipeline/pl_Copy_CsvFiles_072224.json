@@ -4,6 +4,7 @@
 		"activities": [
 			{
 				"name": "GetSourceMetadata",
+				"description": "Get the child items present in the  'mfsdatastorage\\schooldb-landing' folder.",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -34,6 +35,7 @@
 			},
 			{
 				"name": "CSVFileFilter",
+				"description": "Filters the .csv file names from the output of \"GetSourceMetadata\" activity.",
 				"type": "Filter",
 				"dependsOn": [
 					{
@@ -56,7 +58,8 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEach Loop",
+				"description": "For loop pass the output of 'CSVFileFilter' to CSV_file_copy_act activity",
 				"type": "ForEach",
 				"dependsOn": [
 					{
