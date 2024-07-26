@@ -67,9 +67,7 @@
 									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
 									"type": "DatasetReference"
 								},
-								"fieldList": [
-									"itemName"
-								],
+								"fieldList": [],
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"enablePartitionDiscovery": false
