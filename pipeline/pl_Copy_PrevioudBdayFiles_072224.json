@@ -74,7 +74,10 @@
 										}
 									}
 								},
-								"fieldList": [],
+								"fieldList": [
+									"itemName",
+									"lastModified"
+								],
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": true,
@@ -89,18 +92,13 @@
 							"name": "If Condition1",
 							"description": "Copy Previoud Bday file only",
 							"type": "IfCondition",
-							"dependsOn": [
-								{
-									"activity": "GetFilesMetadata",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@lessOrEquals(activity('GetFilesMetadata').output.lastModified,adddays(utcnow(),-1))",
+									"value": "@lessOrEquals(formatDateTime(activity('GetFilesMetadata').output.lastModified,'yyyyMMdd'),formatDateTime(utcNow(),'yyyyMMdd'))",
 									"type": "Expression"
 								},
 								"ifTrueActivities": [
@@ -139,7 +137,13 @@
 										"inputs": [
 											{
 												"referenceName": "ds_Schooldb_blob_Binary_InputFile",
-												"type": "DatasetReference"
+												"type": "DatasetReference",
+												"parameters": {
+													"p_FileName": {
+														"value": "@activity('GetFilesMetadata').output.itemName",
+														"type": "Expression"
+													}
+												}
 											}
 										],
 										"outputs": [
@@ -150,6 +154,30 @@
 										]
 									}
 								]
+							}
+						},
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "GetFilesMetadata",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_FileLastModifiedDate",
+								"value": {
+									"value": "@item().lastModified",
+									"type": "Expression"
+								}
 							}
 						}
 					]
