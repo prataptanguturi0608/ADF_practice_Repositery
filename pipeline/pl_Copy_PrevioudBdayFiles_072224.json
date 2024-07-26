@@ -72,7 +72,8 @@
 										"p_FileName": {
 											"value": "@item().name",
 											"type": "Expression"
-										}
+										},
+										"p_FileSize": "123"
 									}
 								},
 								"fieldList": [
@@ -149,7 +150,8 @@
 													"p_FileName": {
 														"value": "@activity('GetFilesMetadata').output.itemName",
 														"type": "Expression"
-													}
+													},
+													"p_FileSize": "123"
 												}
 											}
 										],
