@@ -90,11 +90,13 @@
 							}
 						},
 						{
-							"name": "Set variable_FileSize",
+							"name": "Set variable_Filename",
 							"type": "SetVariable",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
-									"activity": "GetFileMetadata",
+									"activity": "FilterFilesbySize",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -106,9 +108,9 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "v_FileSize",
+								"variableName": "v_FileName",
 								"value": {
-									"value": "@activity('GetFileMetadata').output.size",
+									"value": "@activity('FilterFilesbySize').output",
 									"type": "Expression"
 								}
 							}
@@ -116,9 +118,11 @@
 						{
 							"name": "If Condition1",
 							"type": "IfCondition",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
-									"activity": "Set variable_FileSize",
+									"activity": "Set variable_Filename",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -184,6 +188,29 @@
 										]
 									}
 								]
+							}
+						},
+						{
+							"name": "FilterFilesbySize",
+							"type": "Filter",
+							"dependsOn": [
+								{
+									"activity": "GetFileMetadata",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"items": {
+									"value": "@item().name",
+									"type": "Expression"
+								},
+								"condition": {
+									"value": "@greaterOrEquals(activity('GetFileMetadata').output.size,300)",
+									"type": "Expression"
+								}
 							}
 						}
 					]
