@@ -21,9 +21,7 @@
 						"type": "DatasetReference"
 					},
 					"fieldList": [
-						"childItems",
-						"lastModified",
-						"itemName"
+						"childItems"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
@@ -68,13 +66,15 @@
 							"typeProperties": {
 								"dataset": {
 									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"p_FileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
 								},
-								"fieldList": [
-									"itemName",
-									"lastModified",
-									"size"
-								],
+								"fieldList": [],
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": true,
@@ -87,7 +87,7 @@
 						},
 						{
 							"name": "If Condition1",
-							"description": "If condition to copy files >300Bytes in size",
+							"description": "Copy Previoud Bday file only",
 							"type": "IfCondition",
 							"dependsOn": [
 								{
