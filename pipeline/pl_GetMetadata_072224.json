@@ -190,6 +190,12 @@
 			},
 			"v_FileSize": {
 				"type": "Integer"
+			},
+			"list_FileNames": {
+				"type": "Array"
+			},
+			"List_FileNameData": {
+				"type": "Array"
 			}
 		},
 		"folder": {
