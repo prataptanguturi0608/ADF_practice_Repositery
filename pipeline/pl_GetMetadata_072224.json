@@ -17,15 +17,11 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_blob_Binary_In_01",
+						"referenceName": "ds_Schooldb_blob_Binary_Input",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
-						"childItems",
-						"exists",
-						"itemName",
-						"itemType",
-						"lastModified"
+						"childItems"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
@@ -106,18 +102,19 @@
 								"sink": {
 									"type": "BinarySink",
 									"storeSettings": {
-										"type": "AzureBlobStorageWriteSettings"
+										"type": "AzureBlobStorageWriteSettings",
+										"copyBehavior": "PreserveHierarchy"
 									}
 								},
 								"enableStaging": false
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_blob_Binary_In_02",
+									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
 									"type": "DatasetReference",
 									"parameters": {
-										"p_filenameInput": {
-											"value": "@variables('v_filename')",
+										"p_FileName": {
+											"value": "@item().name",
 											"type": "Expression"
 										}
 									}
@@ -125,7 +122,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_blob_Binary_out_01",
+									"referenceName": "ds_Schooldb_blob_Binary_Output",
 									"type": "DatasetReference"
 								}
 							]
