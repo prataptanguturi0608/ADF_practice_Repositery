@@ -71,10 +71,6 @@
 										"p_FileName": {
 											"value": "@item().name",
 											"type": "Expression"
-										},
-										"p_FileSize": {
-											"value": "@item().size",
-											"type": "Expression"
 										}
 									}
 								},
