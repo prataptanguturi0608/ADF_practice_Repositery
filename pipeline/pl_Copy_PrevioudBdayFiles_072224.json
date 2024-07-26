@@ -105,7 +105,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@lessOrEquals(activity('GetFilesMetadata').output.lastModified,adddays(utcnow(),-1))\n\n",
+									"value": "@GreaterOrEquals(activity('GetFilesMetadata').output.lastModified,adddays(utcnow(),-1))\n\n",
 									"type": "Expression"
 								},
 								"ifTrueActivities": [

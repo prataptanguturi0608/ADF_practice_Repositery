@@ -9,10 +9,6 @@
 		"parameters": {
 			"p_FileName": {
 				"type": "string"
-			},
-			"p_FileSize": {
-				"type": "string",
-				"defaultValue": "300"
 			}
 		},
 		"folder": {
