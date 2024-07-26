@@ -111,13 +111,7 @@
 							"inputs": [
 								{
 									"referenceName": "ds_Schooldb_blob_Binary_InputFile",
-									"type": "DatasetReference",
-									"parameters": {
-										"p_FileName": {
-											"value": "@item().name",
-											"type": "Expression"
-										}
-									}
+									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
