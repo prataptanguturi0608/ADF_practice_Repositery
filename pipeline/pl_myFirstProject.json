@@ -143,7 +143,7 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_mfp_Blob_txtFile",
+														"referenceName": "ds_mfp_Blob_landing_txt",
 														"type": "DatasetReference",
 														"parameters": {
 															"p_Filename": {
@@ -324,6 +324,7 @@
 								],
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {

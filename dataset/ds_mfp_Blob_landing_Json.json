@@ -1,5 +1,5 @@
 {
-	"name": "ds_mfp_BlobLanding",
+	"name": "ds_mfp_Blob_landing_Json",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myFirstProject_BlobStorage1",
@@ -9,12 +9,12 @@
 			"name": "ADE Classes/myFirstProject"
 		},
 		"annotations": [],
-		"type": "Binary",
+		"type": "Json",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"container": "customer-orders-landing"
+				"type": "AzureBlobStorageLocation"
 			}
-		}
+		},
+		"schema": {}
 	}
 }

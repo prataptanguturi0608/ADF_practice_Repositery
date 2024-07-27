@@ -11,6 +11,9 @@
 				"p_SFTP_Port": 22
 			}
 		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
 		"annotations": [],
 		"type": "Binary",
 		"typeProperties": {
