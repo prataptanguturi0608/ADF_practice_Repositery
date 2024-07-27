@@ -1,5 +1,5 @@
 {
-	"name": "ds_mfp_DLake_B_txt",
+	"name": "ds_mfp_DLake_B_Json",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myFirstProj_DLake_output",
@@ -9,18 +9,14 @@
 			"name": "ADE Classes/myFirstProject"
 		},
 		"annotations": [],
-		"type": "DelimitedText",
+		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": "Output",
 				"fileSystem": "customerorders"
-			},
-			"columnDelimiter": ",",
-			"escapeChar": "\\",
-			"firstRowAsHeader": true,
-			"quoteChar": "\""
+			}
 		},
-		"schema": []
+		"schema": {}
 	}
 }
