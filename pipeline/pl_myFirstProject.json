@@ -228,7 +228,7 @@
 										"value": "parquet",
 										"activities": [
 											{
-												"name": "Copy data3",
+												"name": "CopyParquetFiles",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {
@@ -241,7 +241,7 @@
 												"userProperties": [],
 												"typeProperties": {
 													"source": {
-														"type": "BinarySource",
+														"type": "ParquetSource",
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
@@ -252,11 +252,10 @@
 															"modifiedDatetimeEnd": {
 																"value": "@utcNow()",
 																"type": "Expression"
-															},
-															"deleteFilesAfterCompletion": false
+															}
 														},
 														"formatSettings": {
-															"type": "BinaryReadSettings"
+															"type": "ParquetReadSettings"
 														}
 													},
 													"sink": {
@@ -270,10 +269,10 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_myFirstProject_blobFiles",
+														"referenceName": "ds_mfp_Blob_landing_Parquet",
 														"type": "DatasetReference",
 														"parameters": {
-															"p_FileName": {
+															"p_Filename": {
 																"value": "@variables('v_InputFileName')",
 																"type": "Expression"
 															}
