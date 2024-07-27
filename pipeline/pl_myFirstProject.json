@@ -73,7 +73,7 @@
 										"value": "txt",
 										"activities": [
 											{
-												"name": "Copy data1",
+												"name": "CopyTxtFiles",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {
@@ -113,6 +113,14 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
+															"modifiedDatetimeStart": {
+																"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+																"type": "Expression"
+															},
+															"modifiedDatetimeEnd": {
+																"value": "@ut",
+																"type": "Expression"
+															},
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -166,7 +174,7 @@
 										"value": "json",
 										"activities": [
 											{
-												"name": "Copy data2",
+												"name": "CopyJsonFiles",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {
@@ -179,22 +187,14 @@
 												"userProperties": [],
 												"typeProperties": {
 													"source": {
-														"type": "BinarySource",
+														"type": "JsonSource",
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
-															"modifiedDatetimeStart": {
-																"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
-																"type": "Expression"
-															},
-															"modifiedDatetimeEnd": {
-																"value": "@utcNow()",
-																"type": "Expression"
-															},
-															"deleteFilesAfterCompletion": false
+															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
-															"type": "BinaryReadSettings"
+															"type": "JsonReadSettings"
 														}
 													},
 													"sink": {
@@ -208,13 +208,10 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_myFirstProject_blobFiles",
+														"referenceName": "ds_mfp_Blob_landing_Json",
 														"type": "DatasetReference",
 														"parameters": {
-															"p_FileName": {
-																"value": "@variables('v_InputFileName')",
-																"type": "Expression"
-															}
+															"p_Filename": "@variables('v_InputFileName')"
 														}
 													}
 												],
