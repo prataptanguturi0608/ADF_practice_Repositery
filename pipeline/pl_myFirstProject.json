@@ -97,13 +97,26 @@
 														}
 													},
 													"sink": {
-														"type": "BinarySink",
+														"type": "DelimitedTextSink",
 														"storeSettings": {
 															"type": "AzureBlobFSWriteSettings",
 															"copyBehavior": "PreserveHierarchy"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextWriteSettings",
+															"quoteAllText": true,
+															"fileExtension": ".txt"
 														}
 													},
-													"enableStaging": false
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
 												},
 												"inputs": [
 													{
@@ -119,7 +132,7 @@
 												],
 												"outputs": [
 													{
-														"referenceName": "ds_myFirstProject_Target",
+														"referenceName": "ds_mfp_DLake_txtFile",
 														"type": "DatasetReference"
 													}
 												]
