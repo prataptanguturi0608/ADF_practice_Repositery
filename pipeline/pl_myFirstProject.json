@@ -364,9 +364,6 @@
 		"variables": {
 			"v_InputFileName": {
 				"type": "String"
-			},
-			"v_ShortFileName": {
-				"type": "String"
 			}
 		},
 		"folder": {
