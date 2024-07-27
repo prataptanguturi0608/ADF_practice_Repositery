@@ -64,7 +64,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"on": {
-									"value": "@split(item().name,'.')[1]",
+									"value": "@split(variables('v_ShortFileName'),'.')[1]",
 									"type": "Expression"
 								},
 								"cases": [
@@ -289,6 +289,9 @@
 		],
 		"variables": {
 			"v_InputFileName": {
+				"type": "String"
+			},
+			"v_ShortFileName": {
 				"type": "String"
 			}
 		},
