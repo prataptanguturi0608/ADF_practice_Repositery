@@ -114,10 +114,10 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_myFirstProject_blobFolder",
+														"referenceName": "ds_myFirstProject_blobFiles",
 														"type": "DatasetReference",
 														"parameters": {
-															"p_FileName": "@item().name"
+															"p_FileName": "item().name"
 														}
 													}
 												],
