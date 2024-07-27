@@ -1,5 +1,5 @@
 {
-	"name": "ds_myFirstProject_Target",
+	"name": "ds_mfp_Target",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myFirstProj_DLake_output",

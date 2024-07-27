@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_myFirstProject_blobFolder",
+						"referenceName": "ds_mfp_blobFolder",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
@@ -217,7 +217,7 @@
 												],
 												"outputs": [
 													{
-														"referenceName": "ds_myFirstProject_Target",
+														"referenceName": "ds_mfp_Target",
 														"type": "DatasetReference"
 													}
 												]
@@ -281,7 +281,7 @@
 												],
 												"outputs": [
 													{
-														"referenceName": "ds_myFirstProject_Target",
+														"referenceName": "ds_mfp_Target",
 														"type": "DatasetReference"
 													}
 												]
@@ -305,7 +305,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataset": {
-									"referenceName": "ds_myFirstProject_blobFiles",
+									"referenceName": "ds_mfp_blobFiles",
 									"type": "DatasetReference",
 									"parameters": {
 										"p_FileName": {

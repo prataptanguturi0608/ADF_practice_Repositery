@@ -1,5 +1,5 @@
 {
-	"name": "ds_myFirstProject_blobFolder",
+	"name": "ds_mfp_blobFolder",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myFirstProject_BlobStorage1",
