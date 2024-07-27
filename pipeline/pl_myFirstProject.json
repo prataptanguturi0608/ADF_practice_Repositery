@@ -87,6 +87,15 @@
 												"typeProperties": {
 													"source": {
 														"type": "DelimitedTextSource",
+														"additionalColumns": [
+															{
+																"name": "Injected_by",
+																"value": {
+																	"value": "@pipeline().parameters.p_InjectedBy",
+																	"type": "Expression"
+																}
+															}
+														],
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
