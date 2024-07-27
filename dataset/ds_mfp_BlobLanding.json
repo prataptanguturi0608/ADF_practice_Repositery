@@ -1,0 +1,17 @@
+{
+	"name": "ds_mfp_BlobLanding",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_myFirstProject_BlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "Landing"
+			}
+		}
+	}
+}
