@@ -12,7 +12,8 @@
 		"type": "Json",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation"
+				"type": "AzureBlobStorageLocation",
+				"container": "customer-orders-landing"
 			}
 		},
 		"schema": {}
