@@ -89,21 +89,21 @@
 														"type": "DelimitedTextSource",
 														"additionalColumns": [
 															{
-																"name": "Injected_by",
+																"name": "Ingestion_by",
 																"value": {
 																	"value": "@pipeline().parameters.p_InjectedBy",
 																	"type": "Expression"
 																}
 															},
 															{
-																"name": "Injected_TimeStamp",
+																"name": "Ingestion_TimeStamp",
 																"value": {
 																	"value": "@utcnow()",
 																	"type": "Expression"
 																}
 															},
 															{
-																"name": "InjectionDate",
+																"name": "Ingestion_Date",
 																"value": {
 																	"value": "@formatDateTime(utcNow(),'yyyy\\MM\\dd')",
 																	"type": "Expression"
