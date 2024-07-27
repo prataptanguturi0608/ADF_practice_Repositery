@@ -117,7 +117,10 @@
 														"referenceName": "ds_myFirstProject_blobFiles",
 														"type": "DatasetReference",
 														"parameters": {
-															"p_FileName": "item().name"
+															"p_FileName": {
+																"value": "@variables('v_InputFileName')",
+																"type": "Expression"
+															}
 														}
 													}
 												],
@@ -179,7 +182,10 @@
 														"referenceName": "ds_myFirstProject_blobFiles",
 														"type": "DatasetReference",
 														"parameters": {
-															"p_FileName": "item().name"
+															"p_FileName": {
+																"value": "@variables('v_InputFileName')",
+																"type": "Expression"
+															}
 														}
 													}
 												],
@@ -241,7 +247,10 @@
 														"referenceName": "ds_myFirstProject_blobFiles",
 														"type": "DatasetReference",
 														"parameters": {
-															"p_FileName": "item().name"
+															"p_FileName": {
+																"value": "@variables('v_InputFileName')",
+																"type": "Expression"
+															}
 														}
 													}
 												],
