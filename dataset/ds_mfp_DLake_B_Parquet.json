@@ -1,0 +1,23 @@
+{
+	"name": "ds_mfp_DLake_B_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_myFirstProj_DLake_output",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Output",
+				"fileSystem": "customerorders"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
