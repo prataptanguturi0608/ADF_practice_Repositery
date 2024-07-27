@@ -87,6 +87,20 @@
 				]
 			}
 		],
+		"parameters": {
+			"p_SFTP_Host": {
+				"type": "string"
+			},
+			"p_SFTP_UserName": {
+				"type": "string"
+			},
+			"p_SFTP_Password": {
+				"type": "string"
+			},
+			"p_SFTP_port": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes"
 		},
