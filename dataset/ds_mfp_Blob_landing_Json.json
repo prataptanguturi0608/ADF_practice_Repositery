@@ -18,8 +18,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "@dataset().p_Filename",
-				"container": "customer-orders-landing"
+				"container": "input"
 			}
 		},
 		"schema": {}

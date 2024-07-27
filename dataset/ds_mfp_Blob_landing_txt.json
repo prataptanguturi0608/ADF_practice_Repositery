@@ -22,7 +22,7 @@
 					"value": "@dataset().p_Filename",
 					"type": "Expression"
 				},
-				"container": "customer-orders-landing"
+				"container": "input"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
