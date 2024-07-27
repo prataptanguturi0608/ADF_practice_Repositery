@@ -1,0 +1,25 @@
+{
+	"name": "ds_mfp_Blob_txtFile",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_myFirstProject_BlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
