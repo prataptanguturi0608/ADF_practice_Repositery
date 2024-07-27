@@ -191,6 +191,14 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
+															"modifiedDatetimeStart": {
+																"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+																"type": "Expression"
+															},
+															"modifiedDatetimeEnd": {
+																"value": "@utcNow()",
+																"type": "Expression"
+															},
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -198,10 +206,13 @@
 														}
 													},
 													"sink": {
-														"type": "BinarySink",
+														"type": "JsonSink",
 														"storeSettings": {
 															"type": "AzureBlobFSWriteSettings",
 															"copyBehavior": "PreserveHierarchy"
+														},
+														"formatSettings": {
+															"type": "JsonWriteSettings"
 														}
 													},
 													"enableStaging": false
@@ -217,7 +228,7 @@
 												],
 												"outputs": [
 													{
-														"referenceName": "ds_mfp_Target",
+														"referenceName": "ds_mfp_DLake_B_Json",
 														"type": "DatasetReference"
 													}
 												]
