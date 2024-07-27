@@ -370,6 +370,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"p_InjectedBy": {
+				"type": "string",
+				"defaultValue": "Automated"
+			}
+		},
 		"variables": {
 			"v_InputFileName": {
 				"type": "String"
