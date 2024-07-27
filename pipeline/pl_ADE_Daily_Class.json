@@ -15,6 +15,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_mfp_blobFolder",
+						"type": "DatasetReference"
+					},
 					"fieldList": [
 						"childItems"
 					],
