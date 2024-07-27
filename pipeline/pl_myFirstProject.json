@@ -118,7 +118,7 @@
 																"type": "Expression"
 															},
 															"modifiedDatetimeEnd": {
-																"value": "@ut",
+																"value": "@utcNow()",
 																"type": "Expression"
 															},
 															"enablePartitionDiscovery": false
