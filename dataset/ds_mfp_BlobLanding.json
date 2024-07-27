@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "customer-orders-landing"
+				"container": "input"
 			}
 		}
 	}
