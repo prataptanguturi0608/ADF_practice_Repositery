@@ -33,7 +33,7 @@
 				}
 			},
 			{
-				"name": "Copy_SFTP_Landing",
+				"name": "Copy_SFTP_to_Landing",
 				"type": "Copy",
 				"dependsOn": [
 					{
