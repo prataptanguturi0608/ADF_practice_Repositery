@@ -1,0 +1,9 @@
+{
+	"name": "pl_SFTP_Blob",
+	"properties": {
+		"folder": {
+			"name": "ADE Classes"
+		},
+		"annotations": []
+	}
+}
