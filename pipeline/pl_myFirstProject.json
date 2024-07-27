@@ -404,7 +404,7 @@
 			}
 		],
 		"parameters": {
-			"p_InjectedBy": {
+			"p_IngestedBy": {
 				"type": "string",
 				"defaultValue": "Automated"
 			}
