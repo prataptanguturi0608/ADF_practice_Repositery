@@ -94,6 +94,20 @@
 																	"value": "@pipeline().parameters.p_InjectedBy",
 																	"type": "Expression"
 																}
+															},
+															{
+																"name": "Injected_TimeStamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "InjectionDate",
+																"value": {
+																	"value": "@formatDateTime(utcNow(),'yyyy\\MM\\dd')",
+																	"type": "Expression"
+																}
 															}
 														],
 														"storeSettings": {
