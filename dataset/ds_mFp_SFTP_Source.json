@@ -3,13 +3,7 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_Sftp1",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"p_SFTPServerName": "eu-central-1.sftpcloud.io",
-				"p_SFTP_UserName": "4ee92ae942584131846a993b47169499",
-				"p_SFTP_Password": "tSoq6UnAd84PX2ozMCS6RayiVtt5fnRm",
-				"p_SFTP_Port": 22
-			}
+			"type": "LinkedServiceReference"
 		},
 		"folder": {
 			"name": "ADE Classes/myFirstProject"
