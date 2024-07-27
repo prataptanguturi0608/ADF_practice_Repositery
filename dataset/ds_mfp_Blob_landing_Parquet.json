@@ -5,6 +5,11 @@
 			"referenceName": "ls_myFirstProject_BlobStorage1",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_Filename": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes/myFirstProject"
 		},
