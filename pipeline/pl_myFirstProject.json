@@ -91,7 +91,7 @@
 															{
 																"name": "Ingestion_by",
 																"value": {
-																	"value": "@pipeline().parameters.p_InjectedBy",
+																	"value": "@pipeline().parameters.p_IngestedBy",
 																	"type": "Expression"
 																}
 															},
