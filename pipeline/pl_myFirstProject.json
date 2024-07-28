@@ -188,6 +188,29 @@
 												"typeProperties": {
 													"source": {
 														"type": "JsonSource",
+														"additionalColumns": [
+															{
+																"name": "Ingestion_by",
+																"value": {
+																	"value": "@pipeline().parameters.p_IngestedBy",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "Ingestion_TimeStamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "Ingestion_Date",
+																"value": {
+																	"value": "@formatDateTime(utcNow(),'yyyy\\MM\\dd')",
+																	"type": "Expression"
+																}
+															}
+														],
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
@@ -253,6 +276,29 @@
 												"typeProperties": {
 													"source": {
 														"type": "ParquetSource",
+														"additionalColumns": [
+															{
+																"name": "Ingestion_by",
+																"value": {
+																	"value": "@pipeline().parameters.p_IngestedBy",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "Ingestion_TimeStamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "Ingestion_Date",
+																"value": {
+																	"value": "@formatDateTime(utcNow(),'yyyy\\MM\\dd')",
+																	"type": "Expression"
+																}
+															}
+														],
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
