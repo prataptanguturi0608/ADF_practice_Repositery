@@ -24,6 +24,7 @@
 					],
 					"storeSettings": {
 						"type": "SftpReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false,
 						"disableChunking": false
 					},
@@ -57,6 +58,14 @@
 						"storeSettings": {
 							"type": "SftpReadSettings",
 							"recursive": true,
+							"modifiedDatetimeStart": {
+								"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+								"type": "Expression"
+							},
+							"modifiedDatetimeEnd": {
+								"value": "@utcNow()",
+								"type": "Expression"
+							},
 							"deleteFilesAfterCompletion": false,
 							"disableChunking": false
 						},
