@@ -2,7 +2,7 @@
 	"name": "ds_mfp_DLake_B_txt",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_SchoolDB_i",
+			"referenceName": "ls_myFirstProj_DLake_output",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
@@ -12,9 +12,9 @@
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
+				"type": "AzureBlobFSLocation",
 				"fileName": "OfficeAssignment.csv",
-				"container": "schooldb"
+				"fileSystem": "schooldb"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
