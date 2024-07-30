@@ -1,0 +1,68 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_Course_CSV_i",
+						"type": "DatasetReference"
+					},
+					"name": "CourseCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_mfp_DLake_B_txt",
+						"type": "DatasetReference"
+					},
+					"name": "StudentGradeTXT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_SchoolsData",
+						"type": "DatasetReference"
+					},
+					"name": "sink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JoinTables"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CourseID as string,",
+				"          Title as string,",
+				"          Credits as string,",
+				"          DepartmentID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CourseCSV",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> StudentGradeTXT",
+				"CourseCSV, StudentGradeTXT join(CourseID == {EnrollmentID     CourseID     StudentID     Grade},",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> JoinTables",
+				"JoinTables sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Schooldata'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          Title,",
+				"          Credits,",
+				"          DepartmentID",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sink"
+			]
+		}
+	}
+}
