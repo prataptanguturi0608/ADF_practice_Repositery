@@ -26,9 +26,6 @@
 				"type": "String"
 			}
 		},
-		"folder": {
-			"name": "ADE Classes"
-		},
 		"annotations": []
 	}
 }
