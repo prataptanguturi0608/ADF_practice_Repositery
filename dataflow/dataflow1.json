@@ -16,7 +16,7 @@
 						"referenceName": "ds_mfp_DLake_B_txt",
 						"type": "DatasetReference"
 					},
-					"name": "StudentGradeTXT"
+					"name": "OfficeAssignmentCSV"
 				}
 			],
 			"sinks": [
@@ -45,8 +45,8 @@
 				"     ignoreNoFilesFound: false) ~> CourseCSV",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> StudentGradeTXT",
-				"CourseCSV, StudentGradeTXT join(CourseID == {EnrollmentID     CourseID     StudentID     Grade},",
+				"     ignoreNoFilesFound: false) ~> OfficeAssignmentCSV",
+				"CourseCSV, OfficeAssignmentCSV join(CourseID == {EnrollmentID     CourseID     StudentID     Grade},",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
@@ -57,6 +57,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     mapColumn(",
+				"          CourseID,",
 				"          Title,",
 				"          Credits,",
 				"          DepartmentID",

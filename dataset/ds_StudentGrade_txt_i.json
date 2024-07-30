@@ -1,5 +1,5 @@
 {
-	"name": "ds_StudentGrad_txt_i",
+	"name": "ds_StudentGrade_txt_i",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_SchoolDB_i",
