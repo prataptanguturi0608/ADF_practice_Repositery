@@ -1,0 +1,31 @@
+{
+	"name": "ds_StudentGrad_txt_i",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_SchoolDB_i",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/DailyClass"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "StudentGrade.txt",
+				"container": "schooldb"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "EnrollmentID\tCourseID\tStudentID\tGrade",
+				"type": "String"
+			}
+		]
+	}
+}
