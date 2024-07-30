@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_mFp_SFTP_Source",
+						"referenceName": "ds_mfp_SFTP_Source",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
@@ -84,7 +84,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_mFp_SFTP_Source",
+						"referenceName": "ds_mfp_SFTP_Source",
 						"type": "DatasetReference"
 					}
 				],
