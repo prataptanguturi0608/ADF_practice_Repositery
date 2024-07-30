@@ -72,8 +72,7 @@
 										"p_FileName": {
 											"value": "@item().name",
 											"type": "Expression"
-										},
-										"p_FileSize": "123"
+										}
 									}
 								},
 								"fieldList": [
@@ -150,8 +149,7 @@
 													"p_FileName": {
 														"value": "@activity('GetFilesMetadata').output.itemName",
 														"type": "Expression"
-													},
-													"p_FileSize": "123"
+													}
 												}
 											}
 										],
@@ -180,6 +178,8 @@
 		"folder": {
 			"name": "ADE Classes"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-07-27T10:29:21Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

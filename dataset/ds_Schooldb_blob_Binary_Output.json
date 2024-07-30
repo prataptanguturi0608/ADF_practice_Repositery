@@ -16,5 +16,6 @@
 				"container": "schooldb"
 			}
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

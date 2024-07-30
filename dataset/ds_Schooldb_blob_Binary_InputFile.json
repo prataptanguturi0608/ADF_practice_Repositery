@@ -26,5 +26,6 @@
 				"container": "schooldb-landing"
 			}
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
