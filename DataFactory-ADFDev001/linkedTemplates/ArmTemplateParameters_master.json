@@ -1,0 +1,54 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "DataFactory-ADFDev001"
+		},
+		"LS_ADEDev001_dlakeadfdev01_accountKey": {
+			"value": ""
+		},
+		"ls_SchoolDb_Binary_connectionString": {
+			"value": ""
+		},
+		"ls_Sftp1_password": {
+			"value": ""
+		},
+		"ls_blob_binary_out_connectionString": {
+			"value": ""
+		},
+		"ls_myFirstProj_DLake_output_accountKey": {
+			"value": ""
+		},
+		"ls_myFirstProject_BlobStorage1_connectionString": {
+			"value": ""
+		},
+		"ls_schooldb_AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"ls_test_BlobStorage_connectionString": {
+			"value": ""
+		},
+		"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
+			"value": "https://dlakeadfdev01.dfs.core.windows.net/"
+		},
+		"ls_Sftp1_properties_typeProperties_host": {
+			"value": "eu-central-1.sftpcloud.io"
+		},
+		"ls_Sftp1_properties_typeProperties_userName": {
+			"value": "7cefee8b51c04fa6a04601bcf63dcb71"
+		},
+		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
+			"value": "https://dlakeadfdev01.dfs.core.windows.net/"
+		},
+		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://mfsdatastorage.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

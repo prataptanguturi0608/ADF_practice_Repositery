@@ -1,0 +1,569 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "DataFactory-ADFDev001"
+		},
+		"LS_ADEDev001_dlakeadfdev01_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_ADEDev001_dlakeadfdev01'"
+		},
+		"ls_SchoolDb_Binary_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_SchoolDb_Binary'"
+		},
+		"ls_Sftp1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_Sftp1'"
+		},
+		"ls_blob_binary_out_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_blob_binary_out'"
+		},
+		"ls_myFirstProj_DLake_output_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_myFirstProj_DLake_output'"
+		},
+		"ls_myFirstProject_BlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_myFirstProject_BlobStorage1'"
+		},
+		"ls_schooldb_AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_schooldb_AzureDataLakeStorage1'"
+		},
+		"ls_test_BlobStorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_test_BlobStorage'"
+		},
+		"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
+		},
+		"ls_Sftp1_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "eu-central-1.sftpcloud.io"
+		},
+		"ls_Sftp1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "7cefee8b51c04fa6a04601bcf63dcb71"
+		},
+		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
+		},
+		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ADE_Daily_Class')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"filenametxt": {
+						"type": "String"
+					},
+					"inputfilename": {
+						"type": "String"
+					},
+					"filenamejson": {
+						"type": "String"
+					},
+					"filenameparquet": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ADEDev001_dlakeadfdev01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_ADEDev001_dlakeadfdev01_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_SchoolDb_Binary')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_SchoolDb_Binary_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_Sftp1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Sftp",
+				"typeProperties": {
+					"host": "[parameters('ls_Sftp1_properties_typeProperties_host')]",
+					"port": 22,
+					"skipHostKeyValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('ls_Sftp1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_Sftp1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_blob_binary_out')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_blob_binary_out_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_myFirstProj_DLake_output')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_myFirstProj_DLake_output_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_myFirstProj_DLake_output_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_myFirstProject_BlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_myFirstProject_BlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_schooldb_AzureDataLakeStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_schooldb_AzureDataLakeStorage1_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_test_BlobStorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_test_BlobStorage_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OnPrem-SlefHosted-IR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_BlobLanding')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "input"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Json')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_Filename": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_Filename",
+							"type": "Expression"
+						},
+						"container": "input"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_Filename": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_Filename",
+							"type": "Expression"
+						},
+						"container": "input"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "ORDER_DATETIME",
+						"type": "UTF8"
+					},
+					{
+						"name": "CUSTOMER_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "ORDER_STATUS",
+						"type": "UTF8"
+					},
+					{
+						"name": "STORE_ID",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_txt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_Filename": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_Filename",
+							"type": "Expression"
+						},
+						"container": "input"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_Json')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output",
+						"fileSystem": "customerorders"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output",
+						"fileSystem": "customerorders"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_txt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "OfficeAssignment.csv",
+						"fileSystem": "schooldb"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_SFTP_Source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_Sftp1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "SftpLocation",
+						"folderPath": "/Customer Orders"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_Sftp1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Target')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output",
+						"fileSystem": "customerorders"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_FileName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_FileName",
+							"type": "Expression"
+						},
+						"container": "input"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		}
+	]
+}

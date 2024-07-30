@@ -1,0 +1,632 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "DataFactory-ADFDev001"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFolder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "input"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_SFTP_Blob')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get_SFTP_Metadata",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_mfp_SFTP_Source",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "SftpReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false,
+								"disableChunking": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "Copy_SFTP_to_Landing",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Get_SFTP_Metadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "SftpReadSettings",
+									"recursive": true,
+									"modifiedDatetimeStart": {
+										"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+										"type": "Expression"
+									},
+									"modifiedDatetimeEnd": {
+										"value": "@utcNow()",
+										"type": "Expression"
+									},
+									"deleteFilesAfterCompletion": false,
+									"disableChunking": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_mfp_SFTP_Source",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_mfp_BlobLanding",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "ADE Classes"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_myFirstProject')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get_Input_FolderMetadata",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_mfp_blobFolder",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get_Input_FolderMetadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get_Input_FolderMetadata').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Switch1",
+									"type": "Switch",
+									"dependsOn": [
+										{
+											"activity": "If Condition1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"on": {
+											"value": "@split(variables('v_InputFileName'),'.')[1]",
+											"type": "Expression"
+										},
+										"cases": [
+											{
+												"value": "txt",
+												"activities": [
+													{
+														"name": "CopyTxtFiles",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "DelimitedTextSource",
+																"additionalColumns": [
+																	{
+																		"name": "Ingestion_by",
+																		"value": {
+																			"value": "@pipeline().parameters.p_IngestedBy",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_TimeStamp",
+																		"value": {
+																			"value": "@utcnow()",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_Date",
+																		"value": {
+																			"value": "@formatDateTime(utcNow(),'yyyy/MM/dd')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true,
+																	"modifiedDatetimeStart": {
+																		"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+																		"type": "Expression"
+																	},
+																	"modifiedDatetimeEnd": {
+																		"value": "@utcNow()",
+																		"type": "Expression"
+																	},
+																	"enablePartitionDiscovery": false
+																},
+																"formatSettings": {
+																	"type": "DelimitedTextReadSettings"
+																}
+															},
+															"sink": {
+																"type": "DelimitedTextSink",
+																"storeSettings": {
+																	"type": "AzureBlobFSWriteSettings",
+																	"copyBehavior": "PreserveHierarchy"
+																},
+																"formatSettings": {
+																	"type": "DelimitedTextWriteSettings",
+																	"quoteAllText": true,
+																	"fileExtension": ".txt"
+																}
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_txt",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": {
+																		"value": "@variables('v_InputFileName')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_mfp_DLake_B_txt",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													}
+												]
+											},
+											{
+												"value": "json",
+												"activities": [
+													{
+														"name": "CopyJsonFiles",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "JsonSource",
+																"additionalColumns": [
+																	{
+																		"name": "Ingestion_by",
+																		"value": {
+																			"value": "@pipeline().parameters.p_IngestedBy",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_TimeStamp",
+																		"value": {
+																			"value": "@utcnow()",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_Date",
+																		"value": {
+																			"value": "@formatDateTime(utcNow(),'yyyy/MM/d')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true,
+																	"modifiedDatetimeStart": {
+																		"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+																		"type": "Expression"
+																	},
+																	"modifiedDatetimeEnd": {
+																		"value": "@utcNow()",
+																		"type": "Expression"
+																	},
+																	"enablePartitionDiscovery": false
+																},
+																"formatSettings": {
+																	"type": "JsonReadSettings"
+																}
+															},
+															"sink": {
+																"type": "JsonSink",
+																"storeSettings": {
+																	"type": "AzureBlobFSWriteSettings",
+																	"copyBehavior": "PreserveHierarchy"
+																},
+																"formatSettings": {
+																	"type": "JsonWriteSettings"
+																}
+															},
+															"enableStaging": false
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_Json",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": "@variables('v_InputFileName')"
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_mfp_DLake_B_Json",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													}
+												]
+											},
+											{
+												"value": "parquet",
+												"activities": [
+													{
+														"name": "CopyParquetFiles",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ParquetSource",
+																"additionalColumns": [
+																	{
+																		"name": "Ingestion_by",
+																		"value": {
+																			"value": "@pipeline().parameters.p_IngestedBy",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_TimeStamp",
+																		"value": {
+																			"value": "@utcnow()",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_Date",
+																		"value": {
+																			"value": "@formatDateTime(utcNow(),'yyyy/MM/dd')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true,
+																	"modifiedDatetimeStart": {
+																		"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+																		"type": "Expression"
+																	},
+																	"modifiedDatetimeEnd": {
+																		"value": "@utcNow()",
+																		"type": "Expression"
+																	}
+																},
+																"formatSettings": {
+																	"type": "ParquetReadSettings"
+																}
+															},
+															"sink": {
+																"type": "ParquetSink",
+																"storeSettings": {
+																	"type": "AzureBlobFSWriteSettings",
+																	"copyBehavior": "PreserveHierarchy"
+																},
+																"formatSettings": {
+																	"type": "ParquetWriteSettings"
+																}
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_Parquet",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": {
+																		"value": "@variables('v_InputFileName')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_mfp_DLake_B_Parquet",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								},
+								{
+									"name": "GetFilesMetadata",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "ds_mfp_blobFiles",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_FileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"itemName",
+											"size"
+										],
+										"storeSettings": {
+											"type": "AzureBlobStorageReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "BinaryReadSettings"
+										}
+									}
+								},
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "GetFilesMetadata",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@greater(activity('GetFilesMetadata').output.size,300)",
+											"type": "Expression"
+										},
+										"ifFalseActivities": [
+											{
+												"name": "Wait1",
+												"type": "Wait",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"waitTimeInSeconds": 1
+												}
+											}
+										],
+										"ifTrueActivities": [
+											{
+												"name": "SetFileName",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "v_InputFileName",
+													"value": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_IngestedBy": {
+						"type": "string",
+						"defaultValue": "Automated"
+					}
+				},
+				"variables": {
+					"v_InputFileName": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFolder')]"
+			]
+		}
+	]
+}
