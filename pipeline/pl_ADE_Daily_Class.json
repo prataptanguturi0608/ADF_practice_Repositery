@@ -1,6 +1,17 @@
 {
 	"name": "pl_ADE_Daily_Class",
 	"properties": {
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
 		"variables": {
 			"filenametxt": {
 				"type": "String"
