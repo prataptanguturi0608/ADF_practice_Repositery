@@ -1,0 +1,22 @@
+{
+	"name": "ds_Schooldb_blob_Binary_Input",
+	"properties": {
+		"description": "Will used to get the metadata of the files in the folder",
+		"linkedServiceName": {
+			"referenceName": "ls_SchoolDb_Binary",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/072224_getMetadata_Task"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "schooldb-landing"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

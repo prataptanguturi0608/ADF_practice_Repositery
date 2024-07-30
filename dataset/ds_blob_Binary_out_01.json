@@ -1,0 +1,21 @@
+{
+	"name": "ds_blob_Binary_out_01",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_test_BlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/072224_getmetadata"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "test-output"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
