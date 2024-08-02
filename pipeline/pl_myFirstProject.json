@@ -161,7 +161,7 @@
 												]
 											},
 											{
-												"name": "ArchiveFiles",
+												"name": "ArchiveTxtFiles",
 												"type": "Copy",
 												"dependsOn": [
 													{
@@ -236,7 +236,7 @@
 												"type": "Delete",
 												"dependsOn": [
 													{
-														"activity": "ArchiveFiles",
+														"activity": "ArchiveTxtFiles",
 														"dependencyConditions": [
 															"Succeeded"
 														]
@@ -350,7 +350,7 @@
 												]
 											},
 											{
-												"name": "Archive_JsonFiles",
+												"name": "ArchiveJsonFiles",
 												"type": "Copy",
 												"dependsOn": [
 													{
@@ -431,11 +431,11 @@
 												]
 											},
 											{
-												"name": "Delete1",
+												"name": "DeleteJsonFiles",
 												"type": "Delete",
 												"dependsOn": [
 													{
-														"activity": "Archive_JsonFiles",
+														"activity": "ArchiveJsonFiles",
 														"dependencyConditions": [
 															"Succeeded"
 														]
@@ -551,6 +551,97 @@
 												"outputs": [
 													{
 														"referenceName": "ds_mfp_DLake_B_Parquet",
+														"type": "DatasetReference"
+													}
+												]
+											},
+											{
+												"name": "ArchiveParquetFiles",
+												"type": "Copy",
+												"dependsOn": [
+													{
+														"activity": "CopyParquetFiles",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "ParquetSource",
+														"additionalColumns": [
+															{
+																"name": "Ingestion_by",
+																"value": {
+																	"value": "@pipeline().parameters.p_IngestedBy",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "Ingestion_TimeStamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "Ingestion_Date",
+																"value": {
+																	"value": "@formatDateTime(utcNow(),'yyyy/MM/dd')",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobStorageReadSettings",
+															"recursive": true
+														},
+														"formatSettings": {
+															"type": "ParquetReadSettings"
+														}
+													},
+													"sink": {
+														"type": "ParquetSink",
+														"storeSettings": {
+															"type": "AzureBlobStorageWriteSettings"
+														},
+														"formatSettings": {
+															"type": "ParquetWriteSettings"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_mfp_Blob_landing_Parquet",
+														"type": "DatasetReference",
+														"parameters": {
+															"p_Filename": {
+																"value": "@variables('v_InputFileName')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "ds_archive_Parquet",
 														"type": "DatasetReference"
 													}
 												]

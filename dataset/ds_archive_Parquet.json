@@ -1,0 +1,20 @@
+{
+	"name": "ds_archive_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_mfp_blod_archive",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
+				"container": "archive"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
