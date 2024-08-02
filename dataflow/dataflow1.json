@@ -26,16 +26,27 @@
 					"name": "OrdersSource"
 				}
 			],
-			"sinks": [],
-			"transformations": [
+			"sinks": [
 				{
-					"name": "DataTypeUpdationForOrderItems"
-				},
+					"dataset": {
+						"referenceName": "ds_dl_silver_customer",
+						"type": "DatasetReference"
+					},
+					"name": "CustomersSink"
+				}
+			],
+			"transformations": [
 				{
 					"name": "DataTypeUpdateForcustomers"
 				},
 				{
-					"name": "DataTypeUpdateForOrders"
+					"name": "AddColumnsCustomers"
+				},
+				{
+					"name": "RenameColumns"
+				},
+				{
+					"name": "split1"
 				}
 			],
 			"scriptLines": [
@@ -66,15 +77,32 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> OrdersSource",
-				"OrderItemsSource cast(errors: true) ~> DataTypeUpdationForOrderItems",
 				"CustomersSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",
 				"     errors: true) ~> DataTypeUpdateForcustomers",
-				"OrdersSource cast(output(",
-				"          CUSTOMER_ID as integer",
+				"DataTypeUpdateForcustomers derive(Exec_By = 'Pratap') ~> AddColumnsCustomers",
+				"AddColumnsCustomers select(mapColumn(",
+				"          CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date,",
+				"          IngestedBy = Exec_By",
 				"     ),",
-				"     errors: true) ~> DataTypeUpdateForOrders"
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RenameColumns",
+				"RenameColumns split(!isNull(CUSTOMER_ID),",
+				"     disjoint: false) ~> split1@(NotNull, Null)",
+				"split1@NotNull sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> CustomersSink"
 			]
 		}
 	}
