@@ -68,13 +68,11 @@
 				"     documentForm: 'documentPerLine') ~> OrdersSource",
 				"OrderItemsSource cast(errors: true) ~> DataTypeUpdationForOrderItems",
 				"CustomersSource cast(output(",
-				"          CUSTOMER_ID as string",
+				"          CUSTOMER_ID as integer",
 				"     ),",
 				"     errors: true) ~> DataTypeUpdateForcustomers",
 				"OrdersSource cast(output(",
-				"          CUSTOMER_ID as integer,",
-				"          Ingestion_TimeStamp as timestamp,",
-				"          Ingestion_Date as date",
+				"          CUSTOMER_ID as integer",
 				"     ),",
 				"     errors: true) ~> DataTypeUpdateForOrders"
 			]
