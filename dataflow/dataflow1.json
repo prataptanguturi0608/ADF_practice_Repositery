@@ -1,0 +1,29 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_order_items",
+						"type": "DatasetReference"
+					},
+					"name": "OrderItemsSource"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "DataTypeUpdation"
+				}
+			],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> OrderItemsSource",
+				"OrderItemsSource cast(errors: true) ~> DataTypeUpdation"
+			]
+		}
+	}
+}
