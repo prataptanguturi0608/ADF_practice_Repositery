@@ -10,19 +10,71 @@
 						"type": "DatasetReference"
 					},
 					"name": "OrderItemsSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_customers",
+						"type": "DatasetReference"
+					},
+					"name": "CustomersSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_Orders",
+						"type": "DatasetReference"
+					},
+					"name": "OrdersSource"
 				}
 			],
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "DataTypeUpdation"
+					"name": "DataTypeUpdationForOrderItems"
+				},
+				{
+					"name": "DataTypeUpdateForcustomers"
+				},
+				{
+					"name": "DataTypeUpdateForOrders"
 				}
 			],
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> OrderItemsSource",
-				"OrderItemsSource cast(errors: true) ~> DataTypeUpdation"
+				"source(output(",
+				"          CUSTOMER_ID as string,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> CustomersSource",
+				"source(output(",
+				"          CUSTOMER_ID as string,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> OrdersSource",
+				"OrderItemsSource cast(errors: true) ~> DataTypeUpdationForOrderItems",
+				"CustomersSource cast(output(",
+				"          CUSTOMER_ID as string",
+				"     ),",
+				"     errors: true) ~> DataTypeUpdateForcustomers",
+				"OrdersSource cast(output(",
+				"          CUSTOMER_ID as string",
+				"     ),",
+				"     errors: true) ~> DataTypeUpdateForOrders"
 			]
 		}
 	}
