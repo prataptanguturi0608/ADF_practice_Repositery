@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "customer.parquet",
 				"folderPath": "customerorders/customers",
 				"fileSystem": "silver"
 			},
