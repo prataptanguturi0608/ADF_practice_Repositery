@@ -1,0 +1,50 @@
+{
+	"name": "ds_dl_silver_products",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_myFirstProj_DLake_output",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "products.json",
+				"folderPath": "customerorders",
+				"fileSystem": "bronze"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "CUSTOMER_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "FULL_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "EMAIL_ADDRESS",
+				"type": "UTF8"
+			},
+			{
+				"name": "Ingestion_by",
+				"type": "UTF8"
+			},
+			{
+				"name": "Ingestion_TimeStamp",
+				"type": "UTF8"
+			},
+			{
+				"name": "Ingestion_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "IngestedBy",
+				"type": "UTF8"
+			}
+		]
+	}
+}
