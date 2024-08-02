@@ -22,7 +22,8 @@
 					"value": "@dataset().p_Filename",
 					"type": "Expression"
 				},
-				"container": "input"
+				"folderPath": "customerorders",
+				"container": "bronze"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
