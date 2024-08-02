@@ -30,7 +30,8 @@
 			],
 			"transformations": [
 				{
-					"name": "DataTypeUpdateForcustomers"
+					"name": "CustomersTblCast",
+					"description": "Data type updating for customers table"
 				},
 				{
 					"name": "AddColumnsCustomers"
@@ -42,7 +43,8 @@
 					"name": "split1"
 				},
 				{
-					"name": "cast1"
+					"name": "ProductsTblCast",
+					"description": "Data type updating for products table"
 				}
 			],
 			"scriptLines": [
@@ -74,8 +76,8 @@
 				"CustomersSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",
-				"     errors: true) ~> DataTypeUpdateForcustomers",
-				"DataTypeUpdateForcustomers derive(Exec_By = 'Pratap') ~> AddColumnsCustomers",
+				"     errors: true) ~> CustomersTblCast",
+				"CustomersTblCast derive(Exec_By = 'Pratap') ~> AddColumnsCustomers",
 				"AddColumnsCustomers select(mapColumn(",
 				"          CUSTOMER_ID,",
 				"          FULL_NAME,",
@@ -92,7 +94,7 @@
 				"ProductsSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",
-				"     errors: true) ~> cast1",
+				"     errors: true) ~> ProductsTblCast",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
