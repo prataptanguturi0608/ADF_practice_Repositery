@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "ProductsSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_order_items",
+						"type": "DatasetReference"
+					},
+					"name": "OrderItemsSource"
 				}
 			],
 			"sinks": [
@@ -73,6 +80,9 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> ProductsSource",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> OrderItemsSource",
 				"CustomersSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",
