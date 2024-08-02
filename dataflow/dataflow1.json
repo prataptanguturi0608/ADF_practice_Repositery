@@ -6,13 +6,6 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_dl_bronze_order_items",
-						"type": "DatasetReference"
-					},
-					"name": "OrderItemsSource"
-				},
-				{
-					"dataset": {
 						"referenceName": "ds_dl_bronze_customers",
 						"type": "DatasetReference"
 					},
@@ -20,10 +13,10 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ds_dl_bronze_Orders",
+						"referenceName": "ds_dl_silver_products",
 						"type": "DatasetReference"
 					},
-					"name": "OrdersSource"
+					"name": "ProductsSource"
 				}
 			],
 			"sinks": [
@@ -47,12 +40,12 @@
 				},
 				{
 					"name": "split1"
+				},
+				{
+					"name": "cast1"
 				}
 			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> OrderItemsSource",
 				"source(output(",
 				"          CUSTOMER_ID as string,",
 				"          FULL_NAME as string,",
@@ -66,17 +59,18 @@
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> CustomersSource",
 				"source(output(",
-				"          CUSTOMER_ID as string,",
+				"          CUSTOMER_ID as integer,",
 				"          FULL_NAME as string,",
 				"          EMAIL_ADDRESS as string,",
 				"          Ingestion_by as string,",
 				"          Ingestion_TimeStamp as string,",
-				"          Ingestion_Date as string",
+				"          Ingestion_Date as string,",
+				"          IngestedBy as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'documentPerLine') ~> OrdersSource",
+				"     format: 'parquet') ~> ProductsSource",
 				"CustomersSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",
@@ -95,6 +89,10 @@
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns",
 				"RenameColumns split(!isNull(CUSTOMER_ID),",
 				"     disjoint: false) ~> split1@(NotNull, Null)",
+				"ProductsSource cast(output(",
+				"          CUSTOMER_ID as integer",
+				"     ),",
+				"     errors: true) ~> cast1",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
