@@ -1,0 +1,22 @@
+{
+	"name": "ds_archive_text",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_mfp_blod_archive",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "archive"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

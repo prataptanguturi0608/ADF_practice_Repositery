@@ -73,7 +73,7 @@
 										"value": "txt",
 										"activities": [
 											{
-												"name": "CopyTxtFiles",
+												"name": "CopyTxtFilesToBronze",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {
@@ -156,6 +156,77 @@
 												"outputs": [
 													{
 														"referenceName": "ds_mfp_DLake_B_txt",
+														"type": "DatasetReference"
+													}
+												]
+											},
+											{
+												"name": "ArchiveFiles",
+												"type": "Copy",
+												"dependsOn": [
+													{
+														"activity": "CopyTxtFilesToBronze",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "DelimitedTextSource",
+														"storeSettings": {
+															"type": "AzureBlobStorageReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "DelimitedTextReadSettings"
+														}
+													},
+													"sink": {
+														"type": "DelimitedTextSink",
+														"storeSettings": {
+															"type": "AzureBlobStorageWriteSettings"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextWriteSettings",
+															"quoteAllText": true,
+															"fileExtension": ".txt"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_mfp_Blob_landing_txt",
+														"type": "DatasetReference",
+														"parameters": {
+															"p_Filename": {
+																"value": "@variables('v_InputFileName')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "ds_archive_text",
 														"type": "DatasetReference"
 													}
 												]
