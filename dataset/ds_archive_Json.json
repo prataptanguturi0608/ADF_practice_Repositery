@@ -1,0 +1,22 @@
+{
+	"name": "ds_archive_Json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_mfp_blod_archive",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
+					"type": "Expression"
+				},
+				"container": "archive"
+			}
+		},
+		"schema": {}
+	}
+}

@@ -275,7 +275,7 @@
 										"value": "json",
 										"activities": [
 											{
-												"name": "CopyJsonFiles",
+												"name": "CopyJsonFilesToBronze",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {
@@ -345,6 +345,87 @@
 												"outputs": [
 													{
 														"referenceName": "ds_mfp_DLake_B_Json",
+														"type": "DatasetReference"
+													}
+												]
+											},
+											{
+												"name": "Archive_JsonFiles",
+												"type": "Copy",
+												"dependsOn": [
+													{
+														"activity": "CopyJsonFilesToBronze",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "JsonSource",
+														"additionalColumns": [
+															{
+																"name": "Ingestion_by",
+																"value": {
+																	"value": "@pipeline().parameters.p_IngestedBy",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "Ingestion_TimeStamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "Ingestion_Date",
+																"value": {
+																	"value": "@formatDateTime(utcNow(),'yyyy/MM/d')",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobStorageReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "JsonReadSettings"
+														}
+													},
+													"sink": {
+														"type": "JsonSink",
+														"storeSettings": {
+															"type": "AzureBlobStorageWriteSettings"
+														},
+														"formatSettings": {
+															"type": "JsonWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_mfp_Blob_landing_Json",
+														"type": "DatasetReference",
+														"parameters": {
+															"p_Filename": "@variables('v_InputFileName')"
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "ds_archive_Json",
 														"type": "DatasetReference"
 													}
 												]
