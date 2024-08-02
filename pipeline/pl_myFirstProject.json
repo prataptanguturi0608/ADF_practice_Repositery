@@ -230,6 +230,44 @@
 														"type": "DatasetReference"
 													}
 												]
+											},
+											{
+												"name": "DeleteTxtFiles",
+												"type": "Delete",
+												"dependsOn": [
+													{
+														"activity": "ArchiveFiles",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"dataset": {
+														"referenceName": "ds_mfp_Blob_landing_txt",
+														"type": "DatasetReference",
+														"parameters": {
+															"p_Filename": {
+																"value": "@variables('v_InputFileName')",
+																"type": "Expression"
+															}
+														}
+													},
+													"enableLogging": false,
+													"storeSettings": {
+														"type": "AzureBlobStorageReadSettings",
+														"recursive": true,
+														"enablePartitionDiscovery": false
+													}
+												}
 											}
 										]
 									},
