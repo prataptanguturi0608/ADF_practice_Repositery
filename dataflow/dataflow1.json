@@ -52,6 +52,9 @@
 				{
 					"name": "ProductsTblCast",
 					"description": "Data type updating for products table"
+				},
+				{
+					"name": "OrderItemsTblCast"
 				}
 			],
 			"scriptLines": [
@@ -105,6 +108,7 @@
 				"          CUSTOMER_ID as integer",
 				"     ),",
 				"     errors: true) ~> ProductsTblCast",
+				"OrderItemsSource cast(errors: true) ~> OrderItemsTblCast",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
