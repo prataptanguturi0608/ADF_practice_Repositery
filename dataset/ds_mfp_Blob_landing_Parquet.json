@@ -22,8 +22,7 @@
 					"value": "@dataset().p_Filename",
 					"type": "Expression"
 				},
-				"folderPath": "customerorders",
-				"container": "bronze"
+				"container": "input"
 			},
 			"compressionCodec": "snappy"
 		},
