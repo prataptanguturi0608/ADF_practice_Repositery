@@ -332,6 +332,17 @@
 											}
 										]
 									}
+								],
+								"defaultActivities": [
+									{
+										"name": "DummyWait",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 1
+										}
+									}
 								]
 							}
 						},
