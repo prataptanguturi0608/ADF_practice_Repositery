@@ -113,14 +113,6 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
-															"modifiedDatetimeStart": {
-																"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
-																"type": "Expression"
-															},
-															"modifiedDatetimeEnd": {
-																"value": "@utcNow()",
-																"type": "Expression"
-															},
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -214,14 +206,6 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
-															"modifiedDatetimeStart": {
-																"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
-																"type": "Expression"
-															},
-															"modifiedDatetimeEnd": {
-																"value": "@utcNow()",
-																"type": "Expression"
-															},
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -301,15 +285,7 @@
 														],
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
-															"recursive": true,
-															"modifiedDatetimeStart": {
-																"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
-																"type": "Expression"
-															},
-															"modifiedDatetimeEnd": {
-																"value": "@utcNow()",
-																"type": "Expression"
-															}
+															"recursive": true
 														},
 														"formatSettings": {
 															"type": "ParquetReadSettings"
