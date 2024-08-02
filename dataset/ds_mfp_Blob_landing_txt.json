@@ -2,7 +2,7 @@
 	"name": "ds_mfp_Blob_landing_txt",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_myFirstProj_DLake_output",
+			"referenceName": "ls_myFirstProject_BlobStorage1",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
@@ -17,13 +17,8 @@
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@dataset().p_Filename",
-					"type": "Expression"
-				},
-				"folderPath": "customerorders",
-				"fileSystem": "bronze"
+				"type": "AzureBlobStorageLocation",
+				"container": "input"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
