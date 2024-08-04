@@ -14,7 +14,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "order_items.txt",
-				"folderPath": "customerorders",
+				"folderPath": "customerorders/order_items",
 				"fileSystem": "bronze"
 			},
 			"columnDelimiter": ",",

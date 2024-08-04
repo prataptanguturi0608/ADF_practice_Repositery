@@ -39,6 +39,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "CustomersSink"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_Parquet",
+						"type": "DatasetReference"
+					},
+					"name": "OrderItemsSink"
 				}
 			],
 			"transformations": [
@@ -67,6 +74,15 @@
 				},
 				{
 					"name": "StoresTblCast"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "RenameColumns3"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -143,6 +159,21 @@
 				"     errors: false) ~> OrderItemsTblCast",
 				"OrdersSource cast(errors: true) ~> OrderTblsCast",
 				"StoresSource cast(errors: true) ~> StoresTblCast",
+				"OrderItemsTblCast derive(exec_by = 'pratap') ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          ORDER_ID,",
+				"          LINE_ITEM_ID,",
+				"          PRODUCT_ID,",
+				"          UNIT_PRICE,",
+				"          Prod_QTY = QUANTITY,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date,",
+				"          exec_by",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RenameColumns3",
+				"RenameColumns3 filter(!isNull(ORDER_ID)) ~> filter1",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
@@ -150,7 +181,24 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> CustomersSink"
+				"     skipDuplicateMapOutputs: true) ~> CustomersSink",
+				"filter1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CUSTOMER_ID as integer,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string,",
+				"          IngestedBy as string",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OrderItemsSink"
 			]
 		}
 	}
