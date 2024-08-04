@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_mfp_blobFolder",
+						"referenceName": "ds_mfp_blobFolder1",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
