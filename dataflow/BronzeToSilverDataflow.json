@@ -33,6 +33,10 @@
 					"name": "OrdersSource"
 				},
 				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_Stores",
+						"type": "DatasetReference"
+					},
 					"name": "StoresSource"
 				}
 			],
@@ -192,7 +196,9 @@
 				"          Ingestion_Date as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> StoresSource",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> StoresSource",
 				"CustomersSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",
