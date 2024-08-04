@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ds_dl_boronze_products",
+						"referenceName": "ds_dl_bronze_products",
 						"type": "DatasetReference"
 					},
 					"name": "ProductsSource"
@@ -33,10 +33,6 @@
 					"name": "OrdersSource"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_dl_silver_stores",
-						"type": "DatasetReference"
-					},
 					"name": "StoresSource"
 				}
 			],
@@ -196,9 +192,7 @@
 				"          Ingestion_Date as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'documentPerLine') ~> StoresSource",
+				"     validateSchema: false) ~> StoresSource",
 				"CustomersSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",

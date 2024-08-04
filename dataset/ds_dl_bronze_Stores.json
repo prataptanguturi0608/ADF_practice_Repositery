@@ -1,5 +1,5 @@
 {
-	"name": "ds_dl_bronze_products",
+	"name": "ds_dl_bronze_Stores",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myFirstProj_DLake_output",
@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "products.json",
+				"fileName": "stores.json",
 				"folderPath": "customerorders",
 				"fileSystem": "bronze"
 			}
@@ -21,13 +21,19 @@
 		"schema": {
 			"type": "object",
 			"properties": {
-				"PRODUCT_ID": {
+				"STORE_ID": {
 					"type": "string"
 				},
-				"PRODUCT_NAME": {
+				"STORE_NAME": {
 					"type": "string"
 				},
-				"UNIT_PRICE": {
+				"WEB_ADDRESS": {
+					"type": "string"
+				},
+				"LATITUDE": {
+					"type": "string"
+				},
+				"LONGITUDE": {
 					"type": "string"
 				},
 				"Ingestion_by": {
