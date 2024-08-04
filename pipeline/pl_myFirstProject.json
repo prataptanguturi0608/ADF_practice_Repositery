@@ -828,7 +828,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow1",
+						"referenceName": "BronzeToSilverDataflow",
 						"type": "DataFlowReference"
 					},
 					"compute": {
