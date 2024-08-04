@@ -24,6 +24,12 @@
 						"type": "DatasetReference"
 					},
 					"name": "OrderItemsSource"
+				},
+				{
+					"name": "OrdersSource"
+				},
+				{
+					"name": "StoresSource"
 				}
 			],
 			"sinks": [
@@ -55,6 +61,12 @@
 				},
 				{
 					"name": "OrderItemsTblCast"
+				},
+				{
+					"name": "OrderTblsCast"
+				},
+				{
+					"name": "StoresTblCast"
 				}
 			],
 			"scriptLines": [
@@ -96,6 +108,10 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> OrderItemsSource",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> OrdersSource",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> StoresSource",
 				"CustomersSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",
@@ -119,9 +135,14 @@
 				"     ),",
 				"     errors: true) ~> ProductsTblCast",
 				"OrderItemsSource cast(output(",
-				"          ORDER_ID as string",
+				"          ORDER_ID as integer,",
+				"          LINE_ITEM_ID as integer,",
+				"          PRODUCT_ID as integer,",
+				"          UNIT_PRICE as double",
 				"     ),",
 				"     errors: false) ~> OrderItemsTblCast",
+				"OrdersSource cast(errors: true) ~> OrderTblsCast",
+				"StoresSource cast(errors: true) ~> StoresTblCast",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",

@@ -5,6 +5,9 @@
 			"referenceName": "ls_myFirstProj_DLake_output",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
