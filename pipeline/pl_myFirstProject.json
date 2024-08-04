@@ -732,7 +732,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataset": {
-									"referenceName": "ds_mfp_blobFiles",
+									"referenceName": "ds_mfp_blobFiles1",
 									"type": "DatasetReference",
 									"parameters": {
 										"p_FileName": {
