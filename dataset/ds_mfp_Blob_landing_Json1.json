@@ -1,5 +1,5 @@
 {
-	"name": "ds_mfp_Blob_landing_Json",
+	"name": "ds_mfp_Blob_landing_Json1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myFirstProject_BlobStorage1",

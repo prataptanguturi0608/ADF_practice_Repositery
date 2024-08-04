@@ -342,7 +342,7 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_mfp_Blob_landing_Json",
+														"referenceName": "ds_mfp_Blob_landing_Json1",
 														"type": "DatasetReference",
 														"parameters": {
 															"p_Filename": "@variables('v_InputFileName')"
@@ -423,7 +423,7 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_mfp_Blob_landing_Json",
+														"referenceName": "ds_mfp_Blob_landing_Json1",
 														"type": "DatasetReference",
 														"parameters": {
 															"p_Filename": "@variables('v_InputFileName')"
@@ -458,7 +458,7 @@
 												"userProperties": [],
 												"typeProperties": {
 													"dataset": {
-														"referenceName": "ds_mfp_Blob_landing_Json",
+														"referenceName": "ds_mfp_Blob_landing_Json1",
 														"type": "DatasetReference",
 														"parameters": {
 															"p_Filename": "@variables('v_InputFileName')"
