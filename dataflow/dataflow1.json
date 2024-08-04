@@ -12,6 +12,10 @@
 					"name": "CustomersSource"
 				},
 				{
+					"dataset": {
+						"referenceName": "ds_dl_boronze_products",
+						"type": "DatasetReference"
+					},
 					"name": "ProductsSource"
 				},
 				{
@@ -22,18 +26,51 @@
 					"name": "OrderItemsSource"
 				},
 				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_Orders",
+						"type": "DatasetReference"
+					},
 					"name": "OrdersSource"
 				},
 				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_stores",
+						"type": "DatasetReference"
+					},
 					"name": "StoresSource"
 				}
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_out",
+						"type": "DatasetReference"
+					},
 					"name": "CustomersSink"
 				},
 				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_out",
+						"type": "DatasetReference"
+					},
 					"name": "OrderItemsSink"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_out",
+						"type": "DatasetReference"
+					},
+					"name": "StoresSink"
+				},
+				{
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_out",
+						"type": "DatasetReference"
+					},
+					"name": "ProductsSink"
 				}
 			],
 			"transformations": [
@@ -71,6 +108,30 @@
 				},
 				{
 					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "filter2"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "filter3"
+				},
+				{
+					"name": "derivedColumn4"
+				},
+				{
+					"name": "RenameColumns2"
 				}
 			],
 			"scriptLines": [
@@ -87,16 +148,17 @@
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> CustomersSource",
 				"source(output(",
-				"          CUSTOMER_ID as integer,",
-				"          FULL_NAME as string,",
-				"          EMAIL_ADDRESS as string,",
+				"          PRODUCT_ID as string,",
+				"          PRODUCT_NAME as string,",
+				"          UNIT_PRICE as string,",
 				"          Ingestion_by as string,",
 				"          Ingestion_TimeStamp as string,",
-				"          Ingestion_Date as string,",
-				"          IngestedBy as string",
+				"          Ingestion_Date as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> ProductsSource",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> ProductsSource",
 				"source(output(",
 				"          ORDER_ID as string,",
 				"          LINE_ITEM_ID as string,",
@@ -110,10 +172,32 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> OrderItemsSource",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> OrdersSource",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> StoresSource",
+				"source(output(",
+				"          CUSTOMER_ID as string,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> OrdersSource",
+				"source(output(",
+				"          STORE_ID as string,",
+				"          STORE_NAME as string,",
+				"          WEB_ADDRESS as string,",
+				"          LATITUDE as string,",
+				"          LONGITUDE as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> StoresSource",
 				"CustomersSource cast(output(",
 				"          CUSTOMER_ID as integer",
 				"     ),",
@@ -133,7 +217,8 @@
 				"RenameColumns split(!isNull(CUSTOMER_ID),",
 				"     disjoint: false) ~> split1@(NotNull, Null)",
 				"ProductsSource cast(output(",
-				"          CUSTOMER_ID as integer",
+				"          PRODUCT_ID as integer,",
+				"          UNIT_PRICE as double",
 				"     ),",
 				"     errors: true) ~> ProductsTblCast",
 				"OrderItemsSource cast(output(",
@@ -143,8 +228,16 @@
 				"          UNIT_PRICE as double",
 				"     ),",
 				"     errors: false) ~> OrderItemsTblCast",
-				"OrdersSource cast(errors: true) ~> OrderTblsCast",
-				"StoresSource cast(errors: true) ~> StoresTblCast",
+				"OrdersSource cast(output(",
+				"          CUSTOMER_ID as string",
+				"     ),",
+				"     errors: true) ~> OrderTblsCast",
+				"StoresSource cast(output(",
+				"          STORE_ID as integer,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double",
+				"     ),",
+				"     errors: true) ~> StoresTblCast",
 				"OrderItemsTblCast derive(exec_by = 'pratap') ~> derivedColumn1",
 				"derivedColumn1 select(mapColumn(",
 				"          ORDER_ID,",
@@ -160,20 +253,117 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns3",
 				"RenameColumns3 filter(!isNull(ORDER_ID)) ~> filter1",
+				"OrderTblsCast derive() ~> derivedColumn2",
+				"StoresTblCast derive(exec_by = 'pratap') ~> derivedColumn3",
+				"select1 filter(!isNull(STORE_ID)) ~> filter2",
+				"derivedColumn3 select(mapColumn(",
+				"          STORE_ID,",
+				"          STORE_NAME,",
+				"          WEB_ADDRESS,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date,",
+				"          exec_by",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"derivedColumn2 select(mapColumn(",
+				"          CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 filter(ERROR_FUNCTION('')) ~> filter3",
+				"ProductsTblCast derive(exec_by = 'pratap') ~> derivedColumn4",
+				"derivedColumn4 select(mapColumn(",
+				"          CUSTOMER_ID,",
+				"          Cust_Name = FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date,",
+				"          IngestedBy",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RenameColumns2",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
+				"     input(",
+				"          CUSTOMER_ID as integer,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string,",
+				"          IngestedBy as string",
+				"     ),",
 				"     format: 'parquet',",
+				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: []) ~> CustomersSink",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> CustomersSink",
 				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
+				"     input(",
+				"          CUSTOMER_ID as integer,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string,",
+				"          IngestedBy as string",
+				"     ),",
 				"     format: 'parquet',",
+				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: []) ~> OrderItemsSink"
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OrderItemsSink",
+				"filter2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CUSTOMER_ID as integer,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string,",
+				"          IngestedBy as string",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> StoresSink",
+				"filter3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2",
+				"RenameColumns2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CUSTOMER_ID as integer,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string,",
+				"          IngestedBy as string",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> ProductsSink"
 			]
 		}
 	}
