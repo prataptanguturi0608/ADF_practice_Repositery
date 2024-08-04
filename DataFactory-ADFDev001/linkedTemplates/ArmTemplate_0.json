@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_blob_binary_out'"
 		},
+		"ls_mfp_blod_archive_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_mfp_blod_archive'"
+		},
 		"ls_myFirstProj_DLake_output_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_myFirstProj_DLake_output'"
@@ -97,9 +101,6 @@
 						"type": "String"
 					}
 				},
-				"folder": {
-					"name": "ADE Classes"
-				},
 				"annotations": []
 			},
 			"dependsOn": []
@@ -164,6 +165,19 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('ls_blob_binary_out_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_mfp_blod_archive')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_mfp_blod_archive_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -239,43 +253,13 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_BlobLanding')]",
+			"name": "[concat(parameters('factoryName'), '/ds_archive_Json')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"referenceName": "ls_mfp_blod_archive",
 					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"container": "input"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Json')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProject_BlobStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_Filename": {
-						"type": "string"
-					}
 				},
 				"folder": {
 					"name": "ADE Classes/myFirstProject"
@@ -285,32 +269,27 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().p_Filename",
+						"folderPath": {
+							"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
 							"type": "Expression"
 						},
-						"container": "input"
+						"container": "archive"
 					}
 				},
 				"schema": {}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_mfp_blod_archive')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Parquet')]",
+			"name": "[concat(parameters('factoryName'), '/ds_archive_Parquet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"referenceName": "ls_mfp_blod_archive",
 					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_Filename": {
-						"type": "string"
-					}
 				},
 				"folder": {
 					"name": "ADE Classes/myFirstProject"
@@ -320,11 +299,74 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().p_Filename",
+						"folderPath": {
+							"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
 							"type": "Expression"
 						},
-						"container": "input"
+						"container": "archive"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_mfp_blod_archive')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_archive_text')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_mfp_blod_archive",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
+							"type": "Expression"
+						},
+						"container": "archive"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_mfp_blod_archive')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_Orders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "orders.parquet",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
 					},
 					"compressionCodec": "snappy"
 				},
@@ -348,54 +390,27 @@
 					{
 						"name": "STORE_ID",
 						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
 					}
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_txt')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProject_BlobStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_Filename": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().p_Filename",
-							"type": "Expression"
-						},
-						"container": "input"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_Json')]",
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_Stores')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -411,18 +426,47 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "Output",
-						"fileSystem": "customerorders"
+						"fileName": "stores.json",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
 					}
 				},
-				"schema": {}
+				"schema": {
+					"type": "object",
+					"properties": {
+						"STORE_ID": {
+							"type": "string"
+						},
+						"STORE_NAME": {
+							"type": "string"
+						},
+						"WEB_ADDRESS": {
+							"type": "string"
+						},
+						"LATITUDE": {
+							"type": "string"
+						},
+						"LONGITUDE": {
+							"type": "string"
+						},
+						"Ingestion_by": {
+							"type": "string"
+						},
+						"Ingestion_TimeStamp": {
+							"type": "string"
+						},
+						"Ingestion_Date": {
+							"type": "string"
+						}
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_Parquet')]",
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_customers')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -434,23 +478,45 @@
 					"name": "ADE Classes/myFirstProject"
 				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "Json",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "Output",
-						"fileSystem": "customerorders"
-					},
-					"compressionCodec": "snappy"
+						"fileName": "customers.json",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					}
 				},
-				"schema": []
+				"schema": {
+					"type": "object",
+					"properties": {
+						"CUSTOMER_ID": {
+							"type": "string"
+						},
+						"FULL_NAME": {
+							"type": "string"
+						},
+						"EMAIL_ADDRESS": {
+							"type": "string"
+						},
+						"Ingestion_by": {
+							"type": "string"
+						},
+						"Ingestion_TimeStamp": {
+							"type": "string"
+						},
+						"Ingestion_Date": {
+							"type": "string"
+						}
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_txt')]",
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_order_items')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -466,47 +532,56 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "OfficeAssignment.csv",
-						"fileSystem": "schooldb"
+						"fileName": "order_items.txt",
+						"folderPath": "customerorders/order_items",
+						"fileSystem": "bronze"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "String"
+					},
+					{
+						"name": "LINE_ITEM_ID",
+						"type": "String"
+					},
+					{
+						"name": "PRODUCT_ID",
+						"type": "String"
+					},
+					{
+						"name": "UNIT_PRICE",
+						"type": "String"
+					},
+					{
+						"name": "QUANTITY",
+						"type": "String"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "String"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "String"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_SFTP_Source')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_Sftp1",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "SftpLocation",
-						"folderPath": "/Customer Orders"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_Sftp1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_Target')]",
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_products')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -518,12 +593,36 @@
 					"name": "ADE Classes/myFirstProject"
 				},
 				"annotations": [],
-				"type": "Binary",
+				"type": "Json",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "Output",
-						"fileSystem": "customerorders"
+						"fileName": "products.json",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"PRODUCT_ID": {
+							"type": "string"
+						},
+						"PRODUCT_NAME": {
+							"type": "string"
+						},
+						"UNIT_PRICE": {
+							"type": "string"
+						},
+						"Ingestion_by": {
+							"type": "string"
+						},
+						"Ingestion_TimeStamp": {
+							"type": "string"
+						},
+						"Ingestion_Date": {
+							"type": "string"
+						}
 					}
 				}
 			},
@@ -532,37 +631,60 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_out')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"referenceName": "ls_myFirstProj_DLake_output",
 					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_FileName": {
-						"type": "string"
-					}
 				},
 				"folder": {
 					"name": "ADE Classes/myFirstProject"
 				},
 				"annotations": [],
-				"type": "Binary",
+				"type": "Parquet",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().p_FileName",
-							"type": "Expression"
-						},
-						"container": "input"
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
 					}
-				}
+				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
 			]
 		}
 	]

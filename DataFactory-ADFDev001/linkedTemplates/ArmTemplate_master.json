@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_blob_binary_out'"
 		},
+		"ls_mfp_blod_archive_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_mfp_blod_archive'"
+		},
 		"ls_myFirstProj_DLake_output_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_myFirstProj_DLake_output'"
@@ -97,6 +101,9 @@
 					},
 					"ls_blob_binary_out_connectionString": {
 						"value": "[parameters('ls_blob_binary_out_connectionString')]"
+					},
+					"ls_mfp_blod_archive_connectionString": {
+						"value": "[parameters('ls_mfp_blod_archive_connectionString')]"
 					},
 					"ls_myFirstProj_DLake_output_accountKey": {
 						"value": "[parameters('ls_myFirstProj_DLake_output_accountKey')]"
