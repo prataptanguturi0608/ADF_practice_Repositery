@@ -53,7 +53,7 @@
 						"referenceName": "ds_dl_silver_out",
 						"type": "DatasetReference"
 					},
-					"name": "OrderItemsSink"
+					"name": "Sink"
 				},
 				{
 					"dataset": {
@@ -315,7 +315,7 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> OrderItemsSink",
+				"     skipDuplicateMapOutputs: true) ~> Sink",
 				"NotNullfilter3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
