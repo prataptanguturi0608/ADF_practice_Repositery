@@ -129,9 +129,6 @@
 				},
 				{
 					"name": "derivedColumn4"
-				},
-				{
-					"name": "RenameColumns2"
 				}
 			],
 			"scriptLines": [
@@ -253,7 +250,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns3",
 				"RenameColumns3 filter(!isNull(ORDER_ID)) ~> filter1",
-				"OrderTblsCast derive() ~> derivedColumn2",
+				"OrderTblsCast derive(exec_by = 'pratap') ~> derivedColumn2",
 				"StoresTblCast derive(exec_by = 'pratap') ~> derivedColumn3",
 				"select1 filter(!isNull(STORE_ID)) ~> filter2",
 				"derivedColumn3 select(mapColumn(",
@@ -281,17 +278,6 @@
 				"     skipDuplicateMapOutputs: true) ~> select2",
 				"select2 filter(ERROR_FUNCTION('')) ~> filter3",
 				"ProductsTblCast derive(exec_by = 'pratap') ~> derivedColumn4",
-				"derivedColumn4 select(mapColumn(",
-				"          CUSTOMER_ID,",
-				"          Cust_Name = FULL_NAME,",
-				"          EMAIL_ADDRESS,",
-				"          Ingestion_by,",
-				"          Ingestion_TimeStamp,",
-				"          Ingestion_Date,",
-				"          IngestedBy",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> RenameColumns2",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -347,7 +333,7 @@
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink2",
-				"RenameColumns2 sink(allowSchemaDrift: true,",
+				"derivedColumn4 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
