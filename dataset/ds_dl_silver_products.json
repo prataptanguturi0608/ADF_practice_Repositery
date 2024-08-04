@@ -13,8 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "products.json",
-				"folderPath": "customerorders",
+				"folderPath": "customerorders/products",
 				"fileSystem": "bronze"
 			},
 			"compressionCodec": "snappy"

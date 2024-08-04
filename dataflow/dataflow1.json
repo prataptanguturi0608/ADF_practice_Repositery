@@ -62,6 +62,10 @@
 					"name": "sink2"
 				},
 				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_products",
+						"type": "DatasetReference"
+					},
 					"name": "sink3"
 				}
 			],
@@ -123,10 +127,7 @@
 					"name": "derivedColumn4"
 				},
 				{
-					"name": "select3"
-				},
-				{
-					"name": "filter4"
+					"name": "RenameColumns2"
 				}
 			],
 			"scriptLines": [
@@ -273,8 +274,7 @@
 				"          IngestedBy",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select3",
-				"select3 filter(ERROR_FUNCTION('')) ~> filter4",
+				"     skipDuplicateMapOutputs: true) ~> RenameColumns2",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
@@ -308,8 +308,21 @@
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink2",
-				"filter4 sink(allowSchemaDrift: true,",
+				"RenameColumns2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          CUSTOMER_ID as integer,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string,",
+				"          IngestedBy as string",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink3"
 			]
