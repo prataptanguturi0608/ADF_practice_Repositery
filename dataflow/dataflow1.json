@@ -111,7 +111,7 @@
 					"name": "RenameColumns3"
 				},
 				{
-					"name": "filter1"
+					"name": "NotNullfilter1"
 				},
 				{
 					"name": "derivedColumn2"
@@ -120,7 +120,7 @@
 					"name": "derivedColumn3"
 				},
 				{
-					"name": "filter2"
+					"name": "NotNullfilter3"
 				},
 				{
 					"name": "select1"
@@ -129,7 +129,7 @@
 					"name": "select2"
 				},
 				{
-					"name": "filter3"
+					"name": "NotNullfilter2"
 				},
 				{
 					"name": "derivedColumn4"
@@ -253,10 +253,10 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns3",
-				"RenameColumns3 filter(!isNull(ORDER_ID)) ~> filter1",
+				"RenameColumns3 filter(!isNull(ORDER_ID)) ~> NotNullfilter1",
 				"OrderTblsCast derive(exec_by = 'pratap') ~> derivedColumn2",
 				"StoresTblCast derive(exec_by = 'pratap') ~> derivedColumn3",
-				"select1 filter(!isNull(STORE_ID)) ~> filter2",
+				"select1 filter(!isNull(STORE_ID)) ~> NotNullfilter3",
 				"derivedColumn3 select(mapColumn(",
 				"          STORE_ID,",
 				"          STORE_NAME,",
@@ -280,7 +280,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select2",
-				"select2 filter(!isNull(CUSTOMER_ID)) ~> filter3",
+				"select2 filter(!isNull(CUSTOMER_ID)) ~> NotNullfilter2",
 				"ProductsTblCast derive(exec_by = 'pratap') ~> derivedColumn4",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -299,7 +299,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> CustomersSink",
-				"filter1 sink(allowSchemaDrift: true,",
+				"NotNullfilter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -316,7 +316,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> OrderItemsSink",
-				"filter2 sink(allowSchemaDrift: true,",
+				"NotNullfilter3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -333,7 +333,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> StoresSink",
-				"filter3 sink(allowSchemaDrift: true,",
+				"NotNullfilter2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
