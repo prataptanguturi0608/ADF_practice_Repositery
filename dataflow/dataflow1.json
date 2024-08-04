@@ -26,6 +26,10 @@
 					"name": "OrderItemsSource"
 				},
 				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_Orders",
+						"type": "DatasetReference"
+					},
 					"name": "OrdersSource"
 				},
 				{
@@ -83,6 +87,9 @@
 				},
 				{
 					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn2"
 				}
 			],
 			"scriptLines": [
@@ -124,8 +131,18 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> OrderItemsSource",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> OrdersSource",
+				"source(output(",
+				"          CUSTOMER_ID as string,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          Ingestion_by as string,",
+				"          Ingestion_TimeStamp as string,",
+				"          Ingestion_Date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> OrdersSource",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false) ~> StoresSource",
 				"CustomersSource cast(output(",
@@ -157,7 +174,10 @@
 				"          UNIT_PRICE as double",
 				"     ),",
 				"     errors: false) ~> OrderItemsTblCast",
-				"OrdersSource cast(errors: true) ~> OrderTblsCast",
+				"OrdersSource cast(output(",
+				"          CUSTOMER_ID as string",
+				"     ),",
+				"     errors: true) ~> OrderTblsCast",
 				"StoresSource cast(errors: true) ~> StoresTblCast",
 				"OrderItemsTblCast derive(exec_by = 'pratap') ~> derivedColumn1",
 				"derivedColumn1 select(mapColumn(",
@@ -174,6 +194,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns3",
 				"RenameColumns3 filter(!isNull(ORDER_ID)) ~> filter1",
+				"OrderTblsCast derive() ~> derivedColumn2",
 				"split1@NotNull sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
