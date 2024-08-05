@@ -36,7 +36,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Json1')]",
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Json')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -69,7 +69,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Parquet1')]",
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Parquet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -288,7 +288,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles1')]",
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -320,7 +320,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFolder1')]",
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFolder')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -339,6 +339,286 @@
 						"container": "input"
 					}
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_customers_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "customers.parquet",
+						"folderPath": "customerorders/customers",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_order_items_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "order_items.parquet",
+						"folderPath": "customerorders/orderItems",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_order_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "orders.parquet",
+						"folderPath": "customerorders/orders",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_products_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "products.parquet",
+						"folderPath": "customerorders/products",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_stores_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "stores.parquet",
+						"folderPath": "customerorders/stores",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
 			},
 			"dependsOn": []
 		},
@@ -505,35 +785,35 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_dl_silver_out",
+								"referenceName": "ds_dl_silver_customers_out",
 								"type": "DatasetReference"
 							},
 							"name": "CustomersSink"
 						},
 						{
 							"dataset": {
-								"referenceName": "ds_dl_silver_out",
+								"referenceName": "ds_dl_silver_order_items_out",
 								"type": "DatasetReference"
 							},
-							"name": "Sink"
+							"name": "OrderItemsSink"
 						},
 						{
 							"dataset": {
-								"referenceName": "ds_dl_silver_out",
+								"referenceName": "ds_dl_silver_stores_out",
 								"type": "DatasetReference"
 							},
 							"name": "StoresSink"
 						},
 						{
 							"dataset": {
-								"referenceName": "ds_dl_silver_out",
+								"referenceName": "ds_dl_silver_order_out",
 								"type": "DatasetReference"
 							},
 							"name": "OrderSink"
 						},
 						{
 							"dataset": {
-								"referenceName": "ds_dl_silver_out",
+								"referenceName": "ds_dl_silver_products_out",
 								"type": "DatasetReference"
 							},
 							"name": "ProductsSink"
@@ -777,7 +1057,7 @@
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> Sink",
+						"     skipDuplicateMapOutputs: true) ~> OrderItemsSink",
 						"NotNullfilter3 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
@@ -832,7 +1112,13 @@
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_customers_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_order_items_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_stores_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_order_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_products_out')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_myFirstProject')]",
@@ -854,7 +1140,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
-								"referenceName": "ds_mfp_blobFolder1",
+								"referenceName": "ds_mfp_blobFolder",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -1183,7 +1469,7 @@
 														},
 														"inputs": [
 															{
-																"referenceName": "ds_mfp_Blob_landing_Json1",
+																"referenceName": "ds_mfp_Blob_landing_Json",
 																"type": "DatasetReference",
 																"parameters": {
 																	"p_Filename": "@variables('v_InputFileName')"
@@ -1265,7 +1551,7 @@
 														},
 														"inputs": [
 															{
-																"referenceName": "ds_mfp_Blob_landing_Json1",
+																"referenceName": "ds_mfp_Blob_landing_Json",
 																"type": "DatasetReference",
 																"parameters": {
 																	"p_Filename": "@variables('v_InputFileName')"
@@ -1301,7 +1587,7 @@
 														"userProperties": [],
 														"typeProperties": {
 															"dataset": {
-																"referenceName": "ds_mfp_Blob_landing_Json1",
+																"referenceName": "ds_mfp_Blob_landing_Json",
 																"type": "DatasetReference",
 																"parameters": {
 																	"p_Filename": "@variables('v_InputFileName')"
@@ -1395,7 +1681,7 @@
 														},
 														"inputs": [
 															{
-																"referenceName": "ds_mfp_Blob_landing_Parquet1",
+																"referenceName": "ds_mfp_Blob_landing_Parquet",
 																"type": "DatasetReference",
 																"parameters": {
 																	"p_Filename": {
@@ -1487,7 +1773,7 @@
 														},
 														"inputs": [
 															{
-																"referenceName": "ds_mfp_Blob_landing_Parquet1",
+																"referenceName": "ds_mfp_Blob_landing_Parquet",
 																"type": "DatasetReference",
 																"parameters": {
 																	"p_Filename": {
@@ -1526,7 +1812,7 @@
 														"userProperties": [],
 														"typeProperties": {
 															"dataset": {
-																"referenceName": "ds_mfp_Blob_landing_Parquet1",
+																"referenceName": "ds_mfp_Blob_landing_Parquet",
 																"type": "DatasetReference",
 																"parameters": {
 																	"p_Filename": "@variables('v_InputFileName')"
@@ -1577,7 +1863,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"dataset": {
-											"referenceName": "ds_mfp_blobFiles1",
+											"referenceName": "ds_mfp_blobFiles",
 											"type": "DatasetReference",
 											"parameters": {
 												"p_FileName": {
@@ -1683,11 +1969,12 @@
 									"OrdersSource": {},
 									"StoresSource": {},
 									"CustomersSink": {},
-									"Sink": {},
+									"OrderItemsSink": {},
 									"StoresSink": {},
 									"OrderSink": {},
 									"ProductsSink": {}
-								}
+								},
+								"linkedServiceParameters": {}
 							},
 							"staging": {},
 							"compute": {
@@ -1705,6 +1992,9 @@
 					"p_IngestedBy": {
 						"type": "string",
 						"defaultValue": "Automated"
+					},
+					"p_fileName": {
+						"type": "string"
 					}
 				},
 				"variables": {
@@ -1718,14 +2008,14 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFolder1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFolder')]",
 				"[concat(variables('factoryId'), '/dataflows/BronzeToSilverDataflow')]",
-				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFiles1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFiles')]",
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_Blob_landing_txt')]",
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_txt')]",
-				"[concat(variables('factoryId'), '/datasets/ds_mfp_Blob_landing_Json1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_Blob_landing_Json')]",
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_Json')]",
-				"[concat(variables('factoryId'), '/datasets/ds_mfp_Blob_landing_Parquet1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_Blob_landing_Parquet')]",
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_Parquet')]"
 			]
 		}
