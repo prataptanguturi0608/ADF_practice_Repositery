@@ -57,7 +57,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ds_dl_silver_out",
+						"referenceName": "ds_dl_silver_stores_out",
 						"type": "DatasetReference"
 					},
 					"name": "StoresSink"
