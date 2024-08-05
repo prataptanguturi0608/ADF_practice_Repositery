@@ -5,6 +5,11 @@
 			"referenceName": "ls_myFirstProj_DLake_output",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_subFolderName": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes/myFirstProject"
 		},
