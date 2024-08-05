@@ -43,7 +43,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_dl_silver_out",
+						"referenceName": "ds_dl_silver_customers_out",
 						"type": "DatasetReference"
 					},
 					"name": "CustomersSink"
@@ -71,7 +71,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ds_dl_silver_out",
+						"referenceName": "ds_dl_silver_products_out",
 						"type": "DatasetReference"
 					},
 					"name": "ProductsSink"

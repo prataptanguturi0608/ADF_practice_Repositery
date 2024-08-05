@@ -13,7 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "customerorders",
+				"fileName": "products.parquet",
+				"folderPath": "customerorders/products",
 				"fileSystem": "silver"
 			},
 			"compressionCodec": "snappy"
