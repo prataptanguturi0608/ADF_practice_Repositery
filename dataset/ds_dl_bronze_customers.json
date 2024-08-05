@@ -14,10 +14,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "customers.json",
-				"folderPath": {
-					"value": "@dataset().p_folderName",
-					"type": "Expression"
-				},
+				"folderPath": "customerorders",
 				"fileSystem": "bronze"
 			}
 		},
