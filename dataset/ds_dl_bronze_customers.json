@@ -5,6 +5,11 @@
 			"referenceName": "ls_myFirstProj_DLake_output",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_folderName": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "ADE Classes/myFirstProject"
 		},
@@ -14,7 +19,10 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "customers.json",
-				"folderPath": "customerorders",
+				"folderPath": {
+					"value": "@dataset().p_folderName",
+					"type": "Expression"
+				},
 				"fileSystem": "bronze"
 			}
 		},
