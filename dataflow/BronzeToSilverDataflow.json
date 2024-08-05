@@ -136,6 +136,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     p_FolderName as string",
+				"}",
 				"source(output(",
 				"          CUSTOMER_ID as string,",
 				"          FULL_NAME as string,",
