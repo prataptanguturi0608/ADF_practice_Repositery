@@ -136,6 +136,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     p_filename as string",
+				"}",
 				"source(output(",
 				"          CUSTOMER_ID as string,",
 				"          FULL_NAME as string,",
@@ -294,6 +297,7 @@
 				"          IngestedBy as string",
 				"     ),",
 				"     format: 'parquet',",
+				"     rowFolderUrlColumn:'',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
