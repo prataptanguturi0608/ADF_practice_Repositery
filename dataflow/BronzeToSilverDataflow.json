@@ -136,9 +136,6 @@
 				}
 			],
 			"scriptLines": [
-				"parameters{",
-				"     p_filename as string (Customers)",
-				"}",
 				"source(output(",
 				"          CUSTOMER_ID as string,",
 				"          FULL_NAME as string,",
