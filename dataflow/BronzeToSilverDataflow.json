@@ -297,7 +297,7 @@
 				"          IngestedBy as string",
 				"     ),",
 				"     format: 'parquet',",
-				"     rowFolderUrlColumn:'',",
+				"     partitionFileNames:[($p_filename)],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
