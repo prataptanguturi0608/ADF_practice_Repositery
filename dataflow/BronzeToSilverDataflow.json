@@ -75,6 +75,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "ProductsSink"
+				},
+				{
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -133,6 +136,15 @@
 				},
 				{
 					"name": "derivedColumn4"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "split2"
+				},
+				{
+					"name": "aggregate2"
 				}
 			],
 			"scriptLines": [
@@ -211,7 +223,7 @@
 				"          Ingestion_by,",
 				"          Ingestion_TimeStamp,",
 				"          Ingestion_Date,",
-				"          IngestedBy = Exec_By",
+				"          Exec_By",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns",
@@ -282,7 +294,17 @@
 				"     skipDuplicateMapOutputs: true) ~> select2",
 				"select2 filter(!isNull(CUSTOMER_ID)) ~> NotNullfilter2",
 				"ProductsTblCast derive(exec_by = 'pratap') ~> derivedColumn4",
-				"split1@NotNull sink(allowSchemaDrift: true,",
+				"split1@NotNull aggregate(groupBy(CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date,",
+				"          Exec_By)) ~> aggregate1",
+				"derivedColumn4 split(!isNull(PRODUCT_ID),",
+				"     disjoint: false) ~> split2@(NotnullRows, NullRows)",
+				"split2@NotnullRows aggregate() ~> aggregate2",
+				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -350,7 +372,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> OrderSink",
-				"derivedColumn4 sink(allowSchemaDrift: true,",
+				"aggregate2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -366,7 +388,11 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> ProductsSink"
+				"     skipDuplicateMapOutputs: true) ~> ProductsSink",
+				"split1@Null sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
