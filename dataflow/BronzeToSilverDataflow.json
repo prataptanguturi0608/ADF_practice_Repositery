@@ -78,15 +78,15 @@
 				},
 				{
 					"name": "sink1"
+				},
+				{
+					"name": "sink2"
 				}
 			],
 			"transformations": [
 				{
 					"name": "CustomersTblCast",
 					"description": "Data type updating for customers table"
-				},
-				{
-					"name": "AddColumnsCustomers"
 				},
 				{
 					"name": "RenameColumns"
@@ -108,19 +108,10 @@
 					"name": "StoresTblCast"
 				},
 				{
-					"name": "derivedColumn1"
-				},
-				{
 					"name": "RenameColumns3"
 				},
 				{
 					"name": "NotNullfilter1"
-				},
-				{
-					"name": "derivedColumn2"
-				},
-				{
-					"name": "derivedColumn3"
 				},
 				{
 					"name": "NotNullfilter3"
@@ -133,9 +124,6 @@
 				},
 				{
 					"name": "NotNullfilter2"
-				},
-				{
-					"name": "derivedColumn4"
 				},
 				{
 					"name": "aggregate1"
@@ -215,8 +203,7 @@
 				"          CUSTOMER_ID as integer",
 				"     ),",
 				"     errors: true) ~> CustomersTblCast",
-				"CustomersTblCast derive(Exec_By = 'Pratap') ~> AddColumnsCustomers",
-				"AddColumnsCustomers select(mapColumn(",
+				"CustomersTblCast select(mapColumn(",
 				"          CUSTOMER_ID,",
 				"          FULL_NAME,",
 				"          EMAIL_ADDRESS,",
@@ -251,8 +238,7 @@
 				"          LONGITUDE as double",
 				"     ),",
 				"     errors: true) ~> StoresTblCast",
-				"OrderItemsTblCast derive(exec_by = 'pratap') ~> derivedColumn1",
-				"derivedColumn1 select(mapColumn(",
+				"OrderItemsTblCast select(mapColumn(",
 				"          ORDER_ID,",
 				"          LINE_ITEM_ID,",
 				"          PRODUCT_ID,",
@@ -266,10 +252,8 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns3",
 				"RenameColumns3 filter(!isNull(ORDER_ID)) ~> NotNullfilter1",
-				"OrderTblsCast derive(exec_by = 'pratap') ~> derivedColumn2",
-				"StoresTblCast derive(exec_by = 'pratap') ~> derivedColumn3",
 				"select1 filter(!isNull(STORE_ID)) ~> NotNullfilter3",
-				"derivedColumn3 select(mapColumn(",
+				"StoresTblCast select(mapColumn(",
 				"          STORE_ID,",
 				"          STORE_NAME,",
 				"          WEB_ADDRESS,",
@@ -282,7 +266,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"derivedColumn2 select(mapColumn(",
+				"OrderTblsCast select(mapColumn(",
 				"          CUSTOMER_ID,",
 				"          FULL_NAME,",
 				"          EMAIL_ADDRESS,",
@@ -293,17 +277,21 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select2",
 				"select2 filter(!isNull(CUSTOMER_ID)) ~> NotNullfilter2",
-				"ProductsTblCast derive(exec_by = 'pratap') ~> derivedColumn4",
 				"split1@NotNull aggregate(groupBy(CUSTOMER_ID,",
 				"          FULL_NAME,",
 				"          EMAIL_ADDRESS,",
 				"          Ingestion_by,",
 				"          Ingestion_TimeStamp,",
-				"          Ingestion_Date,",
-				"          Exec_By)) ~> aggregate1",
-				"derivedColumn4 split(!isNull(PRODUCT_ID),",
+				"          Ingestion_Date),",
+				"     RowCount = count(CUSTOMER_ID)) ~> aggregate1",
+				"ProductsTblCast split(!isNull(PRODUCT_ID),",
 				"     disjoint: false) ~> split2@(NotnullRows, NullRows)",
-				"split2@NotnullRows aggregate() ~> aggregate2",
+				"split2@NotnullRows aggregate(groupBy(PRODUCT_NAME,",
+				"          PRODUCT_ID,",
+				"          UNIT_PRICE,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date)) ~> aggregate2",
 				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -392,7 +380,11 @@
 				"split1@Null sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"split2@NullRows sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
 			]
 		}
 	}
