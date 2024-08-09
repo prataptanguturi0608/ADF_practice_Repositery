@@ -75,12 +75,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "ProductsSink"
-				},
-				{
-					"name": "sink1"
-				},
-				{
-					"name": "sink2"
 				}
 			],
 			"transformations": [
@@ -92,7 +86,7 @@
 					"name": "RenameColumns"
 				},
 				{
-					"name": "split1"
+					"name": "splitNullValues"
 				},
 				{
 					"name": "ProductsTblCast",
@@ -117,22 +111,40 @@
 					"name": "NotNullfilter3"
 				},
 				{
-					"name": "select1"
-				},
-				{
-					"name": "select2"
-				},
-				{
 					"name": "NotNullfilter2"
 				},
 				{
-					"name": "aggregate1"
+					"name": "aggDuplicates1"
 				},
 				{
 					"name": "split2"
 				},
 				{
-					"name": "aggregate2"
+					"name": "aggDuplicate2"
+				},
+				{
+					"name": "RemoveCountColumn1"
+				},
+				{
+					"name": "RemoveCountColumn2"
+				},
+				{
+					"name": "aggDuplicate3"
+				},
+				{
+					"name": "RemoveCountColumn3"
+				},
+				{
+					"name": "aggDuplicate4"
+				},
+				{
+					"name": "RemoveCountColumn4"
+				},
+				{
+					"name": "aggDuplicate5"
+				},
+				{
+					"name": "RemoveCountColumn5"
 				}
 			],
 			"scriptLines": [
@@ -209,13 +221,12 @@
 				"          EMAIL_ADDRESS,",
 				"          Ingestion_by,",
 				"          Ingestion_TimeStamp,",
-				"          Ingestion_Date,",
-				"          Exec_By",
+				"          Ingestion_Date",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns",
 				"RenameColumns split(!isNull(CUSTOMER_ID),",
-				"     disjoint: false) ~> split1@(NotNull, Null)",
+				"     disjoint: false) ~> splitNullValues@(NotNull, Null)",
 				"ProductsSource cast(output(",
 				"          PRODUCT_ID as integer,",
 				"          UNIT_PRICE as double",
@@ -252,21 +263,25 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameColumns3",
 				"RenameColumns3 filter(!isNull(ORDER_ID)) ~> NotNullfilter1",
-				"select1 filter(!isNull(STORE_ID)) ~> NotNullfilter3",
-				"StoresTblCast select(mapColumn(",
-				"          STORE_ID,",
-				"          STORE_NAME,",
-				"          WEB_ADDRESS,",
-				"          LATITUDE,",
-				"          LONGITUDE,",
+				"StoresTblCast filter(!isNull(STORE_ID)) ~> NotNullfilter3",
+				"OrderTblsCast filter(!isNull(CUSTOMER_ID)) ~> NotNullfilter2",
+				"splitNullValues@NotNull aggregate(groupBy(CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
 				"          Ingestion_by,",
 				"          Ingestion_TimeStamp,",
-				"          Ingestion_Date,",
-				"          exec_by",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"OrderTblsCast select(mapColumn(",
+				"          Ingestion_Date),",
+				"     RowCount = count(CUSTOMER_ID)) ~> aggDuplicates1",
+				"ProductsTblCast split(!isNull(PRODUCT_ID),",
+				"     disjoint: false) ~> split2@(NotnullRows, NullRows)",
+				"split2@NotnullRows aggregate(groupBy(PRODUCT_NAME,",
+				"          PRODUCT_ID,",
+				"          UNIT_PRICE,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date),",
+				"     Rowcount = count(PRODUCT_ID)) ~> aggDuplicate2",
+				"aggDuplicates1 select(mapColumn(",
 				"          CUSTOMER_ID,",
 				"          FULL_NAME,",
 				"          EMAIL_ADDRESS,",
@@ -275,24 +290,75 @@
 				"          Ingestion_Date",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select2",
-				"select2 filter(!isNull(CUSTOMER_ID)) ~> NotNullfilter2",
-				"split1@NotNull aggregate(groupBy(CUSTOMER_ID,",
-				"          FULL_NAME,",
-				"          EMAIL_ADDRESS,",
-				"          Ingestion_by,",
-				"          Ingestion_TimeStamp,",
-				"          Ingestion_Date),",
-				"     RowCount = count(CUSTOMER_ID)) ~> aggregate1",
-				"ProductsTblCast split(!isNull(PRODUCT_ID),",
-				"     disjoint: false) ~> split2@(NotnullRows, NullRows)",
-				"split2@NotnullRows aggregate(groupBy(PRODUCT_NAME,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn1",
+				"aggDuplicate2 select(mapColumn(",
+				"          PRODUCT_NAME,",
 				"          PRODUCT_ID,",
 				"          UNIT_PRICE,",
 				"          Ingestion_by,",
 				"          Ingestion_TimeStamp,",
-				"          Ingestion_Date)) ~> aggregate2",
-				"aggregate1 sink(allowSchemaDrift: true,",
+				"          Ingestion_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn2",
+				"NotNullfilter1 aggregate(groupBy(ORDER_ID,",
+				"          PRODUCT_ID,",
+				"          LINE_ITEM_ID,",
+				"          UNIT_PRICE,",
+				"          Prod_QTY,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date),",
+				"     rowCount = count(ORDER_ID)) ~> aggDuplicate3",
+				"aggDuplicate3 select(mapColumn(",
+				"          ORDER_ID,",
+				"          PRODUCT_ID,",
+				"          LINE_ITEM_ID,",
+				"          UNIT_PRICE,",
+				"          Prod_QTY,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn3",
+				"NotNullfilter2 aggregate(groupBy(CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp),",
+				"     Rowcount = count(CUSTOMER_ID)) ~> aggDuplicate4",
+				"aggDuplicate4 select(mapColumn(",
+				"          CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn4",
+				"NotNullfilter3 aggregate(groupBy(STORE_ID,",
+				"          STORE_NAME,",
+				"          WEB_ADDRESS,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date),",
+				"     rowCount = count(STORE_ID)) ~> aggDuplicate5",
+				"aggDuplicate5 select(mapColumn(",
+				"          STORE_ID,",
+				"          STORE_NAME,",
+				"          WEB_ADDRESS,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn5",
+				"RemoveCountColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -309,7 +375,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> CustomersSink",
-				"NotNullfilter1 sink(allowSchemaDrift: true,",
+				"RemoveCountColumn3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -326,7 +392,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> OrderItemsSink",
-				"NotNullfilter3 sink(allowSchemaDrift: true,",
+				"RemoveCountColumn5 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -343,7 +409,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> StoresSink",
-				"NotNullfilter2 sink(allowSchemaDrift: true,",
+				"RemoveCountColumn4 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -360,7 +426,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> OrderSink",
-				"aggregate2 sink(allowSchemaDrift: true,",
+				"RemoveCountColumn2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CUSTOMER_ID as integer,",
@@ -376,15 +442,7 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> ProductsSink",
-				"split1@Null sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1",
-				"split2@NullRows sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink2"
+				"     skipDuplicateMapOutputs: true) ~> ProductsSink"
 			]
 		}
 	}
