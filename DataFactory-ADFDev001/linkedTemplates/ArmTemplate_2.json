@@ -13,73 +13,57 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Products_in')]",
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"referenceName": "ls_myFirstProject_BlobStorage1",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"p_FileName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "Binary",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "customerorders/products",
-						"fileSystem": "silver"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": [
-					{
-						"name": "PRODUCT_NAME",
-						"type": "UTF8"
-					},
-					{
-						"name": "PRODUCT_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "UNIT_PRICE",
-						"type": "DOUBLE"
-					},
-					{
-						"name": "Ingestion_by",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_TimeStamp",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_Date",
-						"type": "UTF8"
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_FileName",
+							"type": "Expression"
+						},
+						"container": "input"
 					}
-				]
+				}
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_gold_out')]",
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFolder')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"referenceName": "ls_myFirstProject_BlobStorage1",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "Binary",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "customerorders",
-						"fileSystem": "gold"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
+						"type": "AzureBlobStorageLocation",
+						"container": "input"
+					}
+				}
 			},
 			"dependsOn": []
 		},
@@ -964,10 +948,7 @@
 					]
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Products_in')]",
-				"[concat(variables('factoryId'), '/datasets/ds_dl_gold_out')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_myFirstProject')]",
@@ -1863,8 +1844,7 @@
 									"sourceStores": {},
 									"sourceProducts": {},
 									"silverToGoldSink": {}
-								},
-								"linkedServiceParameters": {}
+								}
 							},
 							"staging": {},
 							"compute": {
@@ -1895,8 +1875,10 @@
 				"annotations": []
 			},
 			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFolder')]",
 				"[concat(variables('factoryId'), '/dataflows/BronzeToSilverDataflow')]",
-				"[concat(variables('factoryId'), '/dataflows/SilverToGoldDataflow')]"
+				"[concat(variables('factoryId'), '/dataflows/SilverToGoldDataflow')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFiles')]"
 			]
 		}
 	]

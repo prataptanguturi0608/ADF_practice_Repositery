@@ -13,6 +13,345 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Customers_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/customers",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_OrderItems_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/orderItems",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "PRODUCT_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "LINE_ITEM_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "UNIT_PRICE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Prod_QTY",
+						"type": "INT32"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Orders_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/orders",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "ORDER_DATETIME",
+						"type": "UTF8"
+					},
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "ORDER_STATUS",
+						"type": "UTF8"
+					},
+					{
+						"name": "STORE_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Products_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/products",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "PRODUCT_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "PRODUCT_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "UNIT_PRICE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Stores_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/stores",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "STORE_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "STORE_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "WEB_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "LATITUDE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LONGITUDE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_customers_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "customers.parquet",
+						"folderPath": "customerorders/customers",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_order_items_out')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -563,281 +902,6 @@
 						"fileSystem": "customerorders"
 					}
 				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProject_BlobStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_FileName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().p_FileName",
-							"type": "Expression"
-						},
-						"container": "input"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFolder')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProject_BlobStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"container": "input"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_OrderItems_in')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_ADEDev001_dlakeadfdev01",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "customerorders/orderItems",
-						"fileSystem": "silver"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": [
-					{
-						"name": "ORDER_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "PRODUCT_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "LINE_ITEM_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "UNIT_PRICE",
-						"type": "DOUBLE"
-					},
-					{
-						"name": "Prod_QTY",
-						"type": "INT32"
-					},
-					{
-						"name": "Ingestion_by",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_TimeStamp",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_Date",
-						"type": "UTF8"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Orders_in')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_ADEDev001_dlakeadfdev01",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "customerorders/orders",
-						"fileSystem": "silver"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": [
-					{
-						"name": "ORDER_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "ORDER_DATETIME",
-						"type": "UTF8"
-					},
-					{
-						"name": "CUSTOMER_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "ORDER_STATUS",
-						"type": "UTF8"
-					},
-					{
-						"name": "STORE_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "Ingestion_by",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_TimeStamp",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_Date",
-						"type": "UTF8"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Customers_in')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_ADEDev001_dlakeadfdev01",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "customerorders/customers",
-						"fileSystem": "silver"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": [
-					{
-						"name": "CUSTOMER_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "FULL_NAME",
-						"type": "UTF8"
-					},
-					{
-						"name": "EMAIL_ADDRESS",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_by",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_TimeStamp",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_Date",
-						"type": "UTF8"
-					},
-					{
-						"name": "IngestedBy",
-						"type": "UTF8"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Stores_in')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_ADEDev001_dlakeadfdev01",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "customerorders/stores",
-						"fileSystem": "silver"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": [
-					{
-						"name": "STORE_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "STORE_NAME",
-						"type": "UTF8"
-					},
-					{
-						"name": "WEB_ADDRESS",
-						"type": "UTF8"
-					},
-					{
-						"name": "LATITUDE",
-						"type": "DOUBLE"
-					},
-					{
-						"name": "LONGITUDE",
-						"type": "DOUBLE"
-					},
-					{
-						"name": "Ingestion_by",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_TimeStamp",
-						"type": "UTF8"
-					},
-					{
-						"name": "Ingestion_Date",
-						"type": "UTF8"
-					}
-				]
 			},
 			"dependsOn": []
 		}
