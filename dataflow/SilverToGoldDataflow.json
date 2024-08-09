@@ -40,10 +40,39 @@
 					"name": "sourceProducts"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_dl_gold_out",
+						"type": "DatasetReference"
+					},
+					"name": "silverToGoldSink"
+				}
+			],
 			"transformations": [
 				{
 					"name": "LeftOutJoin1"
+				},
+				{
+					"name": "RemoveDupColumns1"
+				},
+				{
+					"name": "LeftOutJoin2"
+				},
+				{
+					"name": "RemoveDupColumns2"
+				},
+				{
+					"name": "LeftOutJoin3"
+				},
+				{
+					"name": "RemoveDupColumns3"
+				},
+				{
+					"name": "LeftOutJoin4"
+				},
+				{
+					"name": "RemoveDupColumns4"
 				}
 			],
 			"scriptLines": [
@@ -118,7 +147,109 @@
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> LeftOutJoin1"
+				"     broadcast: 'auto')~> LeftOutJoin1",
+				"LeftOutJoin1 select(mapColumn(",
+				"          ORDER_ID = sourceOrderItems@ORDER_ID,",
+				"          PRODUCT_ID,",
+				"          LINE_ITEM_ID,",
+				"          UNIT_PRICE,",
+				"          Prod_QTY,",
+				"          ORDER_DATETIME,",
+				"          ORDER_STATUS,",
+				"          CUSTOMER_ID,",
+				"          STORE_ID,",
+				"          Ingestion_by = sourceOrderItems@Ingestion_by,",
+				"          Ingestion_TimeStamp = sourceOrderItems@Ingestion_TimeStamp,",
+				"          Ingestion_Date = sourceOrderItems@Ingestion_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns1",
+				"RemoveDupColumns1, sourceCustomers join(RemoveDupColumns1@CUSTOMER_ID == sourceCustomers@CUSTOMER_ID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> LeftOutJoin2",
+				"LeftOutJoin2 select(mapColumn(",
+				"          ORDER_ID,",
+				"          PRODUCT_ID,",
+				"          LINE_ITEM_ID,",
+				"          UNIT_PRICE,",
+				"          Prod_QTY,",
+				"          ORDER_DATETIME,",
+				"          ORDER_STATUS,",
+				"          CUSTOMER_ID = RemoveDupColumns1@CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          STORE_ID,",
+				"          Ingestion_by = RemoveDupColumns1@Ingestion_by,",
+				"          Ingestion_TimeStamp = RemoveDupColumns1@Ingestion_TimeStamp,",
+				"          Ingestion_Date = RemoveDupColumns1@Ingestion_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns2",
+				"RemoveDupColumns2, sourceStores join(RemoveDupColumns2@STORE_ID == sourceStores@STORE_ID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> LeftOutJoin3",
+				"LeftOutJoin3 select(mapColumn(",
+				"          ORDER_ID,",
+				"          PRODUCT_ID,",
+				"          LINE_ITEM_ID,",
+				"          UNIT_PRICE,",
+				"          Prod_QTY,",
+				"          ORDER_DATETIME,",
+				"          ORDER_STATUS,",
+				"          CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          STORE_ID = RemoveDupColumns2@STORE_ID,",
+				"          STORE_NAME,",
+				"          WEB_ADDRESS,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          Ingestion_by = RemoveDupColumns2@Ingestion_by,",
+				"          Ingestion_TimeStamp = RemoveDupColumns2@Ingestion_TimeStamp,",
+				"          Ingestion_Date = RemoveDupColumns2@Ingestion_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns3",
+				"RemoveDupColumns3, sourceProducts join(RemoveDupColumns3@PRODUCT_ID == sourceProducts@PRODUCT_ID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> LeftOutJoin4",
+				"LeftOutJoin4 select(mapColumn(",
+				"          ORDER_ID,",
+				"          PRODUCT_ID = RemoveDupColumns3@PRODUCT_ID,",
+				"          PRODUCT_NAME,",
+				"          Prod_QTY,",
+				"          UNIT_PRICE = sourceProducts@UNIT_PRICE,",
+				"          LINE_ITEM_ID,",
+				"          ORDER_DATETIME,",
+				"          ORDER_STATUS,",
+				"          CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          STORE_ID,",
+				"          STORE_NAME,",
+				"          WEB_ADDRESS,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          Ingestion_by = RemoveDupColumns3@Ingestion_by,",
+				"          Ingestion_TimeStamp = RemoveDupColumns3@Ingestion_TimeStamp,",
+				"          Ingestion_Date = RemoveDupColumns3@Ingestion_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns4",
+				"RemoveDupColumns4 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> silverToGoldSink"
 			]
 		}
 	}

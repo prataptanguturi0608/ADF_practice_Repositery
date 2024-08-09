@@ -1,0 +1,20 @@
+{
+	"name": "ds_dl_gold_out",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADEDev001_dlakeadfdev01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "customerorders",
+				"fileSystem": "gold"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
