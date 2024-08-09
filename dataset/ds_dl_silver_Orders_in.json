@@ -18,7 +18,7 @@
 		"schema": [
 			{
 				"name": "ORDER_ID",
-				"type": "UTF8"
+				"type": "INT32"
 			},
 			{
 				"name": "ORDER_DATETIME",
@@ -34,7 +34,7 @@
 			},
 			{
 				"name": "STORE_ID",
-				"type": "UTF8"
+				"type": "INT32"
 			},
 			{
 				"name": "Ingestion_by",
