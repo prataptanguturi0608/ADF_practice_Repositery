@@ -272,7 +272,28 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> silverToGoldSink"
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          ORDER_ID,",
+				"          PRODUCT_ID,",
+				"          PRODUCT_NAME,",
+				"          Prod_QTY,",
+				"          UNIT_PRICE,",
+				"          LINE_ITEM_ID,",
+				"          ORDER_DATETIME,",
+				"          ORDER_STATUS,",
+				"          CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          STORE_ID,",
+				"          STORE_NAME,",
+				"          WEB_ADDRESS,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date",
+				"     )) ~> silverToGoldSink"
 			]
 		}
 	}
