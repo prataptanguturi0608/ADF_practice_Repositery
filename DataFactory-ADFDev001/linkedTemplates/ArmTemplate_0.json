@@ -631,7 +631,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_out')]",
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_customers_out')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -647,7 +647,8 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "customerorders",
+						"fileName": "customers.parquet",
+						"folderPath": "customerorders/customers",
 						"fileSystem": "silver"
 					},
 					"compressionCodec": "snappy"
