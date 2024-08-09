@@ -73,6 +73,9 @@
 				},
 				{
 					"name": "RemoveDupColumns4"
+				},
+				{
+					"name": "agRemoveDuplicates"
 				}
 			],
 			"scriptLines": [
@@ -242,7 +245,26 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns4",
-				"RemoveDupColumns4 sink(allowSchemaDrift: true,",
+				"RemoveDupColumns4 aggregate(groupBy(ORDER_ID,",
+				"          PRODUCT_ID,",
+				"          PRODUCT_NAME,",
+				"          Prod_QTY,",
+				"          UNIT_PRICE,",
+				"          LINE_ITEM_ID,",
+				"          ORDER_DATETIME,",
+				"          ORDER_STATUS,",
+				"          CUSTOMER_ID,",
+				"          FULL_NAME,",
+				"          EMAIL_ADDRESS,",
+				"          STORE_ID,",
+				"          STORE_NAME,",
+				"          WEB_ADDRESS,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          Ingestion_by,",
+				"          Ingestion_TimeStamp,",
+				"          Ingestion_Date)) ~> agRemoveDuplicates",
+				"agRemoveDuplicates sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     umask: 0022,",
