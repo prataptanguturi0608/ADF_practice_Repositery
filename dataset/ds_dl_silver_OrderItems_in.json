@@ -34,7 +34,7 @@
 			},
 			{
 				"name": "Prod_QTY",
-				"type": "UTF8"
+				"type": "INT32"
 			},
 			{
 				"name": "Ingestion_by",

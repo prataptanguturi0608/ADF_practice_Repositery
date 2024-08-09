@@ -52,7 +52,7 @@
 				"          PRODUCT_ID as integer,",
 				"          LINE_ITEM_ID as integer,",
 				"          UNIT_PRICE as double,",
-				"          Prod_QTY as string,",
+				"          Prod_QTY as integer,",
 				"          Ingestion_by as string,",
 				"          Ingestion_TimeStamp as string,",
 				"          Ingestion_Date as string",
