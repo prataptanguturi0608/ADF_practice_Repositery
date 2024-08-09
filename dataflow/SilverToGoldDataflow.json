@@ -75,7 +75,7 @@
 					"name": "RemoveDupColumns4"
 				},
 				{
-					"name": "agRemoveDuplicates"
+					"name": "agRemoveCount"
 				}
 			],
 			"scriptLines": [
@@ -264,8 +264,8 @@
 				"          Ingestion_by,",
 				"          Ingestion_TimeStamp,",
 				"          Ingestion_Date),",
-				"     count = count(ORDER_ID)) ~> agRemoveDuplicates",
-				"agRemoveDuplicates sink(allowSchemaDrift: true,",
+				"     count = count(ORDER_ID)) ~> agRemoveCount",
+				"agRemoveCount sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     umask: 0022,",
