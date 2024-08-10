@@ -43,6 +43,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_test_BlobStorage'"
 		},
+		"AzureSqlDatabase1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+		},
 		"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
@@ -53,7 +57,7 @@
 		},
 		"ls_Sftp1_properties_typeProperties_userName": {
 			"type": "string",
-			"defaultValue": "7cefee8b51c04fa6a04601bcf63dcb71"
+			"defaultValue": "47d8c15f51694113ab9b3c7b8781f072"
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
@@ -62,6 +66,18 @@
 		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "mfdbserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "myfirstdb"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa-admin"
 		}
 	},
 	"variables": {
@@ -249,6 +265,28 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabase1_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabase1_password')]"
+					}
+				}
 			},
 			"dependsOn": []
 		},
@@ -628,34 +666,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_gold_out')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_ADEDev001_dlakeadfdev01",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "customerorders",
-						"fileSystem": "gold"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ADEDev001_dlakeadfdev01')]"
 			]
 		}
 	]

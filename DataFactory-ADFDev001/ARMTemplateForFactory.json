@@ -43,6 +43,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_test_BlobStorage'"
 		},
+		"AzureSqlDatabase1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+		},
 		"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
@@ -53,7 +57,7 @@
 		},
 		"ls_Sftp1_properties_typeProperties_userName": {
 			"type": "string",
-			"defaultValue": "7cefee8b51c04fa6a04601bcf63dcb71"
+			"defaultValue": "47d8c15f51694113ab9b3c7b8781f072"
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
@@ -62,6 +66,18 @@
 		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "mfdbserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "myfirstdb"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa-admin"
 		}
 	},
 	"variables": {
@@ -1114,7 +1130,8 @@
 									"sourceCustomers": {},
 									"sourceStores": {},
 									"sourceProducts": {},
-									"silverToGoldSink": {}
+									"silverToGoldSink": {},
+									"silevertoDW": {}
 								}
 							},
 							"staging": {},
@@ -3236,6 +3253,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "silverToGoldSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_AzureSqlTable",
+								"type": "DatasetReference"
+							},
+							"name": "silevertoDW"
 						}
 					],
 					"transformations": [
@@ -3265,6 +3289,9 @@
 						},
 						{
 							"name": "agRemoveCount"
+						},
+						{
+							"name": "AlterRow1"
 						}
 					],
 					"scriptLines": [
@@ -3454,6 +3481,7 @@
 						"          Ingestion_TimeStamp,",
 						"          Ingestion_Date),",
 						"     count = count(ORDER_ID)) ~> agRemoveCount",
+						"agRemoveCount alterRow(upsertIf(true())) ~> AlterRow1",
 						"agRemoveCount sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
@@ -3482,7 +3510,54 @@
 						"          Ingestion_by,",
 						"          Ingestion_TimeStamp,",
 						"          Ingestion_Date",
-						"     )) ~> silverToGoldSink"
+						"     )) ~> silverToGoldSink",
+						"AlterRow1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Order_ID as integer,",
+						"          Customer_id as integer,",
+						"          Order_Status as integer,",
+						"          Ordet_dateTime as string,",
+						"          Store_id as integer,",
+						"          Full_Name as string,",
+						"          emil_add as string,",
+						"          Store_name as string,",
+						"          WebAddress as string,",
+						"          Latitude as double,",
+						"          Longitude as double,",
+						"          Product_id as integer,",
+						"          Line_item_id as integer,",
+						"          Unit_Price as double,",
+						"          Prod_Qty as integer,",
+						"          Product_name as string",
+						"     ),",
+						"     deletable:true,",
+						"     insertable:true,",
+						"     updateable:true,",
+						"     upsertable:true,",
+						"     keys:['Order_ID'],",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          Order_ID = ORDER_ID,",
+						"          Customer_id = CUSTOMER_ID,",
+						"          Order_Status = ORDER_STATUS,",
+						"          Ordet_dateTime = ORDER_DATETIME,",
+						"          Store_id = STORE_ID,",
+						"          Full_Name = FULL_NAME,",
+						"          emil_add = EMAIL_ADDRESS,",
+						"          Store_name = STORE_NAME,",
+						"          WebAddress = WEB_ADDRESS,",
+						"          Latitude = LATITUDE,",
+						"          Longitude = LONGITUDE,",
+						"          Product_id = PRODUCT_ID,",
+						"          Line_item_id = LINE_ITEM_ID,",
+						"          Unit_Price = UNIT_PRICE,",
+						"          Prod_Qty = Prod_QTY,",
+						"          Product_name = PRODUCT_NAME",
+						"     )) ~> silevertoDW"
 					]
 				}
 			},
@@ -3492,7 +3567,126 @@
 				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Customers_in')]",
 				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Stores_in')]",
 				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Products_in')]",
-				"[concat(variables('factoryId'), '/datasets/ds_dl_gold_out')]"
+				"[concat(variables('factoryId'), '/datasets/ds_dl_gold_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_AzureSqlTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabase1_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabase1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_AzureSqlTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Order_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Customer_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Order_Status",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Ordet_dateTime",
+						"type": "varchar"
+					},
+					{
+						"name": "Store_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Full_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "emil_add",
+						"type": "varchar"
+					},
+					{
+						"name": "Store_name",
+						"type": "varchar"
+					},
+					{
+						"name": "WebAddress",
+						"type": "varchar"
+					},
+					{
+						"name": "Latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Product_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Line_item_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Unit_Price",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Prod_Qty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Product_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "prod",
+					"table": "tbl_customerOrders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
 			]
 		}
 	]

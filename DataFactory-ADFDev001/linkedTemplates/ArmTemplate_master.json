@@ -43,6 +43,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_test_BlobStorage'"
 		},
+		"AzureSqlDatabase1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+		},
 		"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
@@ -53,7 +57,7 @@
 		},
 		"ls_Sftp1_properties_typeProperties_userName": {
 			"type": "string",
-			"defaultValue": "7cefee8b51c04fa6a04601bcf63dcb71"
+			"defaultValue": "47d8c15f51694113ab9b3c7b8781f072"
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
@@ -62,6 +66,18 @@
 		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "mfdbserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "myfirstdb"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa-admin"
 		},
 		"containerUri": {
 			"type": "string",
@@ -117,6 +133,9 @@
 					"ls_test_BlobStorage_connectionString": {
 						"value": "[parameters('ls_test_BlobStorage_connectionString')]"
 					},
+					"AzureSqlDatabase1_password": {
+						"value": "[parameters('AzureSqlDatabase1_password')]"
+					},
 					"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url')]"
 					},
@@ -131,6 +150,15 @@
 					},
 					"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureSqlDatabase1_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]"
+					},
+					"AzureSqlDatabase1_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_database')]"
+					},
+					"AzureSqlDatabase1_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]"
 					}
 				}
 			},

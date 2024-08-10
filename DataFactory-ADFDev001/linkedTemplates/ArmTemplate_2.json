@@ -13,6 +13,30 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Target')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output",
+						"fileSystem": "customerorders"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -63,6 +87,100 @@
 						"type": "AzureBlobStorageLocation",
 						"container": "input"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_AzureSqlTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Order_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Customer_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Order_Status",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Ordet_dateTime",
+						"type": "varchar"
+					},
+					{
+						"name": "Store_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Full_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "emil_add",
+						"type": "varchar"
+					},
+					{
+						"name": "Store_name",
+						"type": "varchar"
+					},
+					{
+						"name": "WebAddress",
+						"type": "varchar"
+					},
+					{
+						"name": "Latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Product_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Line_item_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Unit_Price",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Prod_Qty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Product_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "prod",
+					"table": "tbl_customerOrders"
 				}
 			},
 			"dependsOn": []
@@ -698,6 +816,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "silverToGoldSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_AzureSqlTable",
+								"type": "DatasetReference"
+							},
+							"name": "silevertoDW"
 						}
 					],
 					"transformations": [
@@ -727,6 +852,9 @@
 						},
 						{
 							"name": "agRemoveCount"
+						},
+						{
+							"name": "AlterRow1"
 						}
 					],
 					"scriptLines": [
@@ -916,6 +1044,7 @@
 						"          Ingestion_TimeStamp,",
 						"          Ingestion_Date),",
 						"     count = count(ORDER_ID)) ~> agRemoveCount",
+						"agRemoveCount alterRow(upsertIf(true())) ~> AlterRow1",
 						"agRemoveCount sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
@@ -944,11 +1073,60 @@
 						"          Ingestion_by,",
 						"          Ingestion_TimeStamp,",
 						"          Ingestion_Date",
-						"     )) ~> silverToGoldSink"
+						"     )) ~> silverToGoldSink",
+						"AlterRow1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Order_ID as integer,",
+						"          Customer_id as integer,",
+						"          Order_Status as integer,",
+						"          Ordet_dateTime as string,",
+						"          Store_id as integer,",
+						"          Full_Name as string,",
+						"          emil_add as string,",
+						"          Store_name as string,",
+						"          WebAddress as string,",
+						"          Latitude as double,",
+						"          Longitude as double,",
+						"          Product_id as integer,",
+						"          Line_item_id as integer,",
+						"          Unit_Price as double,",
+						"          Prod_Qty as integer,",
+						"          Product_name as string",
+						"     ),",
+						"     deletable:true,",
+						"     insertable:true,",
+						"     updateable:true,",
+						"     upsertable:true,",
+						"     keys:['Order_ID'],",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          Order_ID = ORDER_ID,",
+						"          Customer_id = CUSTOMER_ID,",
+						"          Order_Status = ORDER_STATUS,",
+						"          Ordet_dateTime = ORDER_DATETIME,",
+						"          Store_id = STORE_ID,",
+						"          Full_Name = FULL_NAME,",
+						"          emil_add = EMAIL_ADDRESS,",
+						"          Store_name = STORE_NAME,",
+						"          WebAddress = WEB_ADDRESS,",
+						"          Latitude = LATITUDE,",
+						"          Longitude = LONGITUDE,",
+						"          Product_id = PRODUCT_ID,",
+						"          Line_item_id = LINE_ITEM_ID,",
+						"          Unit_Price = UNIT_PRICE,",
+						"          Prod_Qty = Prod_QTY,",
+						"          Product_name = PRODUCT_NAME",
+						"     )) ~> silevertoDW"
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_AzureSqlTable')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_myFirstProject')]",
@@ -1843,7 +2021,8 @@
 									"sourceCustomers": {},
 									"sourceStores": {},
 									"sourceProducts": {},
-									"silverToGoldSink": {}
+									"silverToGoldSink": {},
+									"silevertoDW": {}
 								}
 							},
 							"staging": {},

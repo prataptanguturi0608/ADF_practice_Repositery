@@ -32,6 +32,9 @@
 		"ls_test_BlobStorage_connectionString": {
 			"value": ""
 		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
 		"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
 			"value": "https://dlakeadfdev01.dfs.core.windows.net/"
 		},
@@ -39,13 +42,22 @@
 			"value": "eu-central-1.sftpcloud.io"
 		},
 		"ls_Sftp1_properties_typeProperties_userName": {
-			"value": "7cefee8b51c04fa6a04601bcf63dcb71"
+			"value": "47d8c15f51694113ab9b3c7b8781f072"
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"value": "https://dlakeadfdev01.dfs.core.windows.net/"
 		},
 		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://mfsdatastorage.dfs.core.windows.net/"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "mfdbserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "myfirstdb"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "sa-admin"
 		}
 	}
 }
