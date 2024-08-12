@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "DataFactory-ADFDev001"
 		},
+		"AzureSqlDatabase1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+		},
 		"LS_ADEDev001_dlakeadfdev01_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADEDev001_dlakeadfdev01'"
@@ -43,9 +47,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_test_BlobStorage'"
 		},
-		"AzureSqlDatabase1_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "mfdbserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "myfirstdb"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa-admin"
 		},
 		"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
 			"type": "string",
@@ -66,18 +78,6 @@
 		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
-		},
-		"AzureSqlDatabase1_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "mfdbserver.database.windows.net"
-		},
-		"AzureSqlDatabase1_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "myfirstdb"
-		},
-		"AzureSqlDatabase1_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "sa-admin"
 		}
 	},
 	"variables": {
@@ -1177,6 +1177,102 @@
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_Parquet')]",
 				"[concat(variables('factoryId'), '/datasets/ds_archive_Parquet')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_AzureSqlTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Order_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Customer_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Order_Status",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Ordet_dateTime",
+						"type": "varchar"
+					},
+					{
+						"name": "Store_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Full_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "emil_add",
+						"type": "varchar"
+					},
+					{
+						"name": "Store_name",
+						"type": "varchar"
+					},
+					{
+						"name": "WebAddress",
+						"type": "varchar"
+					},
+					{
+						"name": "Latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Product_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Line_item_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Unit_Price",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Prod_Qty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Product_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "prod",
+					"table": "tbl_customerOrders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
 			]
 		},
 		{
@@ -2578,6 +2674,28 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabase1_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabase1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_ADEDev001_dlakeadfdev01')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -3569,124 +3687,6 @@
 				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Products_in')]",
 				"[concat(variables('factoryId'), '/datasets/ds_dl_gold_out')]",
 				"[concat(variables('factoryId'), '/datasets/ds_AzureSqlTable')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]",
-					"database": "[parameters('AzureSqlDatabase1_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('AzureSqlDatabase1_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_AzureSqlTable')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Order_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Customer_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Order_Status",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Ordet_dateTime",
-						"type": "varchar"
-					},
-					{
-						"name": "Store_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Full_Name",
-						"type": "varchar"
-					},
-					{
-						"name": "emil_add",
-						"type": "varchar"
-					},
-					{
-						"name": "Store_name",
-						"type": "varchar"
-					},
-					{
-						"name": "WebAddress",
-						"type": "varchar"
-					},
-					{
-						"name": "Latitude",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "Longitude",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "Product_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Line_item_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Unit_Price",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "Prod_Qty",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Product_name",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "prod",
-					"table": "tbl_customerOrders"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
 			]
 		}
 	]
