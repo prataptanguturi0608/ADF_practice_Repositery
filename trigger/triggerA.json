@@ -1,0 +1,29 @@
+{
+	"name": "triggerA",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipeline": {
+			"pipelineReference": {
+				"referenceName": "pl_ADE_Daily_Class",
+				"type": "PipelineReference"
+			},
+			"parameters": {
+				"p_wStart": "@Trigger().outputs.windowStartTime",
+				"p_wEnd": "@Trigger().outputs.windowEndTime"
+			}
+		},
+		"type": "TumblingWindowTrigger",
+		"typeProperties": {
+			"frequency": "Hour",
+			"interval": 1,
+			"startTime": "2024-08-13T00:13:00Z",
+			"delay": "00:00:00",
+			"maxConcurrency": 50,
+			"retryPolicy": {
+				"intervalInSeconds": 30
+			},
+			"dependsOn": []
+		}
+	}
+}
