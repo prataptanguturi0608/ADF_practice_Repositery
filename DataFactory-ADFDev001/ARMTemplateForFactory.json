@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_Sftp1'"
 		},
+		"ls_blob_testing_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_blob_testing'"
+		},
 		"ls_mfp_blod_archive_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_mfp_blod_archive'"
@@ -58,6 +62,22 @@
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
+		},
+		"triggerA_properties_pipeline_parameters_p_wStart": {
+			"type": "string",
+			"defaultValue": "@Trigger().outputs.windowStartTime"
+		},
+		"triggerA_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@Trigger().outputs.windowEndTime"
+		},
+		"triggerB_properties_pipeline_parameters_p_wStart": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"triggerB_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
 	},
 	"variables": {
@@ -158,6 +178,111 @@
 					"sch_end": {
 						"type": "String"
 					}
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ADE_Daily_Class_2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_start",
+							"value": {
+								"value": "@pipeline().parameters.p_wStart",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_end",
+							"value": {
+								"value": "@pipeline().parameters.p_wEnd",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_wStart": {
+						"type": "string"
+					},
+					"p_wEnd": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"filenametxt": {
+						"type": "String"
+					},
+					"inputfilename": {
+						"type": "String"
+					},
+					"filenamejson": {
+						"type": "String"
+					},
+					"filenameparquet": {
+						"type": "String"
+					},
+					"sch_start": {
+						"type": "String"
+					},
+					"sch_end": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Testing"
 				},
 				"annotations": []
 			},
@@ -1183,6 +1308,23 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "Fail1",
+						"type": "Fail",
+						"dependsOn": [
+							{
+								"activity": "Get_Input_FolderMetadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"message": "Pipeline failed",
+							"errorCode": "500"
+						}
 					}
 				],
 				"policy": {
@@ -1219,6 +1361,57 @@
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_Parquet')]",
 				"[concat(variables('factoryId'), '/datasets/ds_archive_Parquet')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_testing')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"table1": {},
+									"table2": {},
+									"sink1": {},
+									"sink2": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
 			]
 		},
 		{
@@ -2719,6 +2912,62 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_testing_parquet1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_blob_testing",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "part-00000-2dbd9360-aeff-44e2-8d7e-c2433ae6a466-c000.snappy.parquet",
+						"container": "testcontianer"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_blob_testing')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_testing_parquet2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_blob_testing",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "part-00000-3f6bece8-30a4-4f55-b5b2-6899c1e2070c-c000.snappy.parquet",
+						"container": "testcontianer"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_blob_testing')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -2779,6 +3028,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_blob_testing')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_blob_testing_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_mfp_blod_archive')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -2820,6 +3082,89 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/triggerA')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_ADE_Daily_Class",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_wStart": "[parameters('triggerA_properties_pipeline_parameters_p_wStart')]",
+						"p_wEnd": "[parameters('triggerA_properties_pipeline_parameters_p_wEnd')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 1,
+					"startTime": "2024-08-12T14:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "SelfDependencyTumblingWindowTriggerReference",
+							"offset": "-0:01:00:00"
+						}
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ADE_Daily_Class')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/triggerB')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_ADE_Daily_Class_2",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_wStart": "[parameters('triggerB_properties_pipeline_parameters_p_wStart')]",
+						"p_wEnd": "[parameters('triggerB_properties_pipeline_parameters_p_wEnd')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 1,
+					"startTime": "2024-08-13T14:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "TumblingWindowTriggerDependencyReference",
+							"offset": "-0:00:00:00",
+							"referenceTrigger": {
+								"referenceName": "triggerA",
+								"type": "TriggerReference"
+							}
+						}
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ADE_Daily_Class_2')]",
+				"[concat(variables('factoryId'), '/triggers/triggerA')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/OnPrem-SlefHosted-IR')]",
@@ -3685,103 +4030,72 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_ADE_Daily_Class_2')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "Wait1",
-						"type": "Wait",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"waitTimeInSeconds": 1
-						}
-					},
-					{
-						"name": "Set variable1",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Wait1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_testing_parquet1",
+								"type": "DatasetReference"
+							},
+							"name": "table1"
 						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "sch_start",
-							"value": {
-								"value": "@pipeline().parameters.p_wStart",
-								"type": "Expression"
-							}
+						{
+							"dataset": {
+								"referenceName": "ds_testing_parquet2",
+								"type": "DatasetReference"
+							},
+							"name": "table2"
 						}
-					},
-					{
-						"name": "Set variable2",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Wait1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_archive_Json",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
 						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "sch_end",
-							"value": {
-								"value": "@pipeline().parameters.p_wEnd",
-								"type": "Expression"
-							}
+						{
+							"dataset": {
+								"referenceName": "ds_archive_Parquet",
+								"type": "DatasetReference"
+							},
+							"name": "sink2"
 						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"p_wStart": {
-						"type": "string"
-					},
-					"p_wEnd": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"filenametxt": {
-						"type": "String"
-					},
-					"inputfilename": {
-						"type": "String"
-					},
-					"filenamejson": {
-						"type": "String"
-					},
-					"filenameparquet": {
-						"type": "String"
-					},
-					"sch_start": {
-						"type": "String"
-					},
-					"sch_end": {
-						"type": "String"
-					}
-				},
-				"annotations": []
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> table1",
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> table2",
+						"table1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink1",
+						"table2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink2"
+					]
+				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_testing_parquet1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_testing_parquet2')]",
+				"[concat(variables('factoryId'), '/datasets/ds_archive_Json')]",
+				"[concat(variables('factoryId'), '/datasets/ds_archive_Parquet')]"
+			]
 		}
 	]
 }

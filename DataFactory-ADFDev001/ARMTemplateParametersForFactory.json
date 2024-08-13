@@ -14,6 +14,9 @@
 		"ls_Sftp1_password": {
 			"value": ""
 		},
+		"ls_blob_testing_connectionString": {
+			"value": ""
+		},
 		"ls_mfp_blod_archive_connectionString": {
 			"value": ""
 		},
@@ -43,6 +46,18 @@
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"value": "https://dlakeadfdev01.dfs.core.windows.net/"
+		},
+		"triggerA_properties_pipeline_parameters_p_wStart": {
+			"value": "@Trigger().outputs.windowStartTime"
+		},
+		"triggerA_properties_pipeline_parameters_p_wEnd": {
+			"value": "@Trigger().outputs.windowEndTime"
+		},
+		"triggerB_properties_pipeline_parameters_p_wStart": {
+			"value": "@trigger().outputs.windowStartTime"
+		},
+		"triggerB_properties_pipeline_parameters_p_wEnd": {
+			"value": "@trigger().outputs.windowEndTime"
 		}
 	}
 }
