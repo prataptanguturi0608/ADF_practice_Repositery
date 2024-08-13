@@ -1,5 +1,5 @@
 {
-	"name": "ds_testing_parquet1",
+	"name": "ds_testing_parquet2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_blob_testing",
@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "part-00000-2dbd9360-aeff-44e2-8d7e-c2433ae6a466-c000.snappy.parquet",
+				"fileName": "part-00000-3f6bece8-30a4-4f55-b5b2-6899c1e2070c-c000.snappy.parquet",
 				"container": "testcontianer"
 			},
 			"compressionCodec": "snappy"

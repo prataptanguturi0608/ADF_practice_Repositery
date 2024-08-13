@@ -5,54 +5,19 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "ds_testing_Excel1",
-						"type": "DatasetReference"
-					},
 					"name": "table1"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_testing_Excel2",
-						"type": "DatasetReference"
-					},
 					"name": "table2"
 				}
 			],
-			"sinks": [
-				{
-					"dataset": {
-						"referenceName": "ds_testing_parquet",
-						"type": "DatasetReference"
-					},
-					"name": "sink1"
-				},
-				{
-					"dataset": {
-						"referenceName": "ds_testing_parquet",
-						"type": "DatasetReference"
-					},
-					"name": "sink2"
-				}
-			],
+			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> table1",
+				"     validateSchema: false) ~> table1",
 				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> table2",
-				"table1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     format: 'parquet',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1",
-				"table2 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     format: 'parquet',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink2"
+				"     validateSchema: false) ~> table2"
 			]
 		}
 	}
