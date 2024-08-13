@@ -1,5 +1,5 @@
 {
-	"name": "ds_parquet",
+	"name": "ds_testing_parquet",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_blob_testing",
