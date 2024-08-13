@@ -79,9 +79,9 @@
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
 		},
-		"Sch_trigger01_properties_pl_myFirstProject_parameters_p_IngestedBy": {
+		"Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy": {
 			"type": "string",
-			"defaultValue": "schedules trigger"
+			"defaultValue": "TumbTrigger"
 		}
 	},
 	"variables": {
@@ -3805,31 +3805,32 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Sch_trigger01')]",
+			"name": "[concat(parameters('factoryName'), '/Tumb_Trigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_myFirstProject",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"p_IngestedBy": "[parameters('Sch_trigger01_properties_pl_myFirstProject_parameters_p_IngestedBy')]"
-						}
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_myFirstProject",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_IngestedBy": "[parameters('Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy')]"
 					}
-				],
-				"type": "ScheduleTrigger",
+				},
+				"type": "TumblingWindowTrigger",
 				"typeProperties": {
-					"recurrence": {
-						"frequency": "Minute",
-						"interval": 2,
-						"startTime": "2024-08-13T11:19:00",
-						"timeZone": "India Standard Time"
-					}
+					"frequency": "Minute",
+					"interval": 5,
+					"startTime": "2024-08-13T11:27:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 2,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
 				}
 			},
 			"dependsOn": [

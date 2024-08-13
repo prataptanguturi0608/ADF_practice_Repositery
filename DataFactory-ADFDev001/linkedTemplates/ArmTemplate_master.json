@@ -79,9 +79,9 @@
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
 		},
-		"Sch_trigger01_properties_pl_myFirstProject_parameters_p_IngestedBy": {
+		"Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy": {
 			"type": "string",
-			"defaultValue": "schedules trigger"
+			"defaultValue": "TumbTrigger"
 		},
 		"containerUri": {
 			"type": "string",
@@ -202,8 +202,8 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"Sch_trigger01_properties_pl_myFirstProject_parameters_p_IngestedBy": {
-						"value": "[parameters('Sch_trigger01_properties_pl_myFirstProject_parameters_p_IngestedBy')]"
+					"Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy": {
+						"value": "[parameters('Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy')]"
 					}
 				}
 			},
