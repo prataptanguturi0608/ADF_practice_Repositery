@@ -868,6 +868,23 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "Get_Input_FolderMetadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "Pipeline failed",
+					"errorCode": "500"
+				}
 			}
 		],
 		"parameters": {
