@@ -1,0 +1,29 @@
+{
+	"name": "Tumbtrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipeline": {
+			"pipelineReference": {
+				"referenceName": "pl_ADE_Daily_Class",
+				"type": "PipelineReference"
+			},
+			"parameters": {
+				"p_wStart": "@trigger().outputs.windowStartTime",
+				"p_wEnd": "@trigger().outputs.windowEndTime"
+			}
+		},
+		"type": "TumblingWindowTrigger",
+		"typeProperties": {
+			"frequency": "Hour",
+			"interval": 4,
+			"startTime": "2024-08-12T12:13:00Z",
+			"delay": "00:00:00",
+			"maxConcurrency": 50,
+			"retryPolicy": {
+				"intervalInSeconds": 30
+			},
+			"dependsOn": []
+		}
+	}
+}
