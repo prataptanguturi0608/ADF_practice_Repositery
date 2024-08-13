@@ -2,7 +2,7 @@
 	"name": "triggerB",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "pl_ADE_Daily_Class_2",
