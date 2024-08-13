@@ -6,12 +6,60 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "DataFactory-ADFDev001"
+		},
+		"triggerA_properties_pipeline_parameters_p_wStart": {
+			"type": "string",
+			"defaultValue": "@Trigger().outputs.windowStartTime"
+		},
+		"triggerA_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@Trigger().outputs.windowEndTime"
+		},
+		"triggerB_properties_pipeline_parameters_p_wStart": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"triggerB_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_FileName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_FileName",
+							"type": "Expression"
+						},
+						"container": "input"
+					}
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFolder')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -31,6 +79,43 @@
 						"type": "AzureBlobStorageLocation",
 						"container": "input"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/triggerA')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_ADE_Daily_Class",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_wStart": "[parameters('triggerA_properties_pipeline_parameters_p_wStart')]",
+						"p_wEnd": "[parameters('triggerA_properties_pipeline_parameters_p_wEnd')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 1,
+					"startTime": "2024-08-12T14:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "SelfDependencyTumblingWindowTriggerReference",
+							"offset": "-0:01:00:00"
+						}
+					]
 				}
 			},
 			"dependsOn": []
@@ -983,6 +1068,49 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/triggerB')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_ADE_Daily_Class_2",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_wStart": "[parameters('triggerB_properties_pipeline_parameters_p_wStart')]",
+						"p_wEnd": "[parameters('triggerB_properties_pipeline_parameters_p_wEnd')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 1,
+					"startTime": "2024-08-13T14:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "TumblingWindowTriggerDependencyReference",
+							"offset": "-0:00:00:00",
+							"referenceTrigger": {
+								"referenceName": "triggerA",
+								"type": "TriggerReference"
+							}
+						}
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/triggers/triggerA')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_myFirstProject')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1910,7 +2038,8 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFolder')]",
 				"[concat(variables('factoryId'), '/dataflows/BronzeToSilverDataflow')]",
-				"[concat(variables('factoryId'), '/dataflows/SilverToGoldDataflow')]"
+				"[concat(variables('factoryId'), '/dataflows/SilverToGoldDataflow')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFiles')]"
 			]
 		}
 	]

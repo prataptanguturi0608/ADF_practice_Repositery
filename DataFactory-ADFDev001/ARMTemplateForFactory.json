@@ -58,6 +58,22 @@
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
+		},
+		"triggerA_properties_pipeline_parameters_p_wStart": {
+			"type": "string",
+			"defaultValue": "@Trigger().outputs.windowStartTime"
+		},
+		"triggerA_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@Trigger().outputs.windowEndTime"
+		},
+		"triggerB_properties_pipeline_parameters_p_wStart": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"triggerB_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
 	},
 	"variables": {
@@ -3784,6 +3800,188 @@
 				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Products_in')]",
 				"[concat(variables('factoryId'), '/datasets/ds_dl_gold_out')]",
 				"[concat(variables('factoryId'), '/datasets/ds_AzureSqlTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ADE_Daily_Class_2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_start",
+							"value": {
+								"value": "@pipeline().parameters.p_wStart",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_end",
+							"value": {
+								"value": "@pipeline().parameters.p_wEnd",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_wStart": {
+						"type": "string"
+					},
+					"p_wEnd": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"filenametxt": {
+						"type": "String"
+					},
+					"inputfilename": {
+						"type": "String"
+					},
+					"filenamejson": {
+						"type": "String"
+					},
+					"filenameparquet": {
+						"type": "String"
+					},
+					"sch_start": {
+						"type": "String"
+					},
+					"sch_end": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/triggerA')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_ADE_Daily_Class",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_wStart": "[parameters('triggerA_properties_pipeline_parameters_p_wStart')]",
+						"p_wEnd": "[parameters('triggerA_properties_pipeline_parameters_p_wEnd')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 1,
+					"startTime": "2024-08-12T14:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "SelfDependencyTumblingWindowTriggerReference",
+							"offset": "-0:01:00:00"
+						}
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ADE_Daily_Class')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/triggerB')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_ADE_Daily_Class_2",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_wStart": "[parameters('triggerB_properties_pipeline_parameters_p_wStart')]",
+						"p_wEnd": "[parameters('triggerB_properties_pipeline_parameters_p_wEnd')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 1,
+					"startTime": "2024-08-13T14:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "TumblingWindowTriggerDependencyReference",
+							"offset": "-0:00:00:00",
+							"referenceTrigger": {
+								"referenceName": "triggerA",
+								"type": "TriggerReference"
+							}
+						}
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ADE_Daily_Class_2')]",
+				"[concat(variables('factoryId'), '/triggers/triggerA')]"
 			]
 		}
 	]
