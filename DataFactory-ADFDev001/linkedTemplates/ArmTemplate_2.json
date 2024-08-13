@@ -13,38 +13,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProject_BlobStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_FileName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().p_FileName",
-							"type": "Expression"
-						},
-						"container": "input"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFolder')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1942,8 +1910,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFolder')]",
 				"[concat(variables('factoryId'), '/dataflows/BronzeToSilverDataflow')]",
-				"[concat(variables('factoryId'), '/dataflows/SilverToGoldDataflow')]",
-				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFiles')]"
+				"[concat(variables('factoryId'), '/dataflows/SilverToGoldDataflow')]"
 			]
 		}
 	]
