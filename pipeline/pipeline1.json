@@ -10,9 +10,18 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Test",
+					"value": "abc"
+				}
 			}
 		],
+		"variables": {
+			"Test": {
+				"type": "Integer"
+			}
+		},
 		"folder": {
 			"name": "Testing"
 		},
