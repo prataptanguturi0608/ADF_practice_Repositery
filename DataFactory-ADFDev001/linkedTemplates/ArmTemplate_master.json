@@ -79,6 +79,10 @@
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
 		},
+		"Sch_trigger01_properties_pl_myFirstProject_parameters_p_IngestedBy": {
+			"type": "string",
+			"defaultValue": "schedules trigger"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -197,6 +201,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"Sch_trigger01_properties_pl_myFirstProject_parameters_p_IngestedBy": {
+						"value": "[parameters('Sch_trigger01_properties_pl_myFirstProject_parameters_p_IngestedBy')]"
 					}
 				}
 			},
