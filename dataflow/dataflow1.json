@@ -5,9 +5,17 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "ds_testing_parquet1",
+						"type": "DatasetReference"
+					},
 					"name": "table1"
 				},
 				{
+					"dataset": {
+						"referenceName": "ds_testing_parquet2",
+						"type": "DatasetReference"
+					},
 					"name": "table2"
 				}
 			],
@@ -15,9 +23,13 @@
 			"transformations": [],
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> table1",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> table1",
 				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> table2"
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> table2"
 			]
 		}
 	}
