@@ -5,6 +5,9 @@
 			"referenceName": "AzureSqlDatabase1",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [

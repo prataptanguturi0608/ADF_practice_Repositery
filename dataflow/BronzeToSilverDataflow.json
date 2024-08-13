@@ -1,6 +1,9 @@
 {
 	"name": "BronzeToSilverDataflow",
 	"properties": {
+		"folder": {
+			"name": "ADE Classes"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
