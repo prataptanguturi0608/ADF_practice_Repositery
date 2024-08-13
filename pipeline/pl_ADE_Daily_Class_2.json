@@ -1,0 +1,93 @@
+{
+	"name": "pl_ADE_Daily_Class_2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Wait1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "sch_start",
+					"value": {
+						"value": "@pipeline().parameters.p_wStart",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Wait1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "sch_end",
+					"value": {
+						"value": "@pipeline().parameters.p_wEnd",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"p_wStart": {
+				"type": "string"
+			},
+			"p_wEnd": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"filenametxt": {
+				"type": "String"
+			},
+			"inputfilename": {
+				"type": "String"
+			},
+			"filenamejson": {
+				"type": "String"
+			},
+			"filenameparquet": {
+				"type": "String"
+			},
+			"sch_start": {
+				"type": "String"
+			},
+			"sch_end": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
