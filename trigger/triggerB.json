@@ -26,7 +26,7 @@
 			"dependsOn": [
 				{
 					"type": "TumblingWindowTriggerDependencyReference",
-					"offset": "-0:01:00:00",
+					"offset": "-0:00:00:00",
 					"referenceTrigger": {
 						"referenceName": "triggerA",
 						"type": "TriggerReference"
