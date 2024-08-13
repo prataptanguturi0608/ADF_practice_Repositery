@@ -15,17 +15,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADEDev001_dlakeadfdev01'"
 		},
-		"ls_SchoolDb_Binary_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_SchoolDb_Binary'"
-		},
 		"ls_Sftp1_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_Sftp1'"
-		},
-		"ls_blob_binary_out_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_blob_binary_out'"
 		},
 		"ls_mfp_blod_archive_connectionString": {
 			"type": "secureString",
@@ -38,14 +30,6 @@
 		"ls_myFirstProject_BlobStorage1_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_myFirstProject_BlobStorage1'"
-		},
-		"ls_schooldb_AzureDataLakeStorage1_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_schooldb_AzureDataLakeStorage1'"
-		},
-		"ls_test_BlobStorage_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_test_BlobStorage'"
 		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
 			"type": "string",
@@ -74,18 +58,6 @@
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
-		},
-		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
-		},
-		"Tumbtrigger_properties_pipeline_parameters_p_wStart": {
-			"type": "string",
-			"defaultValue": "@trigger().outputs.windowStartTime"
-		},
-		"Tumbtrigger_properties_pipeline_parameters_p_wEnd": {
-			"type": "string",
-			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
 	},
 	"variables": {
@@ -2888,19 +2860,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ls_SchoolDb_Binary')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('ls_SchoolDb_Binary_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ls_Sftp1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -2917,19 +2876,6 @@
 						"type": "SecureString",
 						"value": "[parameters('ls_Sftp1_password')]"
 					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_blob_binary_out')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('ls_blob_binary_out_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -2973,36 +2919,6 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('ls_myFirstProject_BlobStorage1_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_schooldb_AzureDataLakeStorage1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('ls_schooldb_AzureDataLakeStorage1_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_test_BlobStorage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('ls_test_BlobStorage_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -3868,40 +3784,6 @@
 				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Products_in')]",
 				"[concat(variables('factoryId'), '/datasets/ds_dl_gold_out')]",
 				"[concat(variables('factoryId'), '/datasets/ds_AzureSqlTable')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Tumbtrigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_ADE_Daily_Class",
-						"type": "PipelineReference"
-					},
-					"parameters": {
-						"p_wStart": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wStart')]",
-						"p_wEnd": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wEnd')]"
-					}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Hour",
-					"interval": 4,
-					"startTime": "2024-08-12T12:13:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": []
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_ADE_Daily_Class')]"
 			]
 		}
 	]

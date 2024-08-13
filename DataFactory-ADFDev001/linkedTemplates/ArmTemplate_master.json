@@ -15,17 +15,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADEDev001_dlakeadfdev01'"
 		},
-		"ls_SchoolDb_Binary_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_SchoolDb_Binary'"
-		},
 		"ls_Sftp1_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_Sftp1'"
-		},
-		"ls_blob_binary_out_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_blob_binary_out'"
 		},
 		"ls_mfp_blod_archive_connectionString": {
 			"type": "secureString",
@@ -38,14 +30,6 @@
 		"ls_myFirstProject_BlobStorage1_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_myFirstProject_BlobStorage1'"
-		},
-		"ls_schooldb_AzureDataLakeStorage1_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_schooldb_AzureDataLakeStorage1'"
-		},
-		"ls_test_BlobStorage_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_test_BlobStorage'"
 		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
 			"type": "string",
@@ -74,18 +58,6 @@
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
-		},
-		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
-		},
-		"Tumbtrigger_properties_pipeline_parameters_p_wStart": {
-			"type": "string",
-			"defaultValue": "@trigger().outputs.windowStartTime"
-		},
-		"Tumbtrigger_properties_pipeline_parameters_p_wEnd": {
-			"type": "string",
-			"defaultValue": "@trigger().outputs.windowEndTime"
 		},
 		"containerUri": {
 			"type": "string",
@@ -120,14 +92,8 @@
 					"LS_ADEDev001_dlakeadfdev01_accountKey": {
 						"value": "[parameters('LS_ADEDev001_dlakeadfdev01_accountKey')]"
 					},
-					"ls_SchoolDb_Binary_connectionString": {
-						"value": "[parameters('ls_SchoolDb_Binary_connectionString')]"
-					},
 					"ls_Sftp1_password": {
 						"value": "[parameters('ls_Sftp1_password')]"
-					},
-					"ls_blob_binary_out_connectionString": {
-						"value": "[parameters('ls_blob_binary_out_connectionString')]"
 					},
 					"ls_mfp_blod_archive_connectionString": {
 						"value": "[parameters('ls_mfp_blod_archive_connectionString')]"
@@ -137,12 +103,6 @@
 					},
 					"ls_myFirstProject_BlobStorage1_connectionString": {
 						"value": "[parameters('ls_myFirstProject_BlobStorage1_connectionString')]"
-					},
-					"ls_schooldb_AzureDataLakeStorage1_accountKey": {
-						"value": "[parameters('ls_schooldb_AzureDataLakeStorage1_accountKey')]"
-					},
-					"ls_test_BlobStorage_connectionString": {
-						"value": "[parameters('ls_test_BlobStorage_connectionString')]"
 					},
 					"AzureSqlDatabase1_properties_typeProperties_server": {
 						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]"
@@ -164,9 +124,6 @@
 					},
 					"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 						"value": "[parameters('ls_myFirstProj_DLake_output_properties_typeProperties_url')]"
-					},
-					"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
-						"value": "[parameters('ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url')]"
 					}
 				}
 			},
@@ -205,12 +162,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"Tumbtrigger_properties_pipeline_parameters_p_wStart": {
-						"value": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wStart')]"
-					},
-					"Tumbtrigger_properties_pipeline_parameters_p_wEnd": {
-						"value": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wEnd')]"
 					}
 				}
 			},
