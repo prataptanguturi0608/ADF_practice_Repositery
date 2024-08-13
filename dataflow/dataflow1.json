@@ -1,0 +1,34 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_testing_Excel1",
+						"type": "DatasetReference"
+					},
+					"name": "table1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_testing_Excel2",
+						"type": "DatasetReference"
+					},
+					"name": "table2"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> table1",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> table2"
+			]
+		}
+	}
+}
