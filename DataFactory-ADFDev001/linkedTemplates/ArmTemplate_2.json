@@ -7,9 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "DataFactory-ADFDev001"
 		},
-		"Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy": {
+		"Tumbtrigger_properties_pipeline_parameters_p_wStart": {
 			"type": "string",
-			"defaultValue": "TumbTrigger"
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbtrigger_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
 	},
 	"variables": {
@@ -143,6 +147,38 @@
 						"type": "AzureBlobStorageLocation",
 						"container": "input"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Tumbtrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_ADE_Daily_Class",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_wStart": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wStart')]",
+						"p_wEnd": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wEnd')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 4,
+					"startTime": "2024-08-12T12:13:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
 				}
 			},
 			"dependsOn": []
@@ -2027,39 +2063,6 @@
 				"[concat(variables('factoryId'), '/dataflows/SilverToGoldDataflow')]",
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFiles')]",
 				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_txt')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Tumb_Trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_myFirstProject",
-						"type": "PipelineReference"
-					},
-					"parameters": {
-						"p_IngestedBy": "[parameters('Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy')]"
-					}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Minute",
-					"interval": 5,
-					"startTime": "2024-08-13T11:27:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 2,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": []
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_myFirstProject')]"
 			]
 		}
 	]

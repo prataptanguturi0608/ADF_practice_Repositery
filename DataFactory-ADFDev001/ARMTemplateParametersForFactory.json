@@ -59,8 +59,11 @@
 		"ls_schooldb_AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://mfsdatastorage.dfs.core.windows.net/"
 		},
-		"Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy": {
-			"value": "TumbTrigger"
+		"Tumbtrigger_properties_pipeline_parameters_p_wStart": {
+			"value": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbtrigger_properties_pipeline_parameters_p_wEnd": {
+			"value": "@trigger().outputs.windowEndTime"
 		}
 	}
 }

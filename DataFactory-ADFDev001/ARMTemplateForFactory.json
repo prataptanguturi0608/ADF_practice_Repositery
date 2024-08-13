@@ -79,9 +79,13 @@
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
 		},
-		"Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy": {
+		"Tumbtrigger_properties_pipeline_parameters_p_wStart": {
 			"type": "string",
-			"defaultValue": "TumbTrigger"
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbtrigger_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
 	},
 	"variables": {
@@ -102,10 +106,66 @@
 						"typeProperties": {
 							"waitTimeInSeconds": 1
 						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_start",
+							"value": {
+								"value": "@pipeline().parameters.p_wStart",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_end",
+							"value": {
+								"value": "@pipeline().parameters.p_wEnd",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_wStart": {
+						"type": "string"
+					},
+					"p_wEnd": {
+						"type": "string"
+					}
 				},
 				"variables": {
 					"filenametxt": {
@@ -118,6 +178,12 @@
 						"type": "String"
 					},
 					"filenameparquet": {
+						"type": "String"
+					},
+					"sch_start": {
+						"type": "String"
+					},
+					"sch_end": {
 						"type": "String"
 					}
 				},
@@ -3805,7 +3871,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Tumb_Trigger')]",
+			"name": "[concat(parameters('factoryName'), '/Tumbtrigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3813,20 +3879,21 @@
 				"runtimeState": "Started",
 				"pipeline": {
 					"pipelineReference": {
-						"referenceName": "pl_myFirstProject",
+						"referenceName": "pl_ADE_Daily_Class",
 						"type": "PipelineReference"
 					},
 					"parameters": {
-						"p_IngestedBy": "[parameters('Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy')]"
+						"p_wStart": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wStart')]",
+						"p_wEnd": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wEnd')]"
 					}
 				},
 				"type": "TumblingWindowTrigger",
 				"typeProperties": {
-					"frequency": "Minute",
-					"interval": 5,
-					"startTime": "2024-08-13T11:27:00Z",
+					"frequency": "Hour",
+					"interval": 4,
+					"startTime": "2024-08-12T12:13:00Z",
 					"delay": "00:00:00",
-					"maxConcurrency": 2,
+					"maxConcurrency": 50,
 					"retryPolicy": {
 						"intervalInSeconds": 30
 					},
@@ -3834,7 +3901,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_myFirstProject')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_ADE_Daily_Class')]"
 			]
 		}
 	]

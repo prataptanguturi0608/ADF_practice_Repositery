@@ -79,9 +79,13 @@
 			"type": "string",
 			"defaultValue": "https://mfsdatastorage.dfs.core.windows.net/"
 		},
-		"Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy": {
+		"Tumbtrigger_properties_pipeline_parameters_p_wStart": {
 			"type": "string",
-			"defaultValue": "TumbTrigger"
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbtrigger_properties_pipeline_parameters_p_wEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		},
 		"containerUri": {
 			"type": "string",
@@ -202,8 +206,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy": {
-						"value": "[parameters('Tumb_Trigger_properties_pipeline_parameters_p_IngestedBy')]"
+					"Tumbtrigger_properties_pipeline_parameters_p_wStart": {
+						"value": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wStart')]"
+					},
+					"Tumbtrigger_properties_pipeline_parameters_p_wEnd": {
+						"value": "[parameters('Tumbtrigger_properties_pipeline_parameters_p_wEnd')]"
 					}
 				}
 			},
