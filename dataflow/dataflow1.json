@@ -16,7 +16,7 @@
 						"referenceName": "ds_testing_DeptData",
 						"type": "DatasetReference"
 					},
-					"name": "DEPTData"
+					"name": "DeptData"
 				}
 			],
 			"sinks": [
@@ -58,12 +58,12 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> DEPTData",
+				"     ignoreNoFilesFound: false) ~> DeptData",
 				"EmpData sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1",
-				"DEPTData sink(allowSchemaDrift: true,",
+				"DeptData sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     skipDuplicateMapInputs: true,",
