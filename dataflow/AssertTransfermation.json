@@ -41,6 +41,9 @@
 			"transformations": [
 				{
 					"name": "assertDOJ"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -69,7 +72,8 @@
 				"EmpData, DeptData assert(expectTrue(!isNull(toDate(EmpData@DOJ, 'yyyyMMdd')), false, 'DOJCheckassert'),",
 				"     expectUnique(EmpData@EMP_ID, false, 'UniqueCheckAssert'),",
 				"     expectExists(EmpData@DEPT_ID == DeptData@DEPT_ID, false, 'assert3')) ~> assertDOJ",
-				"assertDOJ sink(allowSchemaDrift: true,",
+				"assertDOJ filter(isError()) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1",
