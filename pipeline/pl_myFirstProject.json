@@ -155,7 +155,7 @@
 												],
 												"outputs": [
 													{
-														"referenceName": "ds_mfp_DLake_B_txt1",
+														"referenceName": "ds_mfp_DLake_B_txt",
 														"type": "DatasetReference"
 													}
 												]
@@ -226,7 +226,7 @@
 												],
 												"outputs": [
 													{
-														"referenceName": "ds_archive_text1",
+														"referenceName": "ds_archive_text",
 														"type": "DatasetReference"
 													}
 												]

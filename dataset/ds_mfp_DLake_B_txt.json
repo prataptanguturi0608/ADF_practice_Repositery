@@ -1,5 +1,5 @@
 {
-	"name": "ds_mfp_DLake_B_txt1",
+	"name": "ds_mfp_DLake_B_txt",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myFirstProj_DLake_output",
