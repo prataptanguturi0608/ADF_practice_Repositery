@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "df-mfs-dev"
+		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"ls_Sftp1_password": {
+			"value": ""
+		},
+		"ls_blob_testing_connectionString": {
+			"value": ""
+		},
+		"ls_mfp_blod_archive_connectionString": {
+			"value": ""
+		},
+		"ls_myFirstProj_DLake_output_accountKey": {
+			"value": ""
+		},
+		"ls_myFirstProject_BlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "mfdbserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "myfirstdb"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "sa-admin"
+		},
+		"ls_Sftp1_properties_typeProperties_host": {
+			"value": "eu-central-1.sftpcloud.io"
+		},
+		"ls_Sftp1_properties_typeProperties_userName": {
+			"value": "47d8c15f51694113ab9b3c7b8781f072"
+		},
+		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
+			"value": "https://dlakeadf.dfs.core.windows.net/"
+		}
+	}
+}
