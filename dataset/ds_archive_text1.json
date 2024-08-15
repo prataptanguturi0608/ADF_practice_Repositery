@@ -1,5 +1,5 @@
 {
-	"name": "ds_archive_text",
+	"name": "ds_archive_text1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_mfp_blod_archive",

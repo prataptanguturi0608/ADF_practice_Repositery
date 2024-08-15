@@ -226,7 +226,7 @@
 												],
 												"outputs": [
 													{
-														"referenceName": "ds_archive_text",
+														"referenceName": "ds_archive_text1",
 														"type": "DatasetReference"
 													}
 												]
