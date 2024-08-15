@@ -2,7 +2,7 @@
 	"name": "ds_dl_silver_OrderItems_in",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_ADEDev001_dlakeadfdev01",
+			"referenceName": "ls_myFirstProj_DLake_output",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
