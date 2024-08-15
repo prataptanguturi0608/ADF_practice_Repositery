@@ -5,10 +5,18 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"name": "table1"
+					"dataset": {
+						"referenceName": "ds_testing_EmpData",
+						"type": "DatasetReference"
+					},
+					"name": "EmpData"
 				},
 				{
-					"name": "table2"
+					"dataset": {
+						"referenceName": "ds_testing_DeptData",
+						"type": "DatasetReference"
+					},
+					"name": "DEPTData"
 				}
 			],
 			"sinks": [
@@ -29,15 +37,33 @@
 			],
 			"transformations": [],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> table1",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> table2",
-				"table1 sink(allowSchemaDrift: true,",
+				"source(output(",
+				"          EMP_ID as string,",
+				"          EMP_NAME as string,",
+				"          GENDER as string,",
+				"          DOJ as string,",
+				"          SALARY as string,",
+				"          DEPT_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> EmpData",
+				"source(output(",
+				"          EMP_ID as string,",
+				"          EMP_NAME as string,",
+				"          GENDER as string,",
+				"          DOJ as string,",
+				"          SALARY as string,",
+				"          DEPT_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DEPTData",
+				"EmpData sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1",
-				"table2 sink(allowSchemaDrift: true,",
+				"DEPTData sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     skipDuplicateMapInputs: true,",
