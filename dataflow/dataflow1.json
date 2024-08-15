@@ -5,17 +5,9 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "ds_testing_parquet1",
-						"type": "DatasetReference"
-					},
 					"name": "table1"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_testing_parquet2",
-						"type": "DatasetReference"
-					},
 					"name": "table2"
 				}
 			],
@@ -38,13 +30,9 @@
 			"transformations": [],
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     format: 'parquet') ~> table1",
+				"     validateSchema: false) ~> table1",
 				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     format: 'parquet') ~> table2",
+				"     validateSchema: false) ~> table2",
 				"table1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
