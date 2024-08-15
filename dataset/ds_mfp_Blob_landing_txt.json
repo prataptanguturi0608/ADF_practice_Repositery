@@ -18,8 +18,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "@dataset().p_Filename",
-				"container": "input"
+				"fileName": {
+					"value": "@dataset().p_Filename",
+					"type": "Expression"
+				},
+				"container": "landing"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
