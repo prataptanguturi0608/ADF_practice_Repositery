@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "LookUpAndJoins",
 	"properties": {
 		"folder": {
 			"name": "Testing"
@@ -42,7 +42,7 @@
 					"name": "lookup1"
 				},
 				{
-					"name": "join1"
+					"name": "LOuterJoin"
 				}
 			],
 			"scriptLines": [
@@ -90,7 +90,7 @@
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1"
+				"     broadcast: 'auto')~> LOuterJoin"
 			]
 		}
 	}
