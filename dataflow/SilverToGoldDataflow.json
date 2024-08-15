@@ -50,13 +50,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "silverToGoldSink"
-				},
-				{
-					"dataset": {
-						"referenceName": "ds_AzureSqlTable",
-						"type": "DatasetReference"
-					},
-					"name": "silevertoDW"
 				}
 			],
 			"transformations": [
@@ -86,9 +79,6 @@
 				},
 				{
 					"name": "agRemoveCount"
-				},
-				{
-					"name": "AlterRow1"
 				}
 			],
 			"scriptLines": [
@@ -278,7 +268,6 @@
 				"          Ingestion_TimeStamp,",
 				"          Ingestion_Date),",
 				"     count = count(ORDER_ID)) ~> agRemoveCount",
-				"agRemoveCount alterRow(upsertIf(true())) ~> AlterRow1",
 				"agRemoveCount sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
@@ -307,54 +296,7 @@
 				"          Ingestion_by,",
 				"          Ingestion_TimeStamp,",
 				"          Ingestion_Date",
-				"     )) ~> silverToGoldSink",
-				"AlterRow1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     input(",
-				"          Order_ID as integer,",
-				"          Customer_id as integer,",
-				"          Order_Status as integer,",
-				"          Ordet_dateTime as string,",
-				"          Store_id as integer,",
-				"          Full_Name as string,",
-				"          emil_add as string,",
-				"          Store_name as string,",
-				"          WebAddress as string,",
-				"          Latitude as double,",
-				"          Longitude as double,",
-				"          Product_id as integer,",
-				"          Line_item_id as integer,",
-				"          Unit_Price as double,",
-				"          Prod_Qty as integer,",
-				"          Product_name as string",
-				"     ),",
-				"     deletable:true,",
-				"     insertable:true,",
-				"     updateable:true,",
-				"     upsertable:true,",
-				"     keys:['Order_ID'],",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          Order_ID = ORDER_ID,",
-				"          Customer_id = CUSTOMER_ID,",
-				"          Order_Status = ORDER_STATUS,",
-				"          Ordet_dateTime = ORDER_DATETIME,",
-				"          Store_id = STORE_ID,",
-				"          Full_Name = FULL_NAME,",
-				"          emil_add = EMAIL_ADDRESS,",
-				"          Store_name = STORE_NAME,",
-				"          WebAddress = WEB_ADDRESS,",
-				"          Latitude = LATITUDE,",
-				"          Longitude = LONGITUDE,",
-				"          Product_id = PRODUCT_ID,",
-				"          Line_item_id = LINE_ITEM_ID,",
-				"          Unit_Price = UNIT_PRICE,",
-				"          Prod_Qty = Prod_QTY,",
-				"          Product_name = PRODUCT_NAME",
-				"     )) ~> silevertoDW"
+				"     )) ~> silverToGoldSink"
 			]
 		}
 	}
