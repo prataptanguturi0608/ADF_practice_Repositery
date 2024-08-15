@@ -36,10 +36,25 @@
 					"name": "Depsource1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_testing_sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_testing_sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
 			"transformations": [
 				{
-					"name": "lookup1"
+					"name": "lookup"
 				},
 				{
 					"name": "LOuterJoin"
@@ -85,12 +100,22 @@
 				"EmpData, DeptData lookup(EmpData@DEPT_ID == DeptData@DEPT_ID,",
 				"     multiple: false,",
 				"     pickup: 'any',",
-				"     broadcast: 'auto')~> lookup1",
+				"     broadcast: 'auto')~> lookup",
 				"Empsource1, Depsource1 join(Empsource1@DEPT_ID == Depsource1@DEPT_ID,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> LOuterJoin"
+				"     broadcast: 'auto')~> LOuterJoin",
+				"lookup sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"LOuterJoin sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
 			]
 		}
 	}
