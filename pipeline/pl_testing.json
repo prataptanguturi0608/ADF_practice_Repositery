@@ -24,8 +24,6 @@
 						{
 							"name": "Copy data1",
 							"type": "Copy",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Lookup1",
@@ -44,14 +42,11 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "DelimitedTextSource",
+									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
 										"recursive": true,
 										"enablePartitionDiscovery": false
-									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
 									}
 								},
 								"sink": {
@@ -61,16 +56,16 @@
 								},
 								"enableStaging": false,
 								"translator": {
-									"value": "@activity('Lookup1').output.firstRow.data_mapping",
+									"value": "@activity('Lookup1').output.firstRow.MappingScript",
 									"type": "Expression"
 								}
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_testing_DeptData",
+									"referenceName": "ds_testing_empdept",
 									"type": "DatasetReference",
 									"parameters": {
-										"pfilename": {
+										"p_Fileaname": {
 											"value": "@item().name",
 											"type": "Expression"
 										}
@@ -83,11 +78,11 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"schema": {
-											"value": "@activity('Lookup1').output.firstRow.InputSchema",
+											"value": "@activity('Lookup1').output.firstRow.table_Schema",
 											"type": "Expression"
 										},
 										"table": {
-											"value": "@activity('Lookup1').output.firstRow.TblName",
+											"value": "@activity('Lookup1').output.firstRow.Table_Name",
 											"type": "Expression"
 										}
 									}
@@ -117,7 +112,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "select * from [dbo].[tbl_mappingData] Where InputFilename= '@{item().name}'",
+										"value": "select * from [dbo].[tbl_mappingData] Where file_name = '@{item().name}'",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
