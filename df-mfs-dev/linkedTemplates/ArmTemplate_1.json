@@ -631,6 +631,39 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_emptbl')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_blob_testing",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emptbl.xlsx",
+						"container": "test2"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "EMP_NAME",
+						"type": "String"
+					},
+					{
+						"name": "AGE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_mfp_BlobLanding')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -679,7 +712,7 @@
 							"value": "@dataset().p_Filename",
 							"type": "Expression"
 						},
-						"container": "input"
+						"container": "landing"
 					}
 				},
 				"schema": {}
@@ -712,7 +745,7 @@
 							"value": "@dataset().p_Filename",
 							"type": "Expression"
 						},
-						"container": "input"
+						"container": "landing"
 					},
 					"compressionCodec": "snappy"
 				},
@@ -767,7 +800,7 @@
 							"value": "@dataset().p_Filename",
 							"type": "Expression"
 						},
-						"container": "input"
+						"container": "landing"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -859,30 +892,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_SFTP_Source')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_Sftp1",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "SftpLocation",
-						"folderPath": "/Customer Orders"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_mfp_Target')]",
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_txt1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -894,14 +904,19 @@
 					"name": "ADE Classes/myFirstProject"
 				},
 				"annotations": [],
-				"type": "Binary",
+				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "Output",
-						"fileSystem": "customerorders"
-					}
-				}
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": []
 		}

@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_myFirstProject_BlobStorage1'"
 		},
+		"ls_testing_sqldb_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_testing_sqldb'"
+		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "mfdbserver.database.windows.net"
@@ -54,252 +58,24 @@
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadf.dfs.core.windows.net/"
+		},
+		"ls_testing_sqldb_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "mfsdbserv01.database.windows.net"
+		},
+		"ls_testing_sqldb_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleProject01"
+		},
+		"ls_testing_sqldb_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa-airbus"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Set variable1",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "Test",
-							"value": "abc"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"variables": {
-					"Test": {
-						"type": "Integer"
-					}
-				},
-				"folder": {
-					"name": "Testing"
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_ADE_Daily_Class')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Wait1",
-						"type": "Wait",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"waitTimeInSeconds": 1
-						}
-					},
-					{
-						"name": "Set variable1",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Wait1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "sch_start",
-							"value": {
-								"value": "@pipeline().parameters.p_wStart",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "Set variable2",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Wait1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "sch_end",
-							"value": {
-								"value": "@pipeline().parameters.p_wEnd",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"p_wStart": {
-						"type": "string"
-					},
-					"p_wEnd": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"filenametxt": {
-						"type": "String"
-					},
-					"inputfilename": {
-						"type": "String"
-					},
-					"filenamejson": {
-						"type": "String"
-					},
-					"filenameparquet": {
-						"type": "String"
-					},
-					"sch_start": {
-						"type": "String"
-					},
-					"sch_end": {
-						"type": "String"
-					}
-				},
-				"folder": {
-					"name": "Testing"
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_ADE_Daily_Class_2')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Wait1",
-						"type": "Wait",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"waitTimeInSeconds": 1
-						}
-					},
-					{
-						"name": "Set variable1",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Wait1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "sch_start",
-							"value": {
-								"value": "@pipeline().parameters.p_wStart",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "Set variable2",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Wait1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "sch_end",
-							"value": {
-								"value": "@pipeline().parameters.p_wEnd",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"p_wStart": {
-						"type": "string"
-					},
-					"p_wEnd": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"filenametxt": {
-						"type": "String"
-					},
-					"inputfilename": {
-						"type": "String"
-					},
-					"filenamejson": {
-						"type": "String"
-					},
-					"filenameparquet": {
-						"type": "String"
-					},
-					"sch_start": {
-						"type": "String"
-					},
-					"sch_end": {
-						"type": "String"
-					}
-				},
-				"folder": {
-					"name": "Testing"
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -395,6 +171,28 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('ls_myFirstProject_BlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_testing_sqldb')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_testing_sqldb_properties_typeProperties_server')]",
+					"database": "[parameters('ls_testing_sqldb_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_testing_sqldb_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_testing_sqldb_password')]"
+					}
 				}
 			},
 			"dependsOn": []
@@ -509,6 +307,47 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_AzureSqlTable_mapping')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_testing_sqldb",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Test"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "file_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "table_Schema",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Table_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MappingScript",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tbl_mappingData"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_testing_sqldb')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_archive_Json')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -571,6 +410,40 @@
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_archive_text')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_mfp_blod_archive",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
+							"type": "Expression"
+						},
+						"container": "archive"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_mfp_blod_archive')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_archive_text1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {

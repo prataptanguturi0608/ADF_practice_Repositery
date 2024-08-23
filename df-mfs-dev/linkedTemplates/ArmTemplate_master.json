@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_myFirstProject_BlobStorage1'"
 		},
+		"ls_testing_sqldb_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_testing_sqldb'"
+		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "mfdbserver.database.windows.net"
@@ -54,6 +58,18 @@
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlakeadf.dfs.core.windows.net/"
+		},
+		"ls_testing_sqldb_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "mfsdbserv01.database.windows.net"
+		},
+		"ls_testing_sqldb_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleProject01"
+		},
+		"ls_testing_sqldb_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa-airbus"
 		},
 		"containerUri": {
 			"type": "string",
@@ -100,6 +116,9 @@
 					"ls_myFirstProject_BlobStorage1_connectionString": {
 						"value": "[parameters('ls_myFirstProject_BlobStorage1_connectionString')]"
 					},
+					"ls_testing_sqldb_password": {
+						"value": "[parameters('ls_testing_sqldb_password')]"
+					},
 					"AzureSqlDatabase1_properties_typeProperties_server": {
 						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]"
 					},
@@ -117,6 +136,15 @@
 					},
 					"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 						"value": "[parameters('ls_myFirstProj_DLake_output_properties_typeProperties_url')]"
+					},
+					"ls_testing_sqldb_properties_typeProperties_server": {
+						"value": "[parameters('ls_testing_sqldb_properties_typeProperties_server')]"
+					},
+					"ls_testing_sqldb_properties_typeProperties_database": {
+						"value": "[parameters('ls_testing_sqldb_properties_typeProperties_database')]"
+					},
+					"ls_testing_sqldb_properties_typeProperties_userName": {
+						"value": "[parameters('ls_testing_sqldb_properties_typeProperties_userName')]"
 					}
 				}
 			},

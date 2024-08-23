@@ -23,6 +23,9 @@
 		"ls_myFirstProject_BlobStorage1_connectionString": {
 			"value": ""
 		},
+		"ls_testing_sqldb_password": {
+			"value": ""
+		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
 			"value": "mfdbserver.database.windows.net"
 		},
@@ -40,6 +43,15 @@
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"value": "https://dlakeadf.dfs.core.windows.net/"
+		},
+		"ls_testing_sqldb_properties_typeProperties_server": {
+			"value": "mfsdbserv01.database.windows.net"
+		},
+		"ls_testing_sqldb_properties_typeProperties_database": {
+			"value": "SampleProject01"
+		},
+		"ls_testing_sqldb_properties_typeProperties_userName": {
+			"value": "sa-airbus"
 		},
 		"containerUri": {
 			"value": ""
