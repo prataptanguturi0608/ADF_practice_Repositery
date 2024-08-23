@@ -1,0 +1,36 @@
+{
+	"name": "AzureSqlTable_mapping",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_testing_sqldb",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Test"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "InputFilename",
+				"type": "varchar"
+			},
+			{
+				"name": "InputSchema",
+				"type": "varchar"
+			},
+			{
+				"name": "data_mapping",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TblName",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "tbl_mappingData"
+		}
+	}
+}
