@@ -12,20 +12,20 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "InputFilename",
-				"type": "varchar"
-			},
-			{
-				"name": "InputSchema",
-				"type": "varchar"
-			},
-			{
-				"name": "data_mapping",
+				"name": "file_name",
 				"type": "nvarchar"
 			},
 			{
-				"name": "TblName",
-				"type": "varchar"
+				"name": "table_Schema",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Table_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MappingScript",
+				"type": "nvarchar"
 			}
 		],
 		"typeProperties": {
