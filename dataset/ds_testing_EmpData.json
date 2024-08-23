@@ -19,7 +19,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "employee.xlsx",
-				"container": "test2"
+				"container": "test"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
