@@ -112,7 +112,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "select * from [dbo].[tbl_mappingData] Where file_name = '@{item().name}'",
+										"value": "select * from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}'",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
