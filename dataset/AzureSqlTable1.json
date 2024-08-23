@@ -5,6 +5,14 @@
 			"referenceName": "ls_testing_sqldb",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"schema": {
+				"type": "string"
+			},
+			"table": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
@@ -19,8 +27,14 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "dbo",
-			"table": "tbl_department"
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().table",
+				"type": "Expression"
+			}
 		}
 	}
 }
