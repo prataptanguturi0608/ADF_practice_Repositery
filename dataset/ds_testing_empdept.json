@@ -1,0 +1,22 @@
+{
+	"name": "ds_testing_empdept",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_testing",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Test"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "employee.xlsx",
+				"container": "test2"
+			}
+		},
+		"schema": []
+	}
+}
