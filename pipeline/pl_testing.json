@@ -96,17 +96,28 @@
 				"inputs": [
 					{
 						"referenceName": "ds_testing_DeptData",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"pfilename": {
+								"value": "@pipeline().parameters.p_filename",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_AzureSqlTable",
+						"referenceName": "AzureSqlTable1",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
+		"parameters": {
+			"p_filename": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Testing"
 		},
