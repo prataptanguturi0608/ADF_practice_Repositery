@@ -5,6 +5,11 @@
 			"referenceName": "ls_blob_testing",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"pfilename": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Test"
 		},
@@ -13,6 +18,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "@dataset().pfilename",
 				"container": "test2"
 			},
 			"columnDelimiter": ",",
