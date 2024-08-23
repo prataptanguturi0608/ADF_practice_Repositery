@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "EmployeeData.txt",
+				"fileName": "part-00000-e2cd00b2-43f3-46e4-918c-9481c84884b8-c000.csv",
 				"container": "test"
 			},
 			"columnDelimiter": ",",
