@@ -1,5 +1,5 @@
 {
-	"name": "ds_dl_gold_out",
+	"name": "ds_mfp_DLake_B_txt1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myFirstProj_DLake_output",
@@ -9,14 +9,17 @@
 			"name": "ADE Classes/myFirstProject"
 		},
 		"annotations": [],
-		"type": "Parquet",
+		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": "customerorders",
-				"fileSystem": "gold"
+				"fileSystem": "bronze"
 			},
-			"compressionCodec": "snappy"
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
 		},
 		"schema": []
 	},

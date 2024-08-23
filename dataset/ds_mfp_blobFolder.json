@@ -16,5 +16,6 @@
 				"container": "landing"
 			}
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
