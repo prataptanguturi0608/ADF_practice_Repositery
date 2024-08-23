@@ -5,19 +5,39 @@
 			"referenceName": "ls_blob_testing",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"p_Fileaname": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Test"
 		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "employee.xlsx",
+				"fileName": {
+					"value": "@dataset().p_Fileaname",
+					"type": "Expression"
+				},
 				"container": "test2"
 			}
 		},
-		"schema": []
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
 	}
 }
