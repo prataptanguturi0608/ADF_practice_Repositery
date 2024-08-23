@@ -16,6 +16,15 @@
 			},
 			"firstRowAsHeader": true
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "EMP_NAME",
+				"type": "String"
+			},
+			{
+				"name": "AGE",
+				"type": "String"
+			}
+		]
 	}
 }
