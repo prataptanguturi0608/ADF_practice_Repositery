@@ -27,7 +27,8 @@
 					"type": "Expression"
 				},
 				"container": "test2"
-			}
+			},
+			"firstRowAsHeader": true
 		},
 		"schema": [
 			{
