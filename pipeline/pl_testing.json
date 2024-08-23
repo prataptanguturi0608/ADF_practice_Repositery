@@ -95,7 +95,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"pfilename": {
-											"value": "@activity('Lookup1').output.firstRow.InputFilename",
+											"value": "@item().name",
 											"type": "Expression"
 										}
 									}
@@ -134,7 +134,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "select * from [dbo].[tbl_mappingData] where @{item().name}",
+										"value": "select * from [dbo].[tbl_mappingData] Where InputFilename= '@{item().name}'",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
