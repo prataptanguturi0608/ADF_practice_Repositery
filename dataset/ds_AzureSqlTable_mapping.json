@@ -1,5 +1,5 @@
 {
-	"name": "AzureSqlTable_mapping",
+	"name": "ds_AzureSqlTable_mapping",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_testing_sqldb",

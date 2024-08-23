@@ -1,5 +1,5 @@
 {
-	"name": "AzureSqlTable1",
+	"name": "ds_param_sqltbls",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_testing_sqldb",
