@@ -1,0 +1,21 @@
+{
+	"name": "ds_emptbl",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_testing",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sheet1",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emptbl.xlsx",
+				"container": "test2"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
