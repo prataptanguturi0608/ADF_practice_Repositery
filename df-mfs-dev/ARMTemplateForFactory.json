@@ -1295,7 +1295,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "ds_param_sqltbls",
+											"referenceName": "ds_azure_custdepttable",
 											"type": "DatasetReference",
 											"parameters": {
 												"schema": {
@@ -1389,7 +1389,7 @@
 				"[concat(variables('factoryId'), '/datasets/ds_testing')]",
 				"[concat(variables('factoryId'), '/datasets/ds_AzureSqlTable_mapping')]",
 				"[concat(variables('factoryId'), '/datasets/ds_testing_empdept')]",
-				"[concat(variables('factoryId'), '/datasets/ds_param_sqltbls')]"
+				"[concat(variables('factoryId'), '/datasets/ds_azure_custdepttable')]"
 			]
 		},
 		{
@@ -3032,7 +3032,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_param_sqltbls')]",
+			"name": "[concat(parameters('factoryName'), '/ds_azure_custdepttable')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
