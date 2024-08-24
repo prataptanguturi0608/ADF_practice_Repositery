@@ -1,5 +1,5 @@
 {
-	"name": "ds_param_sqltbls",
+	"name": "ds_azure_custdepttable",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_testing_sqldb",
