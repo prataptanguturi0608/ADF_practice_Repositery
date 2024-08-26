@@ -86,7 +86,15 @@
 								},
 								"sink": {
 									"type": "AzureSqlSink",
-									"sqlWriterStoredProcedureName": "[dbo].[sp_depEmpTblUpdate]",
+									"writeBehavior": "upsert",
+									"upsertSettings": {
+										"useTempDB": true,
+										"keys": [
+											"empId",
+											"DepId"
+										]
+									},
+									"sqlWriterUseTableLock": false,
 									"disableMetricsCollection": false
 								},
 								"enableStaging": false,

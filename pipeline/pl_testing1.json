@@ -86,8 +86,7 @@
 								},
 								"sink": {
 									"type": "AzureSqlSink",
-									"writeBehavior": "insert",
-									"sqlWriterUseTableLock": false,
+									"sqlWriterStoredProcedureName": "[dbo].[sp_depEmpTblUpdate]",
 									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
