@@ -22,37 +22,19 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Lookup1",
-							"type": "Lookup",
-							"dependsOn": [
-								{
-									"activity": "Set variable1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
 							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
 								"secureOutput": false,
 								"secureInput": false
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"source": {
-									"type": "AzureSqlSource",
-									"sqlReaderQuery": {
-										"value": "IF EXISTS (SELECT 1 FROM [dbo].tbl_mappingData]\n        Where file_name = '@{variables('v_filename')}')\nBegin\nselect * from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}'\nend\n                ",
-										"type": "Expression"
-									},
-									"queryTimeout": "02:00:00",
-									"partitionOption": "None"
-								},
-								"dataset": {
-									"referenceName": "ds_AzureSqlTable_mapping",
-									"type": "DatasetReference"
+								"variableName": "v_filename",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
 								}
 							}
 						},
@@ -61,7 +43,7 @@
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "Lookup1",
+									"activity": "Set variable1",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -85,14 +67,75 @@
 									}
 								},
 								"sink": {
-									"type": "AzureSqlSink",
-									"sqlWriterStoredProcedureName": "[dbo].[sp_depEmpTblUpdate]",
-									"disableMetricsCollection": false
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings",
+										"copyBehavior": "PreserveHierarchy"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
 								},
 								"enableStaging": false,
 								"translator": {
-									"value": "@json(activity('Lookup1').output.firstRow.MappingScript)",
-									"type": "Expression"
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "EMP_ID",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "EMP_ID",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "EMP_NAME",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "EMP_NAME",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "AGE",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "AGE",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "DEPARTMENT_ID",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "DEPARTMENT_ID",
+												"type": "String",
+												"physicalType": "String"
+											}
+										}
+									],
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
 								}
 							},
 							"inputs": [
@@ -101,7 +144,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"p_Fileaname": {
-											"value": "@item().name",
+											"value": "@variables('v_filename')",
 											"type": "Expression"
 										}
 									}
@@ -109,37 +152,10 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_azure_custdepttable",
-									"type": "DatasetReference",
-									"parameters": {
-										"schema": {
-											"value": "@activity('Lookup1').output.firstRow.table_Schema",
-											"type": "Expression"
-										},
-										"table": {
-											"value": "@activity('Lookup1').output.firstRow.Table_Name",
-											"type": "Expression"
-										}
-									}
+									"referenceName": "ds_bronzetesting",
+									"type": "DatasetReference"
 								}
 							]
-						},
-						{
-							"name": "Set variable1",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "v_filename",
-								"value": {
-									"value": "@item().name",
-									"type": "Expression"
-								}
-							}
 						}
 					]
 				}
