@@ -17,27 +17,11 @@
 			},
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "@dataset().p_Fileaname",
-					"type": "Expression"
-				},
+				"fileName": "*.xlsx",
 				"container": "test2"
 			},
 			"firstRowAsHeader": true
 		},
-		"schema": [
-			{
-				"type": "String"
-			},
-			{
-				"type": "String"
-			},
-			{
-				"type": "String"
-			},
-			{
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }
