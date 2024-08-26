@@ -44,7 +44,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "IF EXISTS (select file_name from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}')\nBegin\nselect * from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}'\nend\n                ",
+										"value": "IF EXISTS (SELECT 1 FROM [dbo].tbl_mappingData]\n        Where file_name = '@{variables('v_filename')}')\nBegin\nselect * from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}'\nend\n                ",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
