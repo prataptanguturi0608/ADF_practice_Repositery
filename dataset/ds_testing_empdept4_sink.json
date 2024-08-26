@@ -1,0 +1,26 @@
+{
+	"name": "ds_testing_empdept4_sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_testing",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Test"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": {
+				"value": "sheet1",
+				"type": "Expression"
+			},
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "bronzetesting"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
