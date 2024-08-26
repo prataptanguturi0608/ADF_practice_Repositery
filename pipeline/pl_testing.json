@@ -24,7 +24,14 @@
 						{
 							"name": "Lookup1",
 							"type": "Lookup",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -37,7 +44,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "select * from [dbo].[tbl_mappingData] Where file_name = '@{item().name}'",
+										"value": "@select * from [dbo].[tbl_mappingData] Where file_name = variables('v_filename')",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -52,6 +59,8 @@
 						{
 							"name": "Copy data1",
 							"type": "Copy",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Lookup1",
@@ -116,6 +125,23 @@
 									}
 								}
 							]
+						},
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_filename",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
