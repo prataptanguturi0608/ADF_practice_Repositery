@@ -8,6 +8,10 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": {
+				"value": "sheet1",
+				"type": "Expression"
+			},
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "employee.xlsx",
