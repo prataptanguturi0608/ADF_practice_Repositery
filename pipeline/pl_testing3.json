@@ -86,15 +86,7 @@
 								},
 								"sink": {
 									"type": "AzureSqlSink",
-									"writeBehavior": "upsert",
-									"upsertSettings": {
-										"useTempDB": true,
-										"keys": {
-											"value": "@if(equals(activity('Lookup1').output.firstRow.Table_Name,'tbl_employee'),'empID','depID')",
-											"type": "Expression"
-										}
-									},
-									"sqlWriterUseTableLock": false,
+									"sqlWriterStoredProcedureName": "[dbo].[sp_depEmpTblUpdate]",
 									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
