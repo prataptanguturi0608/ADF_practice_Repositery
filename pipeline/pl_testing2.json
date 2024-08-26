@@ -1,5 +1,5 @@
 {
-	"name": "pl_testing_copy1",
+	"name": "pl_testing2",
 	"properties": {
 		"activities": [
 			{
@@ -86,7 +86,14 @@
 								},
 								"sink": {
 									"type": "AzureSqlSink",
-									"writeBehavior": "insert",
+									"writeBehavior": "upsert",
+									"upsertSettings": {
+										"useTempDB": true,
+										"keys": {
+											"value": "@if(equals(activity('Lookup1').output.firstRow.Table_Name,'tbl_employee'),'empID','depID')",
+											"type": "Expression"
+										}
+									},
 									"sqlWriterUseTableLock": false,
 									"disableMetricsCollection": false
 								},
