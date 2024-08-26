@@ -1,14 +1,9 @@
 {
-	"name": "ds_testing_empdept_copy1",
+	"name": "ds_testing_empdept4",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_blob_testing",
 			"type": "LinkedServiceReference"
-		},
-		"parameters": {
-			"p_Fileaname": {
-				"type": "string"
-			}
 		},
 		"folder": {
 			"name": "Test"
