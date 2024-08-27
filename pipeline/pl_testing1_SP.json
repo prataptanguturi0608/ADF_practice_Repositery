@@ -1,5 +1,5 @@
 {
-	"name": "pl_testing1_query",
+	"name": "pl_testing1_SP",
 	"properties": {
 		"activities": [
 			{
@@ -203,6 +203,15 @@
 				"type": "String"
 			},
 			"Mappingqry": {
+				"type": "String"
+			},
+			"list_files": {
+				"type": "Array"
+			},
+			"list_filesnames": {
+				"type": "Array"
+			},
+			"v_input_filename": {
 				"type": "String"
 			}
 		},
