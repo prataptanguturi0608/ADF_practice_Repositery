@@ -1,6 +1,38 @@
 {
 	"name": "pl_databricks_copy",
 	"properties": {
+		"activities": [
+			{
+				"name": "Notebook1",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/SampleProject01/SimpleCopyActivity/sample_notebook",
+					"baseParameters": {
+						"datafactoryName": {
+							"value": "@pipeline().DataFactory",
+							"type": "Expression"
+						},
+						"PipelineName": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_databricks_copyNB",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
 		"folder": {
 			"name": "Testing"
 		},
