@@ -5,9 +5,14 @@
 			{
 				"name": "Notebook1",
 				"type": "DatabricksNotebook",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -17,17 +22,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Shared/SampleProject01/SimpleCopyActivity/CopydatafromblobtoSQL",
-					"baseParameters": {
-						"datafactoryName": {
-							"value": "@pipeline().DataFactory",
-							"type": "Expression"
-						},
-						"PipelineName": {
-							"value": "@pipeline().Pipeline",
-							"type": "Expression"
-						}
-					}
+					"notebookPath": "/Shared/SampleProject01/SimpleCopyActivity/CopydatafromblobtoSQL"
 				},
 				"linkedServiceName": {
 					"referenceName": "ls_databricks_copyNB",
@@ -54,6 +49,8 @@
 			{
 				"name": "Notebook2",
 				"type": "DatabricksNotebook",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Set variable1",
