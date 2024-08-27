@@ -1,0 +1,9 @@
+{
+	"name": "pl_databricks_copy",
+	"properties": {
+		"folder": {
+			"name": "Testing"
+		},
+		"annotations": []
+	}
+}
