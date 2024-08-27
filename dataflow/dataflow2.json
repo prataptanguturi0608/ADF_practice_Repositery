@@ -6,41 +6,21 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_AzureSqlTable_mapping",
+						"referenceName": "Excel1",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
 				}
 			],
-			"sinks": [
-				{
-					"name": "sink1"
-				}
-			],
+			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
 				"parameters{",
 				"     p_filename as string",
 				"}",
-				"source(output(",
-				"          file_name as string,",
-				"          table_Schema as string,",
-				"          Table_Name as string,",
-				"          MappingScript as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: ('select count(file_name) from [dbo].[tbl_mappingData] where file_name  =$p_filename'),",
-				"     format: 'query') ~> source1",
-				"source1 sink(validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     keys:['file_name'],",
-				"     store: 'cache',",
-				"     format: 'inline',",
-				"     output: false,",
-				"     saveOrder: 1) ~> sink1"
+				"     ignoreNoFilesFound: false) ~> source1"
 			]
 		}
 	}
