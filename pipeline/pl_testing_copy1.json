@@ -94,6 +94,8 @@
 						{
 							"name": "Data flow1",
 							"type": "ExecuteDataFlow",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Set variable1",
@@ -127,14 +129,64 @@
 								},
 								"traceLevel": "Fine"
 							}
+						},
+						{
+							"name": "Append variable1",
+							"type": "AppendVariable",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FileNames",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "list_filenames",
+					"value": {
+						"value": "@variables('FileNames')",
+						"type": "Expression"
+					}
 				}
 			}
 		],
 		"variables": {
 			"v_filename": {
 				"type": "String"
+			},
+			"FileNames": {
+				"type": "Array"
+			},
+			"list_filenames": {
+				"type": "Array"
 			}
 		},
 		"folder": {
