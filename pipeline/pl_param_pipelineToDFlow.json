@@ -1,11 +1,32 @@
 {
-	"name": "pipeline1",
+	"name": "pl_param_pipelineToDFlow",
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
-				"type": "ExecuteDataFlow",
+				"name": "Set variable1",
+				"type": "SetVariable",
 				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_input_filename",
+					"value": ""
+				}
+			},
+			{
+				"name": "df_pipelineToDFlow",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -16,8 +37,26 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow1",
-						"type": "DataFlowReference"
+						"referenceName": "df_PipelinetoDflow",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"source1": {
+								"p_filename": {
+									"value": "@variables('v_input_filename')",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceParameters": {
+							"source1": {
+								"schemaLinkedService": {
+									"p_filename": {
+										"value": "@variables('v_input_filename')",
+										"type": "Expression"
+									}
+								}
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
@@ -28,7 +67,7 @@
 			}
 		],
 		"variables": {
-			"Mappingqry": {
+			"v_input_filename": {
 				"type": "String"
 			}
 		},
