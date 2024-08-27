@@ -5,6 +5,8 @@
 			{
 				"name": "Notebook1",
 				"type": "DatabricksNotebook",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Set variable1",
@@ -49,8 +51,6 @@
 			{
 				"name": "Notebook2",
 				"type": "DatabricksNotebook",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Set variable1",
@@ -88,7 +88,7 @@
 			}
 		},
 		"folder": {
-			"name": "Testing"
+			"name": "ADE Classes"
 		},
 		"annotations": []
 	}
