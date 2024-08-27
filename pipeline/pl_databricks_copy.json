@@ -46,7 +46,7 @@
 				"typeProperties": {
 					"variableName": "v_filename",
 					"value": {
-						"value": "/dbfs/mnt/blobtest2mount/DepartmentData.txt",
+						"value": "/mnt/blobtest2mount/DepartmentData.txt",
 						"type": "Expression"
 					}
 				}
