@@ -1,0 +1,47 @@
+{
+	"name": "dataflow2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_AzureSqlTable_mapping",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"parameters{",
+				"     p_filename as string",
+				"}",
+				"source(output(",
+				"          file_name as string,",
+				"          table_Schema as string,",
+				"          Table_Name as string,",
+				"          MappingScript as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: ('select count(file_name) from [dbo].[tbl_mappingData] where file_name  =$p_filename'),",
+				"     format: 'query') ~> source1",
+				"source1 sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     keys:['file_name'],",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> sink1"
+			]
+		}
+	}
+}
