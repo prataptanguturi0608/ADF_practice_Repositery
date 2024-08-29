@@ -5,8 +5,6 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Filter1",
@@ -24,46 +22,13 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Lookup1",
-							"type": "Lookup",
-							"dependsOn": [
-								{
-									"activity": "Set variable1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "AzureSqlSource",
-									"sqlReaderQuery": {
-										"value": "IF EXISTS (select file_name from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}')\nBegin\nselect * from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}'\nend\n                ",
-										"type": "Expression"
-									},
-									"queryTimeout": "02:00:00",
-									"partitionOption": "None"
-								},
-								"dataset": {
-									"referenceName": "ds_AzureSqlTable_mapping",
-									"type": "DatasetReference"
-								}
-							}
-						},
-						{
 							"name": "Copy data1",
 							"type": "Copy",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
-									"activity": "Lookup1",
+									"activity": "Set variable2",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -127,7 +92,7 @@
 							]
 						},
 						{
-							"name": "Set variable1",
+							"name": "Get InputFile Name",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
@@ -136,9 +101,69 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "v_filename",
+								"variableName": "v_input_filename",
 								"value": {
 									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Input File Validation",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Get InputFile Name",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "\nSELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[tbl_mappingData] WHERE UserID = '@{variables('v_input_filename')}')\n            THEN CAST(1 AS BIT)\n            ELSE CAST(0 AS BIT)\n       END AS IsUserPresent;",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_AzureSqlTable_mapping",
+									"type": "DatasetReference"
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "Set variable2",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Input File Validation",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_FileValid",
+								"value": {
+									"value": "@activity('Input File Validation').output",
 									"type": "Expression"
 								}
 							}
@@ -198,67 +223,6 @@
 						"type": "Expression"
 					}
 				}
-			},
-			{
-				"name": "ForEach2",
-				"type": "ForEach",
-				"dependsOn": [
-					{
-						"activity": "Filter1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"items": {
-						"value": "@activity('Filter1').output.value",
-						"type": "Expression"
-					},
-					"isSequential": true,
-					"activities": [
-						{
-							"name": "Script1",
-							"type": "Script",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"linkedServiceName": {
-								"referenceName": "ls_testing_sqldb",
-								"type": "LinkedServiceReference"
-							},
-							"typeProperties": {
-								"scripts": [
-									{
-										"parameters": [
-											{
-												"name": "p_filename",
-												"type": "String",
-												"value": {
-													"value": "@item().name",
-													"type": "Expression"
-												}
-											}
-										],
-										"type": "Query",
-										"text": {
-											"value": "select count(*) from [dbo].[tbl_mappingData] where file_name = \"department.xlsx\"",
-											"type": "Expression"
-										}
-									}
-								],
-								"scriptBlockExecutionTimeout": "02:00:00"
-							}
-						}
-					]
-				}
 			}
 		],
 		"variables": {
@@ -276,6 +240,9 @@
 			},
 			"v_input_filename": {
 				"type": "String"
+			},
+			"v_FileValid": {
+				"type": "Integer"
 			}
 		},
 		"folder": {
