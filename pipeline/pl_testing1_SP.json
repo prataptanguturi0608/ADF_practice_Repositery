@@ -28,7 +28,7 @@
 							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
-									"activity": "Set variable2",
+									"activity": "If Condition1",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -131,7 +131,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "\nSELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[tbl_mappingData] WHERE UserID = '@{variables('v_input_filename')}')\n            THEN CAST(1 AS BIT)\n            ELSE CAST(0 AS BIT)\n       END AS IsUserPresent;",
+										"value": "\nSELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[tbl_mappingData] WHERE file_name = '@{variables('v_input_filename')}')\n            THEN CAST(1 AS BIT)\n            ELSE CAST(0 AS BIT)\n       END AS IsFileValid;",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -142,6 +142,38 @@
 									"type": "DatasetReference"
 								},
 								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [
+								{
+									"activity": "Set variable2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@contains(string(activity('Input File Validation').output), true)",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Wait1",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 1
+										}
+									}
+								]
 							}
 						},
 						{
@@ -161,9 +193,9 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "v_FileValid",
+								"variableName": "v_filename",
 								"value": {
-									"value": "@activity('Input File Validation').output",
+									"value": "@string(activity('Input File Validation').output)",
 									"type": "Expression"
 								}
 							}
@@ -242,7 +274,7 @@
 				"type": "String"
 			},
 			"v_FileValid": {
-				"type": "Integer"
+				"type": "Array"
 			}
 		},
 		"folder": {
