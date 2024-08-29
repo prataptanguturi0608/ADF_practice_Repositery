@@ -22,76 +22,6 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Copy data1",
-							"type": "Copy",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [
-								{
-									"activity": "If Condition1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "ExcelSource",
-									"storeSettings": {
-										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
-									}
-								},
-								"sink": {
-									"type": "AzureSqlSink",
-									"sqlWriterStoredProcedureName": "[dbo].[sp_depEmpTblUpdate]",
-									"disableMetricsCollection": false
-								},
-								"enableStaging": false,
-								"translator": {
-									"value": "@json(activity('Lookup1').output.firstRow.MappingScript)",
-									"type": "Expression"
-								}
-							},
-							"inputs": [
-								{
-									"referenceName": "ds_testing_empdept",
-									"type": "DatasetReference",
-									"parameters": {
-										"p_Fileaname": {
-											"value": "@item().name",
-											"type": "Expression"
-										}
-									}
-								}
-							],
-							"outputs": [
-								{
-									"referenceName": "ds_azure_custdepttable",
-									"type": "DatasetReference",
-									"parameters": {
-										"schema": {
-											"value": "@activity('Lookup1').output.firstRow.table_Schema",
-											"type": "Expression"
-										},
-										"table": {
-											"value": "@activity('Lookup1').output.firstRow.Table_Name",
-											"type": "Expression"
-										}
-									}
-								}
-							]
-						},
-						{
 							"name": "Get InputFile Name",
 							"type": "SetVariable",
 							"dependsOn": [],
@@ -174,12 +104,99 @@
 								],
 								"ifTrueActivities": [
 									{
-										"name": "TRUE WAIT",
-										"type": "Wait",
-										"dependsOn": [],
+										"name": "Copy data1",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Lookup1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
 										"userProperties": [],
 										"typeProperties": {
-											"waitTimeInSeconds": 1
+											"source": {
+												"type": "ExcelSource",
+												"storeSettings": {
+													"type": "AzureBlobStorageReadSettings",
+													"recursive": true,
+													"enablePartitionDiscovery": false
+												}
+											},
+											"sink": {
+												"type": "AzureSqlSink",
+												"sqlWriterStoredProcedureName": "[dbo].[sp_depEmpTblUpdate]",
+												"disableMetricsCollection": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"value": "@json(activity('Lookup1').output.firstRow.MappingScript)",
+												"type": "Expression"
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_testing_empdept",
+												"type": "DatasetReference",
+												"parameters": {
+													"p_Fileaname": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_azure_custdepttable",
+												"type": "DatasetReference",
+												"parameters": {
+													"schema": {
+														"value": "@activity('Lookup1').output.firstRow.table_Schema",
+														"type": "Expression"
+													},
+													"table": {
+														"value": "@activity('Lookup1').output.firstRow.Table_Name",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "Lookup1",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "select * from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}'\n                ",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "ds_AzureSqlTable_mapping",
+												"type": "DatasetReference"
+											}
 										}
 									}
 								]
