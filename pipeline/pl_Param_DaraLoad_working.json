@@ -134,8 +134,15 @@
 											},
 											"sink": {
 												"type": "AzureSqlSink",
-												"writeBehavior": "insert",
+												"sqlWriterStoredProcedureName": "[dbo].[sp_depEmpTblUpdate]",
+												"writeBehavior": {
+													"value": "@variables('v_KeyColumn')",
+													"type": "Expression"
+												},
 												"sqlWriterUseTableLock": false,
+												"upsertSettings": {
+													"useTempDB": true
+												},
 												"disableMetricsCollection": false
 											},
 											"enableStaging": false,
@@ -176,7 +183,14 @@
 									{
 										"name": "Lookup_MappingData",
 										"type": "Lookup",
-										"dependsOn": [],
+										"dependsOn": [
+											{
+												"activity": "SetKeyColumn",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
 										"policy": {
 											"timeout": "0.12:00:00",
 											"retry": 0,
@@ -198,6 +212,23 @@
 											"dataset": {
 												"referenceName": "ds_AzureSqlTable_mapping",
 												"type": "DatasetReference"
+											}
+										}
+									},
+									{
+										"name": "SetKeyColumn",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "v_KeyColumn",
+											"value": {
+												"value": "@if(equals(variables('v_input_filename'),'employee.xlsx'),'empID','DepID')",
+												"type": "Expression"
 											}
 										}
 									}
@@ -302,6 +333,9 @@
 				"type": "String"
 			},
 			"v_FileValid": {
+				"type": "String"
+			},
+			"v_KeyColumn": {
 				"type": "String"
 			}
 		},
