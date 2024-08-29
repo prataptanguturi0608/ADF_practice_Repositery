@@ -1,0 +1,4038 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "DataFactory-ADFDev001"
+		},
+		"AzureSqlDatabase1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+		},
+		"LS_ADEDev001_dlakeadfdev01_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_ADEDev001_dlakeadfdev01'"
+		},
+		"ls_Sftp1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_Sftp1'"
+		},
+		"ls_blob_testing_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_blob_testing'"
+		},
+		"ls_mfp_blod_archive_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_mfp_blod_archive'"
+		},
+		"ls_myFirstProj_DLake_output_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_myFirstProj_DLake_output'"
+		},
+		"ls_myFirstProject_BlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_myFirstProject_BlobStorage1'"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "mfdbserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "myfirstdb"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa-admin"
+		},
+		"LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
+		},
+		"ls_Sftp1_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "eu-central-1.sftpcloud.io"
+		},
+		"ls_Sftp1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "47d8c15f51694113ab9b3c7b8781f072"
+		},
+		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dlakeadfdev01.dfs.core.windows.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Test",
+							"value": "abc"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"Test": {
+						"type": "Integer"
+					}
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ADE_Daily_Class')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_start",
+							"value": {
+								"value": "@pipeline().parameters.p_wStart",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_end",
+							"value": {
+								"value": "@pipeline().parameters.p_wEnd",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_wStart": {
+						"type": "string"
+					},
+					"p_wEnd": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"filenametxt": {
+						"type": "String"
+					},
+					"inputfilename": {
+						"type": "String"
+					},
+					"filenamejson": {
+						"type": "String"
+					},
+					"filenameparquet": {
+						"type": "String"
+					},
+					"sch_start": {
+						"type": "String"
+					},
+					"sch_end": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ADE_Daily_Class_2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_start",
+							"value": {
+								"value": "@pipeline().parameters.p_wStart",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "sch_end",
+							"value": {
+								"value": "@pipeline().parameters.p_wEnd",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_wStart": {
+						"type": "string"
+					},
+					"p_wEnd": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"filenametxt": {
+						"type": "String"
+					},
+					"inputfilename": {
+						"type": "String"
+					},
+					"filenamejson": {
+						"type": "String"
+					},
+					"filenameparquet": {
+						"type": "String"
+					},
+					"sch_start": {
+						"type": "String"
+					},
+					"sch_end": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_SFTP_Blob')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get_SFTP_Metadata",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_mfp_SFTP_Source",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "SftpReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false,
+								"disableChunking": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "Copy_SFTP_to_Landing",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Get_SFTP_Metadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "SftpReadSettings",
+									"recursive": true,
+									"modifiedDatetimeStart": {
+										"value": "@addDays(formatDateTime(utcNow(),'yyyy/MM/dd'),-1)",
+										"type": "Expression"
+									},
+									"modifiedDatetimeEnd": {
+										"value": "@utcNow()",
+										"type": "Expression"
+									},
+									"deleteFilesAfterCompletion": false,
+									"disableChunking": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_mfp_SFTP_Source",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_mfp_BlobLanding",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "ADE Classes"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_SFTP_Source')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_BlobLanding')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_myFirstProject')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get_Input_FolderMetadata",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_mfp_blobFolder",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get_Input_FolderMetadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get_Input_FolderMetadata').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Switch1",
+									"type": "Switch",
+									"dependsOn": [
+										{
+											"activity": "If Condition1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"on": {
+											"value": "@split(variables('v_InputFileName'),'.')[1]",
+											"type": "Expression"
+										},
+										"cases": [
+											{
+												"value": "txt",
+												"activities": [
+													{
+														"name": "CopyTxtFilesToBronze",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "DelimitedTextSource",
+																"additionalColumns": [
+																	{
+																		"name": "Ingestion_by",
+																		"value": {
+																			"value": "@pipeline().parameters.p_IngestedBy",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_TimeStamp",
+																		"value": {
+																			"value": "@utcnow()",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_Date",
+																		"value": {
+																			"value": "@formatDateTime(utcNow(),'yyyy/MM/dd')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true,
+																	"enablePartitionDiscovery": false
+																},
+																"formatSettings": {
+																	"type": "DelimitedTextReadSettings"
+																}
+															},
+															"sink": {
+																"type": "DelimitedTextSink",
+																"storeSettings": {
+																	"type": "AzureBlobFSWriteSettings",
+																	"copyBehavior": "PreserveHierarchy"
+																},
+																"formatSettings": {
+																	"type": "DelimitedTextWriteSettings",
+																	"quoteAllText": true,
+																	"fileExtension": ".txt"
+																}
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_txt",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": {
+																		"value": "@variables('v_InputFileName')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_mfp_DLake_B_txt",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													},
+													{
+														"name": "ArchiveTxtFiles",
+														"type": "Copy",
+														"dependsOn": [
+															{
+																"activity": "CopyTxtFilesToBronze",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "DelimitedTextSource",
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true,
+																	"enablePartitionDiscovery": false
+																},
+																"formatSettings": {
+																	"type": "DelimitedTextReadSettings"
+																}
+															},
+															"sink": {
+																"type": "DelimitedTextSink",
+																"storeSettings": {
+																	"type": "AzureBlobStorageWriteSettings"
+																},
+																"formatSettings": {
+																	"type": "DelimitedTextWriteSettings",
+																	"quoteAllText": true,
+																	"fileExtension": ".txt"
+																}
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_txt",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": {
+																		"value": "@variables('v_InputFileName')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_archive_text",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													},
+													{
+														"name": "DeleteTxtFiles",
+														"type": "Delete",
+														"dependsOn": [
+															{
+																"activity": "ArchiveTxtFiles",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"dataset": {
+																"referenceName": "ds_mfp_Blob_landing_txt",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": {
+																		"value": "@variables('v_InputFileName')",
+																		"type": "Expression"
+																	}
+																}
+															},
+															"logStorageSettings": {
+																"linkedServiceName": {
+																	"referenceName": "ls_myFirstProject_BlobStorage1",
+																	"type": "LinkedServiceReference"
+																},
+																"path": "logs"
+															},
+															"enableLogging": true,
+															"storeSettings": {
+																"type": "AzureBlobStorageReadSettings",
+																"recursive": true,
+																"enablePartitionDiscovery": false
+															}
+														}
+													}
+												]
+											},
+											{
+												"value": "json",
+												"activities": [
+													{
+														"name": "CopyJsonFilesToBronze",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "JsonSource",
+																"additionalColumns": [
+																	{
+																		"name": "Ingestion_by",
+																		"value": {
+																			"value": "@pipeline().parameters.p_IngestedBy",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_TimeStamp",
+																		"value": {
+																			"value": "@utcnow()",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_Date",
+																		"value": {
+																			"value": "@formatDateTime(utcNow(),'yyyy/MM/d')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true,
+																	"enablePartitionDiscovery": false
+																},
+																"formatSettings": {
+																	"type": "JsonReadSettings"
+																}
+															},
+															"sink": {
+																"type": "JsonSink",
+																"storeSettings": {
+																	"type": "AzureBlobFSWriteSettings",
+																	"copyBehavior": "PreserveHierarchy"
+																},
+																"formatSettings": {
+																	"type": "JsonWriteSettings"
+																}
+															},
+															"enableStaging": false
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_Json",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": "@variables('v_InputFileName')"
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_mfp_DLake_B_Json",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													},
+													{
+														"name": "ArchiveJsonFiles",
+														"type": "Copy",
+														"dependsOn": [
+															{
+																"activity": "CopyJsonFilesToBronze",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "JsonSource",
+																"additionalColumns": [
+																	{
+																		"name": "Ingestion_by",
+																		"value": {
+																			"value": "@pipeline().parameters.p_IngestedBy",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_TimeStamp",
+																		"value": {
+																			"value": "@utcnow()",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_Date",
+																		"value": {
+																			"value": "@formatDateTime(utcNow(),'yyyy/MM/d')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true,
+																	"enablePartitionDiscovery": false
+																},
+																"formatSettings": {
+																	"type": "JsonReadSettings"
+																}
+															},
+															"sink": {
+																"type": "JsonSink",
+																"storeSettings": {
+																	"type": "AzureBlobStorageWriteSettings"
+																},
+																"formatSettings": {
+																	"type": "JsonWriteSettings"
+																}
+															},
+															"enableStaging": false
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_Json",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": "@variables('v_InputFileName')"
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_archive_Json",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													},
+													{
+														"name": "DeleteJsonFiles",
+														"type": "Delete",
+														"dependsOn": [
+															{
+																"activity": "ArchiveJsonFiles",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"dataset": {
+																"referenceName": "ds_mfp_Blob_landing_Json",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": "@variables('v_InputFileName')"
+																}
+															},
+															"logStorageSettings": {
+																"linkedServiceName": {
+																	"referenceName": "ls_myFirstProject_BlobStorage1",
+																	"type": "LinkedServiceReference"
+																},
+																"path": "logs"
+															},
+															"enableLogging": true,
+															"storeSettings": {
+																"type": "AzureBlobStorageReadSettings",
+																"recursive": true,
+																"enablePartitionDiscovery": false
+															}
+														}
+													}
+												]
+											},
+											{
+												"value": "parquet",
+												"activities": [
+													{
+														"name": "CopyParquetFiles",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ParquetSource",
+																"additionalColumns": [
+																	{
+																		"name": "Ingestion_by",
+																		"value": {
+																			"value": "@pipeline().parameters.p_IngestedBy",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_TimeStamp",
+																		"value": {
+																			"value": "@utcnow()",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_Date",
+																		"value": {
+																			"value": "@formatDateTime(utcNow(),'yyyy/MM/dd')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true
+																},
+																"formatSettings": {
+																	"type": "ParquetReadSettings"
+																}
+															},
+															"sink": {
+																"type": "ParquetSink",
+																"storeSettings": {
+																	"type": "AzureBlobFSWriteSettings",
+																	"copyBehavior": "PreserveHierarchy"
+																},
+																"formatSettings": {
+																	"type": "ParquetWriteSettings"
+																}
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_Parquet",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": {
+																		"value": "@variables('v_InputFileName')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_mfp_DLake_B_Parquet",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													},
+													{
+														"name": "ArchiveParquetFiles",
+														"type": "Copy",
+														"dependsOn": [
+															{
+																"activity": "CopyParquetFiles",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ParquetSource",
+																"additionalColumns": [
+																	{
+																		"name": "Ingestion_by",
+																		"value": {
+																			"value": "@pipeline().parameters.p_IngestedBy",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_TimeStamp",
+																		"value": {
+																			"value": "@utcnow()",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "Ingestion_Date",
+																		"value": {
+																			"value": "@formatDateTime(utcNow(),'yyyy/MM/dd')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "AzureBlobStorageReadSettings",
+																	"recursive": true
+																},
+																"formatSettings": {
+																	"type": "ParquetReadSettings"
+																}
+															},
+															"sink": {
+																"type": "ParquetSink",
+																"storeSettings": {
+																	"type": "AzureBlobStorageWriteSettings"
+																},
+																"formatSettings": {
+																	"type": "ParquetWriteSettings"
+																}
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "ds_mfp_Blob_landing_Parquet",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": {
+																		"value": "@variables('v_InputFileName')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_archive_Parquet",
+																"type": "DatasetReference",
+																"parameters": {}
+															}
+														]
+													},
+													{
+														"name": "DeleteParquetFiles",
+														"type": "Delete",
+														"dependsOn": [
+															{
+																"activity": "ArchiveParquetFiles",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"dataset": {
+																"referenceName": "ds_mfp_Blob_landing_Parquet",
+																"type": "DatasetReference",
+																"parameters": {
+																	"p_Filename": "@variables('v_InputFileName')"
+																}
+															},
+															"logStorageSettings": {
+																"linkedServiceName": {
+																	"referenceName": "ls_myFirstProject_BlobStorage1",
+																	"type": "LinkedServiceReference"
+																},
+																"path": "logs"
+															},
+															"enableLogging": true,
+															"storeSettings": {
+																"type": "AzureBlobStorageReadSettings",
+																"recursive": true,
+																"enablePartitionDiscovery": false
+															}
+														}
+													}
+												]
+											}
+										],
+										"defaultActivities": [
+											{
+												"name": "DummyWait",
+												"type": "Wait",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"waitTimeInSeconds": 1
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "GetFilesMetadata",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "ds_mfp_blobFiles",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_FileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"itemName",
+											"size"
+										],
+										"storeSettings": {
+											"type": "AzureBlobStorageReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "BinaryReadSettings"
+										}
+									}
+								},
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "GetFilesMetadata",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@greater(activity('GetFilesMetadata').output.size,300)",
+											"type": "Expression"
+										},
+										"ifFalseActivities": [
+											{
+												"name": "Wait1",
+												"type": "Wait",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"waitTimeInSeconds": 1
+												}
+											}
+										],
+										"ifTrueActivities": [
+											{
+												"name": "SetFileName",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "v_InputFileName",
+													"value": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "BronzeToSilverDataflow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "BronzeToSilverDataflow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"CustomersSource": {},
+									"ProductsSource": {},
+									"OrderItemsSource": {},
+									"OrdersSource": {},
+									"StoresSource": {},
+									"CustomersSink": {},
+									"OrderItemsSink": {},
+									"StoresSink": {},
+									"OrderSink": {},
+									"ProductsSink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "SilverToGoldDataflow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "BronzeToSilverDataflow",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "SilverToGoldDataflow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceOrderItems": {},
+									"sourceOrders": {},
+									"sourceCustomers": {},
+									"sourceStores": {},
+									"sourceProducts": {},
+									"silverToGoldSink": {},
+									"silevertoDW": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Fail1",
+						"type": "Fail",
+						"dependsOn": [
+							{
+								"activity": "Get_Input_FolderMetadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"message": "Pipeline failed",
+							"errorCode": "500"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_IngestedBy": {
+						"type": "string",
+						"defaultValue": "Automated"
+					}
+				},
+				"variables": {
+					"v_InputFileName": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFolder')]",
+				"[concat(variables('factoryId'), '/dataflows/BronzeToSilverDataflow')]",
+				"[concat(variables('factoryId'), '/dataflows/SilverToGoldDataflow')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_blobFiles')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_Blob_landing_txt')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_txt')]",
+				"[concat(variables('factoryId'), '/datasets/ds_archive_text')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_Blob_landing_Json')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_Json')]",
+				"[concat(variables('factoryId'), '/datasets/ds_archive_Json')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_Blob_landing_Parquet')]",
+				"[concat(variables('factoryId'), '/datasets/ds_mfp_DLake_B_Parquet')]",
+				"[concat(variables('factoryId'), '/datasets/ds_archive_Parquet')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_testing')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"table1": {},
+									"table2": {},
+									"sink1": {},
+									"sink2": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_AzureSqlTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Order_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Customer_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Order_Status",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Ordet_dateTime",
+						"type": "varchar"
+					},
+					{
+						"name": "Store_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Full_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "emil_add",
+						"type": "varchar"
+					},
+					{
+						"name": "Store_name",
+						"type": "varchar"
+					},
+					{
+						"name": "WebAddress",
+						"type": "varchar"
+					},
+					{
+						"name": "Latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Product_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Line_item_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Unit_Price",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "Prod_Qty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Product_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "prod",
+					"table": "tbl_customerOrders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_archive_Json')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_mfp_blod_archive",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
+							"type": "Expression"
+						},
+						"container": "archive"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_mfp_blod_archive')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_archive_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_mfp_blod_archive",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
+							"type": "Expression"
+						},
+						"container": "archive"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_mfp_blod_archive')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_archive_text')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_mfp_blod_archive",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
+							"type": "Expression"
+						},
+						"container": "archive"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_mfp_blod_archive')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_Orders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "orders.parquet",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "ORDER_DATETIME",
+						"type": "UTF8"
+					},
+					{
+						"name": "CUSTOMER_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "ORDER_STATUS",
+						"type": "UTF8"
+					},
+					{
+						"name": "STORE_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_Stores')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "stores.json",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"STORE_ID": {
+							"type": "string"
+						},
+						"STORE_NAME": {
+							"type": "string"
+						},
+						"WEB_ADDRESS": {
+							"type": "string"
+						},
+						"LATITUDE": {
+							"type": "string"
+						},
+						"LONGITUDE": {
+							"type": "string"
+						},
+						"Ingestion_by": {
+							"type": "string"
+						},
+						"Ingestion_TimeStamp": {
+							"type": "string"
+						},
+						"Ingestion_Date": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_customers')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "customers.json",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"CUSTOMER_ID": {
+							"type": "string"
+						},
+						"FULL_NAME": {
+							"type": "string"
+						},
+						"EMAIL_ADDRESS": {
+							"type": "string"
+						},
+						"Ingestion_by": {
+							"type": "string"
+						},
+						"Ingestion_TimeStamp": {
+							"type": "string"
+						},
+						"Ingestion_Date": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_order_items')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "order_items.txt",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "String"
+					},
+					{
+						"name": "LINE_ITEM_ID",
+						"type": "String"
+					},
+					{
+						"name": "PRODUCT_ID",
+						"type": "String"
+					},
+					{
+						"name": "UNIT_PRICE",
+						"type": "String"
+					},
+					{
+						"name": "QUANTITY",
+						"type": "String"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "String"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "String"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_products')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "products.json",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"PRODUCT_ID": {
+							"type": "string"
+						},
+						"PRODUCT_NAME": {
+							"type": "string"
+						},
+						"UNIT_PRICE": {
+							"type": "string"
+						},
+						"Ingestion_by": {
+							"type": "string"
+						},
+						"Ingestion_TimeStamp": {
+							"type": "string"
+						},
+						"Ingestion_Date": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_gold_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders",
+						"fileSystem": "gold"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADEDev001_dlakeadfdev01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Customers_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/customers",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADEDev001_dlakeadfdev01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_OrderItems_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/orderItems",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "PRODUCT_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "LINE_ITEM_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "UNIT_PRICE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Prod_QTY",
+						"type": "INT32"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADEDev001_dlakeadfdev01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Orders_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/orders",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "ORDER_DATETIME",
+						"type": "UTF8"
+					},
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "ORDER_STATUS",
+						"type": "UTF8"
+					},
+					{
+						"name": "STORE_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADEDev001_dlakeadfdev01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Products_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/products",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "PRODUCT_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "PRODUCT_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "UNIT_PRICE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADEDev001_dlakeadfdev01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_Stores_in')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADEDev001_dlakeadfdev01",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders/stores",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "STORE_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "STORE_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "WEB_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "LATITUDE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LONGITUDE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADEDev001_dlakeadfdev01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_customers_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "customers.parquet",
+						"folderPath": "customerorders/customers",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_order_items_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "order_items.parquet",
+						"folderPath": "customerorders/orderItems",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_order_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "orders.parquet",
+						"folderPath": "customerorders/orders",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_products_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "products.parquet",
+						"folderPath": "customerorders/products",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dl_silver_stores_out')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "stores.parquet",
+						"folderPath": "customerorders/stores",
+						"fileSystem": "silver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "FULL_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL_ADDRESS",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_by",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_TimeStamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "Ingestion_Date",
+						"type": "UTF8"
+					},
+					{
+						"name": "IngestedBy",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_BlobLanding')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "input"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Json')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_Filename": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_Filename",
+							"type": "Expression"
+						},
+						"container": "input"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_Filename": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_Filename",
+							"type": "Expression"
+						},
+						"container": "input"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "ORDER_DATETIME",
+						"type": "UTF8"
+					},
+					{
+						"name": "CUSTOMER_ID",
+						"type": "UTF8"
+					},
+					{
+						"name": "ORDER_STATUS",
+						"type": "UTF8"
+					},
+					{
+						"name": "STORE_ID",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Blob_landing_txt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_Filename": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_Filename",
+							"type": "Expression"
+						},
+						"container": "input"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_Json')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_DLake_B_txt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "customerorders",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_SFTP_Source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_Sftp1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "SftpLocation",
+						"folderPath": "/Customer Orders"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_Sftp1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_Target')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProj_DLake_output",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Output",
+						"fileSystem": "customerorders"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFiles')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_FileName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_FileName",
+							"type": "Expression"
+						},
+						"container": "input"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_mfp_blobFolder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_myFirstProject_BlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "ADE Classes/myFirstProject"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "input"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProject_BlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_testing_parquet1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_blob_testing",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "part-00000-2dbd9360-aeff-44e2-8d7e-c2433ae6a466-c000.snappy.parquet",
+						"container": "testcontianer"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_blob_testing')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_testing_parquet2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_blob_testing",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Testing"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "part-00000-3f6bece8-30a4-4f55-b5b2-6899c1e2070c-c000.snappy.parquet",
+						"container": "testcontianer"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_blob_testing')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabase1_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabase1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ADEDev001_dlakeadfdev01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ADEDev001_dlakeadfdev01_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_ADEDev001_dlakeadfdev01_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_Sftp1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Sftp",
+				"typeProperties": {
+					"host": "[parameters('ls_Sftp1_properties_typeProperties_host')]",
+					"port": 22,
+					"skipHostKeyValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('ls_Sftp1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_Sftp1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_blob_testing')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_blob_testing_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_mfp_blod_archive')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_mfp_blod_archive_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_myFirstProj_DLake_output')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_myFirstProj_DLake_output_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_myFirstProj_DLake_output_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_myFirstProject_BlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_myFirstProject_BlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OnPrem-SlefHosted-IR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BronzeToSilverDataflow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "ADE Classes"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_dl_bronze_customers",
+								"type": "DatasetReference"
+							},
+							"name": "CustomersSource"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_bronze_products",
+								"type": "DatasetReference"
+							},
+							"name": "ProductsSource"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_bronze_order_items",
+								"type": "DatasetReference"
+							},
+							"name": "OrderItemsSource"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_bronze_Orders",
+								"type": "DatasetReference"
+							},
+							"name": "OrdersSource"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_bronze_Stores",
+								"type": "DatasetReference"
+							},
+							"name": "StoresSource"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_customers_out",
+								"type": "DatasetReference"
+							},
+							"name": "CustomersSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_order_items_out",
+								"type": "DatasetReference"
+							},
+							"name": "OrderItemsSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_stores_out",
+								"type": "DatasetReference"
+							},
+							"name": "StoresSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_order_out",
+								"type": "DatasetReference"
+							},
+							"name": "OrderSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_products_out",
+								"type": "DatasetReference"
+							},
+							"name": "ProductsSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "CustomersTblCast",
+							"description": "Data type updating for customers table"
+						},
+						{
+							"name": "RenameColumns"
+						},
+						{
+							"name": "splitNullValues"
+						},
+						{
+							"name": "ProductsTblCast",
+							"description": "Data type updating for products table"
+						},
+						{
+							"name": "OrderItemsTblCast"
+						},
+						{
+							"name": "OrderTblsCast"
+						},
+						{
+							"name": "StoresTblCast"
+						},
+						{
+							"name": "RenameColumns3"
+						},
+						{
+							"name": "NotNullfilter1"
+						},
+						{
+							"name": "NotNullfilter3"
+						},
+						{
+							"name": "NotNullfilter2"
+						},
+						{
+							"name": "aggDuplicates1"
+						},
+						{
+							"name": "split2"
+						},
+						{
+							"name": "aggDuplicate2"
+						},
+						{
+							"name": "RemoveCountColumn1"
+						},
+						{
+							"name": "RemoveCountColumn2"
+						},
+						{
+							"name": "aggDuplicate3"
+						},
+						{
+							"name": "RemoveCountColumn3"
+						},
+						{
+							"name": "aggDuplicate4"
+						},
+						{
+							"name": "RemoveCountColumn4"
+						},
+						{
+							"name": "aggDuplicate5"
+						},
+						{
+							"name": "RemoveCountColumn5"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          CUSTOMER_ID as string,",
+						"          FULL_NAME as string,",
+						"          EMAIL_ADDRESS as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> CustomersSource",
+						"source(output(",
+						"          PRODUCT_ID as string,",
+						"          PRODUCT_NAME as string,",
+						"          UNIT_PRICE as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> ProductsSource",
+						"source(output(",
+						"          ORDER_ID as string,",
+						"          LINE_ITEM_ID as string,",
+						"          PRODUCT_ID as string,",
+						"          UNIT_PRICE as string,",
+						"          QUANTITY as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> OrderItemsSource",
+						"source(output(",
+						"          ORDER_ID as string,",
+						"          ORDER_DATETIME as string,",
+						"          CUSTOMER_ID as string,",
+						"          ORDER_STATUS as string,",
+						"          STORE_ID as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> OrdersSource",
+						"source(output(",
+						"          STORE_ID as string,",
+						"          STORE_NAME as string,",
+						"          WEB_ADDRESS as string,",
+						"          LATITUDE as string,",
+						"          LONGITUDE as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> StoresSource",
+						"CustomersSource cast(output(",
+						"          CUSTOMER_ID as integer",
+						"     ),",
+						"     errors: true) ~> CustomersTblCast",
+						"CustomersTblCast select(mapColumn(",
+						"          CUSTOMER_ID,",
+						"          FULL_NAME,",
+						"          EMAIL_ADDRESS,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RenameColumns",
+						"RenameColumns split(!isNull(CUSTOMER_ID),",
+						"     disjoint: false) ~> splitNullValues@(NotNull, Null)",
+						"ProductsSource cast(output(",
+						"          PRODUCT_ID as integer,",
+						"          UNIT_PRICE as double",
+						"     ),",
+						"     errors: true) ~> ProductsTblCast",
+						"OrderItemsSource cast(output(",
+						"          ORDER_ID as integer,",
+						"          LINE_ITEM_ID as integer,",
+						"          PRODUCT_ID as integer,",
+						"          UNIT_PRICE as double,",
+						"          QUANTITY as integer",
+						"     ),",
+						"     errors: false) ~> OrderItemsTblCast",
+						"OrdersSource cast(output(",
+						"          ORDER_ID as integer,",
+						"          ORDER_DATETIME as string,",
+						"          CUSTOMER_ID as integer,",
+						"          ORDER_STATUS as string,",
+						"          STORE_ID as integer,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     errors: true) ~> OrderTblsCast",
+						"StoresSource cast(output(",
+						"          STORE_ID as integer,",
+						"          LATITUDE as double,",
+						"          LONGITUDE as double",
+						"     ),",
+						"     errors: true) ~> StoresTblCast",
+						"OrderItemsTblCast select(mapColumn(",
+						"          ORDER_ID,",
+						"          LINE_ITEM_ID,",
+						"          PRODUCT_ID,",
+						"          UNIT_PRICE,",
+						"          Prod_QTY = QUANTITY,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RenameColumns3",
+						"RenameColumns3 filter(!isNull(ORDER_ID)) ~> NotNullfilter1",
+						"StoresTblCast filter(!isNull(STORE_ID)) ~> NotNullfilter3",
+						"OrderTblsCast filter(!isNull(CUSTOMER_ID)) ~> NotNullfilter2",
+						"splitNullValues@NotNull aggregate(groupBy(CUSTOMER_ID,",
+						"          FULL_NAME,",
+						"          EMAIL_ADDRESS,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date),",
+						"     RowCount = count(CUSTOMER_ID)) ~> aggDuplicates1",
+						"ProductsTblCast split(!isNull(PRODUCT_ID),",
+						"     disjoint: false) ~> split2@(NotnullRows, NullRows)",
+						"split2@NotnullRows aggregate(groupBy(PRODUCT_NAME,",
+						"          PRODUCT_ID,",
+						"          UNIT_PRICE,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date),",
+						"     Rowcount = count(PRODUCT_ID)) ~> aggDuplicate2",
+						"aggDuplicates1 select(mapColumn(",
+						"          CUSTOMER_ID,",
+						"          FULL_NAME,",
+						"          EMAIL_ADDRESS,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn1",
+						"aggDuplicate2 select(mapColumn(",
+						"          PRODUCT_NAME,",
+						"          PRODUCT_ID,",
+						"          UNIT_PRICE,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn2",
+						"NotNullfilter1 aggregate(groupBy(ORDER_ID,",
+						"          PRODUCT_ID,",
+						"          LINE_ITEM_ID,",
+						"          UNIT_PRICE,",
+						"          Prod_QTY,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date),",
+						"     rowCount = count(ORDER_ID)) ~> aggDuplicate3",
+						"aggDuplicate3 select(mapColumn(",
+						"          ORDER_ID,",
+						"          PRODUCT_ID,",
+						"          LINE_ITEM_ID,",
+						"          UNIT_PRICE,",
+						"          Prod_QTY,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn3",
+						"NotNullfilter2 aggregate(groupBy(ORDER_ID,",
+						"          ORDER_DATETIME,",
+						"          CUSTOMER_ID,",
+						"          ORDER_STATUS,",
+						"          STORE_ID,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date),",
+						"     Rowcount = count(CUSTOMER_ID)) ~> aggDuplicate4",
+						"aggDuplicate4 select(mapColumn(",
+						"          ORDER_ID,",
+						"          ORDER_DATETIME,",
+						"          CUSTOMER_ID,",
+						"          ORDER_STATUS,",
+						"          STORE_ID,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn4",
+						"NotNullfilter3 aggregate(groupBy(STORE_ID,",
+						"          STORE_NAME,",
+						"          WEB_ADDRESS,",
+						"          LATITUDE,",
+						"          LONGITUDE,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date),",
+						"     rowCount = count(STORE_ID)) ~> aggDuplicate5",
+						"aggDuplicate5 select(mapColumn(",
+						"          STORE_ID,",
+						"          STORE_NAME,",
+						"          WEB_ADDRESS,",
+						"          LATITUDE,",
+						"          LONGITUDE,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveCountColumn5",
+						"RemoveCountColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CUSTOMER_ID as integer,",
+						"          FULL_NAME as string,",
+						"          EMAIL_ADDRESS as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string,",
+						"          IngestedBy as string",
+						"     ),",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> CustomersSink",
+						"RemoveCountColumn3 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CUSTOMER_ID as integer,",
+						"          FULL_NAME as string,",
+						"          EMAIL_ADDRESS as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string,",
+						"          IngestedBy as string",
+						"     ),",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> OrderItemsSink",
+						"RemoveCountColumn5 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CUSTOMER_ID as integer,",
+						"          FULL_NAME as string,",
+						"          EMAIL_ADDRESS as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string,",
+						"          IngestedBy as string",
+						"     ),",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> StoresSink",
+						"RemoveCountColumn4 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CUSTOMER_ID as integer,",
+						"          FULL_NAME as string,",
+						"          EMAIL_ADDRESS as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string,",
+						"          IngestedBy as string",
+						"     ),",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> OrderSink",
+						"RemoveCountColumn2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CUSTOMER_ID as integer,",
+						"          FULL_NAME as string,",
+						"          EMAIL_ADDRESS as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string,",
+						"          IngestedBy as string",
+						"     ),",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> ProductsSink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_dl_bronze_customers')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_bronze_products')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_bronze_order_items')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_bronze_Orders')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_bronze_Stores')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_customers_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_order_items_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_stores_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_order_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_products_out')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SilverToGoldDataflow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "ADE Classes"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_OrderItems_in",
+								"type": "DatasetReference"
+							},
+							"name": "sourceOrderItems"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_Orders_in",
+								"type": "DatasetReference"
+							},
+							"name": "sourceOrders"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_Customers_in",
+								"type": "DatasetReference"
+							},
+							"name": "sourceCustomers"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_Stores_in",
+								"type": "DatasetReference"
+							},
+							"name": "sourceStores"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dl_silver_Products_in",
+								"type": "DatasetReference"
+							},
+							"name": "sourceProducts"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_dl_gold_out",
+								"type": "DatasetReference"
+							},
+							"name": "silverToGoldSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_AzureSqlTable",
+								"type": "DatasetReference"
+							},
+							"name": "silevertoDW"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LeftOutJoin1"
+						},
+						{
+							"name": "RemoveDupColumns1"
+						},
+						{
+							"name": "LeftOutJoin2"
+						},
+						{
+							"name": "RemoveDupColumns2"
+						},
+						{
+							"name": "LeftOutJoin3"
+						},
+						{
+							"name": "RemoveDupColumns3"
+						},
+						{
+							"name": "LeftOutJoin4"
+						},
+						{
+							"name": "RemoveDupColumns4"
+						},
+						{
+							"name": "agRemoveCount"
+						},
+						{
+							"name": "AlterRow1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ORDER_ID as integer,",
+						"          PRODUCT_ID as integer,",
+						"          LINE_ITEM_ID as integer,",
+						"          UNIT_PRICE as double,",
+						"          Prod_QTY as integer,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> sourceOrderItems",
+						"source(output(",
+						"          ORDER_ID as integer,",
+						"          ORDER_DATETIME as string,",
+						"          CUSTOMER_ID as integer,",
+						"          ORDER_STATUS as string,",
+						"          STORE_ID as integer,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> sourceOrders",
+						"source(output(",
+						"          CUSTOMER_ID as integer,",
+						"          FULL_NAME as string,",
+						"          EMAIL_ADDRESS as string,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string,",
+						"          IngestedBy as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> sourceCustomers",
+						"source(output(",
+						"          STORE_ID as integer,",
+						"          STORE_NAME as string,",
+						"          WEB_ADDRESS as string,",
+						"          LATITUDE as double,",
+						"          LONGITUDE as double,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> sourceStores",
+						"source(output(",
+						"          PRODUCT_NAME as string,",
+						"          PRODUCT_ID as integer,",
+						"          UNIT_PRICE as double,",
+						"          Ingestion_by as string,",
+						"          Ingestion_TimeStamp as string,",
+						"          Ingestion_Date as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> sourceProducts",
+						"sourceOrderItems, sourceOrders join(sourceOrderItems@ORDER_ID == sourceOrders@ORDER_ID,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> LeftOutJoin1",
+						"LeftOutJoin1 select(mapColumn(",
+						"          ORDER_ID = sourceOrderItems@ORDER_ID,",
+						"          PRODUCT_ID,",
+						"          LINE_ITEM_ID,",
+						"          UNIT_PRICE,",
+						"          Prod_QTY,",
+						"          ORDER_DATETIME,",
+						"          ORDER_STATUS,",
+						"          CUSTOMER_ID,",
+						"          STORE_ID,",
+						"          Ingestion_by = sourceOrderItems@Ingestion_by,",
+						"          Ingestion_TimeStamp = sourceOrderItems@Ingestion_TimeStamp,",
+						"          Ingestion_Date = sourceOrderItems@Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns1",
+						"RemoveDupColumns1, sourceCustomers join(RemoveDupColumns1@CUSTOMER_ID == sourceCustomers@CUSTOMER_ID,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> LeftOutJoin2",
+						"LeftOutJoin2 select(mapColumn(",
+						"          ORDER_ID,",
+						"          PRODUCT_ID,",
+						"          LINE_ITEM_ID,",
+						"          UNIT_PRICE,",
+						"          Prod_QTY,",
+						"          ORDER_DATETIME,",
+						"          ORDER_STATUS,",
+						"          CUSTOMER_ID = RemoveDupColumns1@CUSTOMER_ID,",
+						"          FULL_NAME,",
+						"          EMAIL_ADDRESS,",
+						"          STORE_ID,",
+						"          Ingestion_by = RemoveDupColumns1@Ingestion_by,",
+						"          Ingestion_TimeStamp = RemoveDupColumns1@Ingestion_TimeStamp,",
+						"          Ingestion_Date = RemoveDupColumns1@Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns2",
+						"RemoveDupColumns2, sourceStores join(RemoveDupColumns2@STORE_ID == sourceStores@STORE_ID,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> LeftOutJoin3",
+						"LeftOutJoin3 select(mapColumn(",
+						"          ORDER_ID,",
+						"          PRODUCT_ID,",
+						"          LINE_ITEM_ID,",
+						"          UNIT_PRICE,",
+						"          Prod_QTY,",
+						"          ORDER_DATETIME,",
+						"          ORDER_STATUS,",
+						"          CUSTOMER_ID,",
+						"          FULL_NAME,",
+						"          EMAIL_ADDRESS,",
+						"          STORE_ID = RemoveDupColumns2@STORE_ID,",
+						"          STORE_NAME,",
+						"          WEB_ADDRESS,",
+						"          LATITUDE,",
+						"          LONGITUDE,",
+						"          Ingestion_by = RemoveDupColumns2@Ingestion_by,",
+						"          Ingestion_TimeStamp = RemoveDupColumns2@Ingestion_TimeStamp,",
+						"          Ingestion_Date = RemoveDupColumns2@Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns3",
+						"RemoveDupColumns3, sourceProducts join(RemoveDupColumns3@PRODUCT_ID == sourceProducts@PRODUCT_ID,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> LeftOutJoin4",
+						"LeftOutJoin4 select(mapColumn(",
+						"          ORDER_ID,",
+						"          PRODUCT_ID = RemoveDupColumns3@PRODUCT_ID,",
+						"          PRODUCT_NAME,",
+						"          Prod_QTY,",
+						"          UNIT_PRICE = sourceProducts@UNIT_PRICE,",
+						"          LINE_ITEM_ID,",
+						"          ORDER_DATETIME,",
+						"          ORDER_STATUS,",
+						"          CUSTOMER_ID,",
+						"          FULL_NAME,",
+						"          EMAIL_ADDRESS,",
+						"          STORE_ID,",
+						"          STORE_NAME,",
+						"          WEB_ADDRESS,",
+						"          LATITUDE,",
+						"          LONGITUDE,",
+						"          Ingestion_by = RemoveDupColumns3@Ingestion_by,",
+						"          Ingestion_TimeStamp = RemoveDupColumns3@Ingestion_TimeStamp,",
+						"          Ingestion_Date = RemoveDupColumns3@Ingestion_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RemoveDupColumns4",
+						"RemoveDupColumns4 aggregate(groupBy(ORDER_ID,",
+						"          PRODUCT_ID,",
+						"          PRODUCT_NAME,",
+						"          Prod_QTY,",
+						"          UNIT_PRICE,",
+						"          LINE_ITEM_ID,",
+						"          ORDER_DATETIME,",
+						"          ORDER_STATUS,",
+						"          CUSTOMER_ID,",
+						"          FULL_NAME,",
+						"          EMAIL_ADDRESS,",
+						"          STORE_ID,",
+						"          STORE_NAME,",
+						"          WEB_ADDRESS,",
+						"          LATITUDE,",
+						"          LONGITUDE,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date),",
+						"     count = count(ORDER_ID)) ~> agRemoveCount",
+						"agRemoveCount alterRow(upsertIf(true())) ~> AlterRow1",
+						"agRemoveCount sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          ORDER_ID,",
+						"          PRODUCT_ID,",
+						"          PRODUCT_NAME,",
+						"          Prod_QTY,",
+						"          UNIT_PRICE,",
+						"          LINE_ITEM_ID,",
+						"          ORDER_DATETIME,",
+						"          ORDER_STATUS,",
+						"          CUSTOMER_ID,",
+						"          FULL_NAME,",
+						"          EMAIL_ADDRESS,",
+						"          STORE_ID,",
+						"          STORE_NAME,",
+						"          WEB_ADDRESS,",
+						"          LATITUDE,",
+						"          LONGITUDE,",
+						"          Ingestion_by,",
+						"          Ingestion_TimeStamp,",
+						"          Ingestion_Date",
+						"     )) ~> silverToGoldSink",
+						"AlterRow1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Order_ID as integer,",
+						"          Customer_id as integer,",
+						"          Order_Status as integer,",
+						"          Ordet_dateTime as string,",
+						"          Store_id as integer,",
+						"          Full_Name as string,",
+						"          emil_add as string,",
+						"          Store_name as string,",
+						"          WebAddress as string,",
+						"          Latitude as double,",
+						"          Longitude as double,",
+						"          Product_id as integer,",
+						"          Line_item_id as integer,",
+						"          Unit_Price as double,",
+						"          Prod_Qty as integer,",
+						"          Product_name as string",
+						"     ),",
+						"     deletable:true,",
+						"     insertable:true,",
+						"     updateable:true,",
+						"     upsertable:true,",
+						"     keys:['Order_ID'],",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          Order_ID = ORDER_ID,",
+						"          Customer_id = CUSTOMER_ID,",
+						"          Order_Status = ORDER_STATUS,",
+						"          Ordet_dateTime = ORDER_DATETIME,",
+						"          Store_id = STORE_ID,",
+						"          Full_Name = FULL_NAME,",
+						"          emil_add = EMAIL_ADDRESS,",
+						"          Store_name = STORE_NAME,",
+						"          WebAddress = WEB_ADDRESS,",
+						"          Latitude = LATITUDE,",
+						"          Longitude = LONGITUDE,",
+						"          Product_id = PRODUCT_ID,",
+						"          Line_item_id = LINE_ITEM_ID,",
+						"          Unit_Price = UNIT_PRICE,",
+						"          Prod_Qty = Prod_QTY,",
+						"          Product_name = PRODUCT_NAME",
+						"     )) ~> silevertoDW"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_OrderItems_in')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Orders_in')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Customers_in')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Stores_in')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_silver_Products_in')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dl_gold_out')]",
+				"[concat(variables('factoryId'), '/datasets/ds_AzureSqlTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_testing_parquet1",
+								"type": "DatasetReference"
+							},
+							"name": "table1"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_testing_parquet2",
+								"type": "DatasetReference"
+							},
+							"name": "table2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_archive_Json",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_archive_Parquet",
+								"type": "DatasetReference"
+							},
+							"name": "sink2"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> table1",
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> table2",
+						"table1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink1",
+						"table2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink2"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_testing_parquet1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_testing_parquet2')]",
+				"[concat(variables('factoryId'), '/datasets/ds_archive_Json')]",
+				"[concat(variables('factoryId'), '/datasets/ds_archive_Parquet')]"
+			]
+		}
+	]
+}
