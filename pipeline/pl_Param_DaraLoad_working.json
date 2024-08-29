@@ -138,7 +138,7 @@
 												"upsertSettings": {
 													"useTempDB": true,
 													"keys": {
-														"value": "@variables('v_KeyColumn')",
+														"value": "@variables('v_list_keyColumns')",
 														"type": "Expression"
 													}
 												},
@@ -185,7 +185,7 @@
 										"type": "Lookup",
 										"dependsOn": [
 											{
-												"activity": "SetKeyColumn",
+												"activity": "SetKeyColumn1",
 												"dependencyConditions": [
 													"Succeeded"
 												]
@@ -216,7 +216,7 @@
 										}
 									},
 									{
-										"name": "SetKeyColumn",
+										"name": "SetKeyColumn1",
 										"type": "SetVariable",
 										"dependsOn": [],
 										"policy": {
@@ -225,9 +225,9 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"variableName": "v_KeyColumn",
+											"variableName": "v_list_keyColumns",
 											"value": {
-												"value": "@if(equals(variables('v_input_filename'),'employee.xlsx'),'empID','DepID')",
+												"value": "@array(if(equals(variables('v_input_filename'),'employee.xlsx'),'empID','DepID'))",
 												"type": "Expression"
 											}
 										}
@@ -336,6 +336,9 @@
 				"type": "String"
 			},
 			"v_KeyColumn": {
+				"type": "String"
+			},
+			"v_list_keyColumns": {
 				"type": "Array"
 			}
 		},
