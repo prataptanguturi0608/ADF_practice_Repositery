@@ -79,7 +79,7 @@
 							"type": "IfCondition",
 							"dependsOn": [
 								{
-									"activity": "Set variable2",
+									"activity": "FileValidation",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -88,7 +88,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@contains(variables('v_filename'), 'true}')",
+									"value": "@contains(variables('v_FileValid'), 'true}')",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
@@ -108,7 +108,7 @@
 										"type": "Copy",
 										"dependsOn": [
 											{
-												"activity": "Lookup1",
+												"activity": "Lookup_MappingData",
 												"dependencyConditions": [
 													"Succeeded"
 												]
@@ -139,7 +139,7 @@
 											},
 											"enableStaging": false,
 											"translator": {
-												"value": "@json(activity('Lookup1').output.firstRow.MappingScript)",
+												"value": "@json(activity('Lookup_MappingData').output.firstRow.MappingScript)",
 												"type": "Expression"
 											}
 										},
@@ -161,11 +161,11 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"schema": {
-														"value": "@activity('Lookup1').output.firstRow.table_Schema",
+														"value": "@activity('Lookup_MappingData').output.firstRow.table_Schema",
 														"type": "Expression"
 													},
 													"table": {
-														"value": "@activity('Lookup1').output.firstRow.Table_Name",
+														"value": "@activity('Lookup_MappingData').output.firstRow.Table_Name",
 														"type": "Expression"
 													}
 												}
@@ -173,7 +173,7 @@
 										]
 									},
 									{
-										"name": "Lookup1",
+										"name": "Lookup_MappingData",
 										"type": "Lookup",
 										"dependsOn": [],
 										"policy": {
@@ -188,7 +188,7 @@
 											"source": {
 												"type": "AzureSqlSource",
 												"sqlReaderQuery": {
-													"value": "select * from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_filename')}'\n                ",
+													"value": "select * from [dbo].[tbl_mappingData] Where file_name = '@{variables('v_input_filename')}'\n                ",
 													"type": "Expression"
 												},
 												"queryTimeout": "02:00:00",
@@ -204,7 +204,7 @@
 							}
 						},
 						{
-							"name": "Set variable2",
+							"name": "FileValidation",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -220,7 +220,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "v_filename",
+								"variableName": "v_FileValid",
 								"value": {
 									"value": "@split(string(activity('Input File Validation').output.firstRow),':')[1]",
 									"type": "Expression"
@@ -301,7 +301,7 @@
 				"type": "String"
 			},
 			"v_FileValid": {
-				"type": "Array"
+				"type": "String"
 			}
 		},
 		"folder": {
