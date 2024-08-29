@@ -1,5 +1,5 @@
 {
-	"name": "pl_Param_DaraLoad_working",
+	"name": "pl_Param_SQLDataLoad",
 	"properties": {
 		"description": "In Progress:\nEliminate duplicates in data loading\nDone:\nThis pipeline load data from excel file to azure SQL database. with parameterize mapping.",
 		"activities": [
