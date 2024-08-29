@@ -113,16 +113,6 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"dataflow": {
-									"referenceName": "dataflow2",
-									"type": "DataFlowReference",
-									"parameters": {
-										"p_filename": {
-											"value": "@variables('v_filename')",
-											"type": "Expression"
-										}
-									}
-								},
 								"compute": {
 									"coreCount": 8,
 									"computeType": "General"
