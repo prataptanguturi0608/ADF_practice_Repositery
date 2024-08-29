@@ -147,8 +147,6 @@
 						{
 							"name": "If Condition1",
 							"type": "IfCondition",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Set variable2",
@@ -160,12 +158,23 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@contains(string(activity('Input File Validation').output), true)",
+									"value": "@contains(variables('v_filename'), 'true}')",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
 									{
-										"name": "Wait1",
+										"name": "False Wait",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 1
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "TRUE WAIT",
 										"type": "Wait",
 										"dependsOn": [],
 										"userProperties": [],
@@ -195,7 +204,7 @@
 							"typeProperties": {
 								"variableName": "v_filename",
 								"value": {
-									"value": "@string(activity('Input File Validation').output)",
+									"value": "@split(string(activity('Input File Validation').output.firstRow),':')[1]",
 									"type": "Expression"
 								}
 							}
