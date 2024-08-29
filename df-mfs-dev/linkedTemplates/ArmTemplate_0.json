@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_blob_testing'"
 		},
+		"ls_databricks_copyNB_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_databricks_copyNB'"
+		},
 		"ls_mfp_blod_archive_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_mfp_blod_archive'"
@@ -54,6 +58,10 @@
 		"ls_Sftp1_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "47d8c15f51694113ab9b3c7b8781f072"
+		},
+		"ls_databricks_copyNB_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0821-094203-orrljn1u"
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
@@ -133,6 +141,24 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_databricks_copyNB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-1504801268539580.0.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('ls_databricks_copyNB_accessToken')]"
+					},
+					"existingClusterId": "[parameters('ls_databricks_copyNB_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_mfp_blod_archive')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -206,6 +232,109 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_databricks_copy')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Shared/SampleProject01/SimpleCopyActivity/CopydatafromblobtoSQL"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_databricks_copyNB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "v_filename",
+							"value": {
+								"value": "/mnt/blobtest2mount/DepartmentData.txt",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Notebook2",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Shared/SampleProject01/SimpleCopyActivity/sample_notebook",
+							"baseParameters": {
+								"FileName": {
+									"value": "@variables('v_filename')",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_databricks_copyNB",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"v_filename": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "ADE Classes"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_databricks_copyNB')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_AzureSqlTable')]",
@@ -345,6 +474,67 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_testing_sqldb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_PipelinetoDflow')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_blob_testing",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().p_filename",
+							"type": "Expression"
+						},
+						"container": "test2"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "EMP_ID",
+						"type": "String"
+					},
+					{
+						"name": "EMP_NAME",
+						"type": "String"
+					},
+					{
+						"name": "GENDER",
+						"type": "String"
+					},
+					{
+						"name": "DOJ",
+						"type": "String"
+					},
+					{
+						"name": "SALARY",
+						"type": "String"
+					},
+					{
+						"name": "DEPT_ID",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_blob_testing')]"
 			]
 		},
 		{
@@ -525,6 +715,33 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_bronzetesting')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_blob_testing",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "bronzetesting"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_blob_testing')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_Orders')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -581,227 +798,6 @@
 						"type": "UTF8"
 					}
 				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_Stores')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProj_DLake_output",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "stores.json",
-						"folderPath": "customerorders",
-						"fileSystem": "bronze"
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"STORE_ID": {
-							"type": "string"
-						},
-						"STORE_NAME": {
-							"type": "string"
-						},
-						"WEB_ADDRESS": {
-							"type": "string"
-						},
-						"LATITUDE": {
-							"type": "string"
-						},
-						"LONGITUDE": {
-							"type": "string"
-						},
-						"Ingestion_by": {
-							"type": "string"
-						},
-						"Ingestion_TimeStamp": {
-							"type": "string"
-						},
-						"Ingestion_Date": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_customers')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProj_DLake_output",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "customers.json",
-						"folderPath": "customerorders",
-						"fileSystem": "bronze"
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"CUSTOMER_ID": {
-							"type": "string"
-						},
-						"FULL_NAME": {
-							"type": "string"
-						},
-						"EMAIL_ADDRESS": {
-							"type": "string"
-						},
-						"Ingestion_by": {
-							"type": "string"
-						},
-						"Ingestion_TimeStamp": {
-							"type": "string"
-						},
-						"Ingestion_Date": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_order_items')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProj_DLake_output",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "order_items.txt",
-						"folderPath": "customerorders",
-						"fileSystem": "bronze"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "ORDER_ID",
-						"type": "String"
-					},
-					{
-						"name": "LINE_ITEM_ID",
-						"type": "String"
-					},
-					{
-						"name": "PRODUCT_ID",
-						"type": "String"
-					},
-					{
-						"name": "UNIT_PRICE",
-						"type": "String"
-					},
-					{
-						"name": "QUANTITY",
-						"type": "String"
-					},
-					{
-						"name": "Ingestion_by",
-						"type": "String"
-					},
-					{
-						"name": "Ingestion_TimeStamp",
-						"type": "String"
-					},
-					{
-						"name": "Ingestion_Date",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_dl_bronze_products')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_myFirstProj_DLake_output",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ADE Classes/myFirstProject"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "products.json",
-						"folderPath": "customerorders",
-						"fileSystem": "bronze"
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"PRODUCT_ID": {
-							"type": "string"
-						},
-						"PRODUCT_NAME": {
-							"type": "string"
-						},
-						"UNIT_PRICE": {
-							"type": "string"
-						},
-						"Ingestion_by": {
-							"type": "string"
-						},
-						"Ingestion_TimeStamp": {
-							"type": "string"
-						},
-						"Ingestion_Date": {
-							"type": "string"
-						}
-					}
-				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_myFirstProj_DLake_output')]"

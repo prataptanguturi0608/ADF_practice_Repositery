@@ -14,6 +14,9 @@
 		"ls_blob_testing_connectionString": {
 			"value": ""
 		},
+		"ls_databricks_copyNB_accessToken": {
+			"value": ""
+		},
 		"ls_mfp_blod_archive_connectionString": {
 			"value": ""
 		},
@@ -40,6 +43,9 @@
 		},
 		"ls_Sftp1_properties_typeProperties_userName": {
 			"value": "47d8c15f51694113ab9b3c7b8781f072"
+		},
+		"ls_databricks_copyNB_properties_typeProperties_existingClusterId": {
+			"value": "0821-094203-orrljn1u"
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"value": "https://dlakeadf.dfs.core.windows.net/"

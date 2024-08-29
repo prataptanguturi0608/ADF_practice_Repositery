@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_blob_testing'"
 		},
+		"ls_databricks_copyNB_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_databricks_copyNB'"
+		},
 		"ls_mfp_blod_archive_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_mfp_blod_archive'"
@@ -54,6 +58,10 @@
 		"ls_Sftp1_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "47d8c15f51694113ab9b3c7b8781f072"
+		},
+		"ls_databricks_copyNB_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0821-094203-orrljn1u"
 		},
 		"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 			"type": "string",
@@ -107,6 +115,9 @@
 					"ls_blob_testing_connectionString": {
 						"value": "[parameters('ls_blob_testing_connectionString')]"
 					},
+					"ls_databricks_copyNB_accessToken": {
+						"value": "[parameters('ls_databricks_copyNB_accessToken')]"
+					},
 					"ls_mfp_blod_archive_connectionString": {
 						"value": "[parameters('ls_mfp_blod_archive_connectionString')]"
 					},
@@ -133,6 +144,9 @@
 					},
 					"ls_Sftp1_properties_typeProperties_userName": {
 						"value": "[parameters('ls_Sftp1_properties_typeProperties_userName')]"
+					},
+					"ls_databricks_copyNB_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('ls_databricks_copyNB_properties_typeProperties_existingClusterId')]"
 					},
 					"ls_myFirstProj_DLake_output_properties_typeProperties_url": {
 						"value": "[parameters('ls_myFirstProj_DLake_output_properties_typeProperties_url')]"
@@ -188,6 +202,26 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'df-mfs-dev_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "df-mfs-dev_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-mfs-dev_ArmTemplate_2')]"
 			]
 		}
 	]
