@@ -336,7 +336,7 @@
 				"type": "String"
 			},
 			"v_KeyColumn": {
-				"type": "String"
+				"type": "Array"
 			}
 		},
 		"folder": {
