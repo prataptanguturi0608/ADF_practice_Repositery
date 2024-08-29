@@ -90,6 +90,8 @@
 		"folder": {
 			"name": "ADE Classes"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-08-29T16:32:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
