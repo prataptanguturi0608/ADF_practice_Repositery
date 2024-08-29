@@ -1319,7 +1319,7 @@
 					}
 				},
 				"folder": {
-					"name": "Testing"
+					"name": "UseCases"
 				},
 				"annotations": []
 			},
@@ -5353,7 +5353,7 @@
 					}
 				},
 				"folder": {
-					"name": "Testing"
+					"name": "UseCases"
 				},
 				"annotations": [],
 				"lastPublishTime": "2024-08-15T16:24:16Z"
