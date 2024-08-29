@@ -1,6 +1,7 @@
 {
-	"name": "pl_testing1_SP",
+	"name": "pl_Param_DaraLoad",
 	"properties": {
+		"description": "This pipeline load data from excel file to azure SQL database. with parameterize mapping.",
 		"activities": [
 			{
 				"name": "ForEach1",
