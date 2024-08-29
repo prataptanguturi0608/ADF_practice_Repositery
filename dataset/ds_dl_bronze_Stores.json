@@ -1,0 +1,51 @@
+{
+	"name": "ds_dl_bronze_Stores",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_myFirstProj_DLake_output",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "stores.json",
+				"folderPath": "customerorders",
+				"fileSystem": "bronze"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"STORE_ID": {
+					"type": "string"
+				},
+				"STORE_NAME": {
+					"type": "string"
+				},
+				"WEB_ADDRESS": {
+					"type": "string"
+				},
+				"LATITUDE": {
+					"type": "string"
+				},
+				"LONGITUDE": {
+					"type": "string"
+				},
+				"Ingestion_by": {
+					"type": "string"
+				},
+				"Ingestion_TimeStamp": {
+					"type": "string"
+				},
+				"Ingestion_Date": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

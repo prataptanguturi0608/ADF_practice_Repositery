@@ -1,0 +1,20 @@
+{
+	"name": "ds_mfp_SFTP_Source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_Sftp1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation",
+				"folderPath": "/Customer Orders"
+			}
+		}
+	}
+}

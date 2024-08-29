@@ -1,0 +1,94 @@
+{
+	"name": "ds_AzureSqlTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Order_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Customer_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Order_Status",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Ordet_dateTime",
+				"type": "varchar"
+			},
+			{
+				"name": "Store_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Full_Name",
+				"type": "varchar"
+			},
+			{
+				"name": "emil_add",
+				"type": "varchar"
+			},
+			{
+				"name": "Store_name",
+				"type": "varchar"
+			},
+			{
+				"name": "WebAddress",
+				"type": "varchar"
+			},
+			{
+				"name": "Latitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Longitude",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Product_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Line_item_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Unit_Price",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Prod_Qty",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Product_name",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "prod",
+			"table": "tbl_customerOrders"
+		}
+	}
+}

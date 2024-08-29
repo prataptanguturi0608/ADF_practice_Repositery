@@ -1,0 +1,26 @@
+{
+	"name": "ds_archive_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_mfp_blod_archive",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@formatDateTime(utcNow(),'yyyy-MM-dd')",
+					"type": "Expression"
+				},
+				"container": "archive"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

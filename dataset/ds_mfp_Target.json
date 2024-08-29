@@ -1,0 +1,21 @@
+{
+	"name": "ds_mfp_Target",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_myFirstProj_DLake_output",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADE Classes/myFirstProject"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Output",
+				"fileSystem": "customerorders"
+			}
+		}
+	}
+}
