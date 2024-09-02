@@ -1,0 +1,9 @@
+{
+	"name": "pl_databricksNotebook",
+	"properties": {
+		"folder": {
+			"name": "UseCases"
+		},
+		"annotations": []
+	}
+}
